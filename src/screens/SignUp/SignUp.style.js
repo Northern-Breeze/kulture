@@ -45,6 +45,7 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontFamily: 'Roboto-black',
         fontSize: 13,
+        fontWeight: 'bold',
     },
     linkbtn: {
         marginVertical: 10,
