@@ -4,7 +4,7 @@ import { View, Text } from 'react-native'
 export default function HomeRoute() {
     return (
         <View>
-            <Text></Text>
+            <Text>Hello</Text>
         </View>
     )
 }
