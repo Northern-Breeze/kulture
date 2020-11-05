@@ -8,8 +8,8 @@ import AuthRoute from './AuthRoutes';
 
 const RootStack = createStackNavigator()
 
-export default function Routes() {
-    const isloggedin = useStoreState(state => state.isLoggedin);
+export default function Routes(props) {
+    const isloggedin = useStoreState(state => state.isloggedIn);
     return (
         <RootStack.Navigator
             screenOptions={{

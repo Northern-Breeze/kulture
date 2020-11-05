@@ -14,7 +14,12 @@ const styles = StyleSheet.create({
     },
     brandlogo: {
         flexDirection: "row",
-        alignItems: 'center'
+        // justifyContent: "space-evenly",
+    },
+    logo: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     first: {
         flex: 1,
@@ -34,7 +39,7 @@ const styles = StyleSheet.create({
         width: 167,
         height: 52,
         borderColor: '#000',
-        borderWidth: 1,
+        borderWidth: 2,
         margin: 5,
         borderRadius: 6,
     },
