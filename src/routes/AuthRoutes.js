@@ -8,7 +8,7 @@ import SignUp from '../screens/SignUp';
 
 const Stack = createStackNavigator();
 
-export default function AuthRoutes() {
+export default function AuthRoutes(props) {
     return (
         <Stack.Navigator
             screenOptions={{
@@ -19,7 +19,14 @@ export default function AuthRoutes() {
                 name="welcome" 
                 component={Welcome} 
                 />
-            <Stack.Screen name="signin" component={SignIn} />
+            <Stack.Screen 
+                name="signup" 
+                component={SignUp} 
+                />
+            <Stack.Screen 
+                name="signin" 
+                component={SignIn} 
+                />
         </Stack.Navigator>
     )
 }
