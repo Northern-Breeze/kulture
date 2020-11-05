@@ -47,6 +47,7 @@ const styles = StyleSheet.create({
         fontFamily: 'Roboto-Regular',
         fontSize: 13,
         color: '#000',
+        fontWeight: 'bold',
     },
     second: {
         flex: 7,
@@ -68,6 +69,7 @@ const styles = StyleSheet.create({
         fontFamily: 'Roboto-Regular',
         fontSize: 13,
         color: '#fff',
+        fontWeight: 'bold',
     }
     
 });
