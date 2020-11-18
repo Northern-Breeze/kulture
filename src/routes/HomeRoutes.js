@@ -14,7 +14,10 @@ const Tab = createMaterialBottomTabNavigator();
 const Stack = createStackNavigator();
 const StackScreen = () => {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator
+      screenOptions={{
+        headerShown: false,
+      }}>
       <Stack.Screen name="home" component={Home} />
       <Stack.Screen name="preview" component={Preview} />
     </Stack.Navigator>
@@ -24,7 +27,9 @@ const StackScreen = () => {
 export default function HomeRoute() {
   return (
     <Tab.Navigator
+      activeColor="#000"
       screenOptions={({route}) => ({
+        tabBarColor: '#fff',
         tabBarIcon: ({color, size}) => {
           let iconName;
           if (route.name === 'Home') {
@@ -39,7 +44,7 @@ export default function HomeRoute() {
             iconName = 'chatbubble-outline';
           }
 
-          return <Ionicons name={iconName} size={size} color={color} />;
+          return <Ionicons name={iconName} size={25} color={'#000'} />;
         },
       })}>
       <Tab.Screen name="Home" component={StackScreen} />
