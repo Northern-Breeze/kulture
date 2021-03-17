@@ -75,9 +75,6 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         fontSize: 13,
     },
-    post: {
-        backgroundColor: '#000',
-    }
 });
 
 export default styles;

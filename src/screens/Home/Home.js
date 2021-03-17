@@ -1,13 +1,9 @@
 import React from 'react'
 import { View, Text, StatusBar, Image, FlatList, ScrollView } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import MasonryList from "react-native-masonry-list";
 import styles from './Home.style';
 
-const feed_1 = require('../../assets/images/feed_1.png');
-const feed_2 = require('../../assets/images/feed_2.png');
-const feed_3 = require('../../assets/images/feed_3.png');
-const feed_4 = require('../../assets/images/feed_2.png');
+import Feed from '../../components/Feed';
 
 const avatar = require('../../assets/images/avatar.png');
 
@@ -24,10 +20,47 @@ export default function Home(props) {
         },{
             image: require('../../assets/images/feed_4.png')
         },
-])
+    ])
+    const [data] = React.useState([
+        {
+            id: 1,
+            image: 'https://via.placeholder.com/150'
+        },
+        {
+            id: 2,
+            image: 'https://via.placeholder.com/150'
+        },
+        {
+            id: 3,
+            image: 'https://via.placeholder.com/150'
+        },
+        {
+            id: 4,
+            image: 'https://via.placeholder.com/150'
+        },
+        {
+            id: 5,
+            image: 'https://via.placeholder.com/150'
+        },
+        {
+            id: 6,
+            image: 'https://via.placeholder.com/150'
+        },
+        {
+            id: 7,
+            image: 'https://via.placeholder.com/150'
+        },
+        {
+            id: 8,
+            image: 'https://via.placeholder.com/150'
+        },
+    ])
     const renderItem = ({ item }) => {
         return (
-            <TouchableOpacity style={styles.card} activeOpacity={0.6} onPress={() => navigation.navigate("preview")}>
+            <TouchableOpacity 
+                style={styles.card} 
+                activeOpacity={0.8} 
+                onPress={() => navigation.navigate("Preview")}>
                 <View style={styles.imageContainer}>
                     <Image source={item.image} style={styles.imageCard}/>
                 </View>
@@ -64,24 +97,10 @@ export default function Home(props) {
                     BROWSE ALL
                 </Text>
             </View>
-            <View style={styles.post}>
-                <MasonryList
-                    images={[
-                        { uri: "https://luehangs.site/pic-chat-app-images/beautiful-blond-blonde-hair-478544.jpg" },
-                        { source: { uri: "https://luehangs.site/pic-chat-app-images/beautiful-beautiful-women-beauty-40901.jpg" } },
-                        { uri: "https://luehangs.site/pic-chat-app-images/animals-avian-beach-760984.jpg",
-                            dimensions: { width: 1080, height: 1920 } },
-                        { URI: "https://luehangs.site/pic-chat-app-images/beautiful-blond-fishnet-stockings-48134.jpg",
-                            id: "blpccx4cn" },
-                        { url: "https://luehangs.site/pic-chat-app-images/beautiful-beautiful-woman-beauty-9763.jpg" },
-                        { URL: "https://luehangs.site/pic-chat-app-images/attractive-balance-beautiful-186263.jpg" },
-                        { url: "https://luehangs.site/pic-chat-app-images/beautiful-beautiful-woman-beauty-9763.jpg" },
-                        { URL: "https://luehangs.site/pic-chat-app-images/attractive-balance-beautiful-186263.jpg" },
-                        { url: "https://luehangs.site/pic-chat-app-images/beautiful-beautiful-woman-beauty-9763.jpg" },
-                        { URL: "https://luehangs.site/pic-chat-app-images/attractive-balance-beautiful-186263.jpg" },
- 
-                    ]}
-                />
+            <View>
+                <Feed 
+                    data={data} 
+                    />
             </View>
         </ScrollView>
     )
