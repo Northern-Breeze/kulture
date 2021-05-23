@@ -20,6 +20,7 @@ export default function Feed(props) {
         <Item image={item.image} />
     )
     return (
+        <View>
             <FlatList
                 numColumns={2}
                 columnWrapperStyle={styles.container}
@@ -27,5 +28,6 @@ export default function Feed(props) {
                 renderItem={renderFeed}
                 keyExtractor={( item ) => item.id}
             />
+        </View>
     )
 }
