@@ -8,7 +8,7 @@ const styles = StyleSheet.create({
     avatarContainer: {
         flexDirection: 'row',
         justifyContent: 'center',
-        marginTop: hp(10),
+        marginTop: hp(7),
     },
     avatar: {
         borderRadius: wp(20),
@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
         height: hp(20)
     },
     usernameContainer: {
-        marginTop: wp(10),
+        marginTop: wp(2),
         justifyContent: 'center',
         alignItems: 'center'
     },
@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
     },
     button: {
         backgroundColor: '#000',
-        width: wp(80),
+        width: wp(95),
         height: hp(8),
         borderRadius: 13,
         justifyContent: 'center',
