@@ -1,5 +1,4 @@
 import React from 'react'
-import { View, Text } from 'react-native'
 import { createStackNavigator } from '@react-navigation/stack';
 import { useStoreState } from 'easy-peasy';
 
@@ -19,7 +18,7 @@ export default function Routes(props) {
             {
                 isloggedin ? (
                 <RootStack.Screen
-                    name={"Home"}
+                    name="Home"
                     component={HomeRoute}
                     options={{
                         title: "Feed"
@@ -27,7 +26,7 @@ export default function Routes(props) {
                 />
                 ) : (
                 <RootStack.Screen
-                    name={"Auth"}
+                    name="Auth"
                     component={AuthRoute}
                 />
                 )

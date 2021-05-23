@@ -1,19 +1,65 @@
-import React from 'react'
-import { createStackNavigator } from '@react-navigation/stack';
-import Home from '../screens/Home';
-import Preview from '../screens/Preview';
+import * as  React from 'react'
+import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
+import EvilIcons from 'react-native-vector-icons/EvilIcons';
+import AntDesign from 'react-native-vector-icons/AntDesign'
 
-const Stack = createStackNavigator();
+import Home from './Home';
+import Profile from '../screens/Profile';
+import AddPost from '../screens/AddPost'
+import Search from '../screens/Search';
+
+
+const Tab = createMaterialBottomTabNavigator();
+
 
 export default function HomeRoute() {
     return (
-        <Stack.Navigator
-            screenOptions={{
-                headerShown: false
-            }}
+        <Tab.Navigator
+            initialRouteName="Home"
+            activeColor="#f0edf6"
+            inactiveColor="#000"
+            barStyle={{ backgroundColor: '#347deb', paddingBottom: 2 }}
         >
-            <Stack.Screen name="home" component={Home} />
-            <Stack.Screen name="preview" component={Preview} />
-        </Stack.Navigator>
+            <Tab.Screen 
+                name="Home" 
+                component={Home} 
+                options={{
+                    tabBarLabel: 'Home',
+                    tabBarIcon: ({ color }) => (
+                      <AntDesign name="home" color={color} size={26} />
+                    ),
+                  }}
+                />
+            <Tab.Screen 
+                name="Search" 
+                component={Search} 
+                options={{
+                    tabBarLabel: 'Search',
+                    tabBarIcon: ({ color }) => (
+                      <EvilIcons name="search" color={color} size={26} />
+                    ),
+                  }}
+                />
+            <Tab.Screen 
+                name="Add" 
+                component={AddPost} 
+                options={{
+                    tabBarLabel: 'Add',
+                    tabBarIcon: ({ color }) => (
+                      <EvilIcons name="plus" color={color} size={26} />
+                    ),
+                  }}
+                />
+            <Tab.Screen 
+                name="Profile" 
+                component={Profile} 
+                options={{
+                    tabBarLabel: 'Profile',
+                    tabBarIcon: ({ color }) => (
+                      <AntDesign name="user" color={color} size={26} />
+                    ),
+                  }}
+                />
+        </Tab.Navigator>
     )
 }
