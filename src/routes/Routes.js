@@ -10,12 +10,11 @@ import AuthRoute from './AuthRoutes';
 const RootStack = createStackNavigator();
 
 export default function Routes(props) {
-  const isloggedin = useStoreState((state) => state.isloggedIn);
-  const setIsLoggin = useStoreActions((actions) => actions.setIsLoggin);
+  const [isloggedin, setIsLoggedIn] = React.useState(false);
   const checkToken = React.useCallback(() => {
     AsyncStorage.getItem('token')
-      .then((token) => {
-        setIsLoggin(token);
+      .then(() => {
+        setIsLoggedIn(true);
       })
       .catch((error) => console.log(error));
   }, []);
