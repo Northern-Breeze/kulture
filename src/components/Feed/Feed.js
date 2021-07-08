@@ -26,7 +26,7 @@ export default function Feed(props) {
                 columnWrapperStyle={styles.container}
                 data={data}
                 renderItem={renderFeed}
-                keyExtractor={( item ) => item.id}
+                keyExtractor={( item ) => item.postId}
             />
         </View>
     )
