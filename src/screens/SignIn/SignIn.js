@@ -52,9 +52,9 @@ export default function SignIn(props) {
           });
           setNetworkLoading(false);
           AsyncStorage.setItem('token', response.data.token)
-            .then(() => {
-				login()
-			})
+            .then((inserted) => {
+              login();
+            })
             .catch((error) => console.log(error));
         } else {
           Snackbar.show({

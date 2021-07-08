@@ -10,23 +10,28 @@ import AuthRoute from './AuthRoutes';
 const RootStack = createStackNavigator();
 
 export default function Routes(props) {
-  const [isloggedin, setIsLoggedIn] = React.useState(false);
+  const setIsLoggin = useStoreActions((actions) => actions.setIsLoggin);
+  const change = useStoreState((state) => state.isloggedIn);
   const checkToken = React.useCallback(() => {
     AsyncStorage.getItem('token')
-      .then(() => {
-        setIsLoggedIn(true);
+      .then((response) => {
+        if(response !== null){
+          setIsLoggin(true);
+        } else {
+          setIsLoggin(false);
+        }
       })
       .catch((error) => console.log(error));
   }, []);
   React.useEffect(() => {
     checkToken();
-  }, []);
+  }, [change]);
   return (
     <RootStack.Navigator
       screenOptions={{
         headerShown: false,
       }}>
-      {isloggedin ? (
+      {change ? (
         <RootStack.Screen
           name="Home"
           component={HomeRoute}
