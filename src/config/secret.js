@@ -1,4 +1,4 @@
 export default {
     STAGE: 'development',
-    SERVER_URL: 'https://3f300c5e448e.ngrok.io'
+    SERVER_URL: 'https://c5805fdb37e8.ngrok.io'
 }

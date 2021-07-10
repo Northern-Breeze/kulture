@@ -55,12 +55,6 @@ export default function SignIn(props) {
               });
             })
             .catch((error) => console.log(error));
-          // AsyncStorage.setItem('token', response.data.token)
-          // .then((inserted) => {
-          //   console.log('inserted', inserted);
-          //   login();
-          //   })
-          //   .catch((error) => console.log(error));
         } else {
           Snackbar.show({
             text: response.data.message,
