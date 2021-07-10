@@ -1,11 +1,12 @@
 import React from 'react';
-import {View, Text, Image, SafeAreaView, TouchableOpacity} from 'react-native';
-import {ScrollView} from 'react-native-gesture-handler';
+import {View, FlatList, Image, SafeAreaView, TouchableOpacity} from 'react-native';
 import SnackBar from 'react-native-snackbar';
 import Feed from '../../components/Feed';
 
 import server from '../../service/server';
 import styles from './Profile.style';
+
+import HeaderList from './Header';
 
 export default function Profile() {
   const [loading, setLoading] = React.useState(false);
@@ -17,10 +18,10 @@ export default function Profile() {
       const response = await server.getProfile();
       if (response.status === 200) {
         if (response.data.success) {
-          const {posts} = response.data.data;
+          const {posts: postData} = response.data.data;
           const {username, profile, email} = response.data.data;
           const user = {username: username, email: email, profile: profile};
-          setPost(posts);
+          setPost(postData);
           setData(user);
           setLoading(false);
         } else {
@@ -46,48 +47,33 @@ export default function Profile() {
       setLoading(false);
     }
   };
+
   React.useEffect(() => {
     fetchProfile();
   }, []);
 
+  const Item = ({image}) => {
+    console.log(image);
+    return (
+      <TouchableOpacity>
+        <Image source={{uri: image}} style={styles.image} />
+      </TouchableOpacity>
+    );
+  };
+  const renderFeed = ({item}) => <Item image={item.image} />;
+
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView>
-        <View style={styles.avatarContainer}>
-          <View>
-            <Image
-              source={{uri: 'https://picsum.photos/200/300?grayscale'}}
-              style={styles.avatar}
-            />
-          </View>
-        </View>
-        <View>
-          <View style={styles.usernameContainer}>
-            {loading && <Text style={styles.username}>loading ...</Text>}
-            {!loading && data !== null && (
-              <Text style={styles.username}>{data.username}</Text>
-            )}
-          </View>
-          <View style={styles.locationContainer}>
-            <Text style={styles.locations}>South Africa, Polokwane</Text>
-          </View>
-        </View>
-        <View style={styles.btnContainer}>
-          <TouchableOpacity activeOpacity={0.9} style={styles.button}>
-            <Text style={styles.buttonTextAdd}>Add New Post</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.button, styles.buttonSettings]}
-            activeOpacity={0.9}>
-            <Text style={[styles.buttonTextAdd, styles.buttonTextSettings]}>
-              Settings
-            </Text>
-          </TouchableOpacity>
-        </View>
-        <View>
-          <Feed data={posts} />
-        </View>
-      </ScrollView>
+      <View>
+        <FlatList
+          ListHeaderComponent={<HeaderList loading={loading} data={data} />}
+          numColumns={2}
+          columnWrapperStyle={styles.container}
+          data={posts}
+          renderItem={renderFeed}
+          keyExtractor={(item) => item.postId}
+        />
+      </View>
     </SafeAreaView>
   );
 }

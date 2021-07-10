@@ -5,7 +5,8 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import styles from './Feed.style';
 
 export default function Feed(props) {
-    const { data } = props;
+    const { data, Header } = props;
+    console.log('##########', Header);
     const Item = ({ image }) => {
         return (
             <TouchableOpacity>
@@ -22,6 +23,7 @@ export default function Feed(props) {
     return (
         <View>
             <FlatList
+                ListHeaderComponent={<Header />}
                 numColumns={2}
                 columnWrapperStyle={styles.container}
                 data={data}

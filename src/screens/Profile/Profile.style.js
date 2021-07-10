@@ -3,7 +3,8 @@ import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-nativ
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1
+        flex: 1,
+        justifyContent: 'center',
     },
     avatarContainer: {
         flexDirection: 'row',
@@ -62,6 +63,17 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontFamily: 'Roboto',
         fontWeight: 'bold'
+    },
+    image: {
+        width: wp(45),
+        height: hp(40),
+        margin: wp(2),
+    },
+    containerImages: {
+        flex: 1,
+        justifyContent: 'center',
+        flexDirection: 'row',
+        flexWrap: 'wrap',
     }
 });
 
