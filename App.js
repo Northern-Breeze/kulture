@@ -5,7 +5,7 @@ import Store from './src/store/model';
 import linking from './linking'
 import Routes from './src/routes/Routes';
 
-import {  createStore, StoreProvider as Provider, persist } from 'easy-peasy';
+import { createStore, StoreProvider as Provider } from 'easy-peasy';
 
 const store = createStore(Store);
 
