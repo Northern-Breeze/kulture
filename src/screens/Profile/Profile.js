@@ -1,7 +1,14 @@
 import React from 'react';
-import {View, FlatList, Image, SafeAreaView, TouchableOpacity} from 'react-native';
+import {
+  View,
+  FlatList,
+  Image,
+  SafeAreaView,
+  TouchableOpacity,
+  RefreshControl,
+} from 'react-native';
 import SnackBar from 'react-native-snackbar';
-import Feed from '../../components/Feed';
+import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 
 import server from '../../service/server';
 import styles from './Profile.style';
@@ -11,7 +18,14 @@ import HeaderList from './Header';
 export default function Profile() {
   const [loading, setLoading] = React.useState(false);
   const [data, setData] = React.useState(null);
-  const [posts, setPost] = React.useState([]);
+  const [posts, setPost] = React.useState([
+    {postId: 1},
+    {postId: 1},
+    {postId: 3},
+    {postId: 4},
+  ]);
+  const [isRefreshing, setRefreshing] = React.useState(false);
+
   const fetchProfile = async () => {
     try {
       setLoading(true);
@@ -53,24 +67,44 @@ export default function Profile() {
   }, []);
 
   const Item = ({image}) => {
-    console.log(image);
     return (
       <TouchableOpacity>
         <Image source={{uri: image}} style={styles.image} />
       </TouchableOpacity>
     );
   };
-  const renderFeed = ({item}) => <Item image={item.image} />;
+
+  const renderFeed = ({item}) => {
+    return <Item image={item.image} />;
+  };
+  const loadingItems = () => {
+    return (
+      <SkeletonPlaceholder>
+        <View style={styles.image} />
+      </SkeletonPlaceholder>
+    );
+  };
+  const handleRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    fetchProfile();
+    setRefreshing(false);
+  }, []);
 
   return (
     <SafeAreaView style={styles.container}>
       <View>
         <FlatList
-          ListHeaderComponent={<HeaderList loading={loading} data={data} />}
+          ListHeaderComponent={<HeaderList loading={loading} data={data} fetchProfile={fetchProfile}/>}
           numColumns={2}
+          refreshControl={
+            <RefreshControl
+              refreshing={isRefreshing}
+              onRefresh={handleRefresh}
+            />
+          }
           columnWrapperStyle={styles.container}
           data={posts}
-          renderItem={renderFeed}
+          renderItem={loading ? loadingItems : renderFeed}
           keyExtractor={(item) => item.postId}
         />
       </View>

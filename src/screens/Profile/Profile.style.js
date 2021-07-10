@@ -80,6 +80,9 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         height: hp(20),
+    },
+    imageButtons: {
+        margin: 10
     }
 });
 

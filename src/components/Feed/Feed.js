@@ -5,8 +5,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import styles from './Feed.style';
 
 export default function Feed(props) {
-    const { data, Header } = props;
-    console.log('##########', Header);
+    const { data } = props;
     const Item = ({ image }) => {
         return (
             <TouchableOpacity>
