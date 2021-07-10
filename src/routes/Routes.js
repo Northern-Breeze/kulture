@@ -12,7 +12,7 @@ const RootStack = createStackNavigator();
 export default function Routes(props) {
   const setIsLoggin = useStoreActions((actions) => actions.setIsLoggin);
   const change = useStoreState((state) => state.isloggedIn);
-  const checkToken = React.useCallback(() => {
+  const checkToken = () => {
     AsyncStorage.getItem('token')
       .then((response) => {
         if(response !== null){
@@ -22,7 +22,7 @@ export default function Routes(props) {
         }
       })
       .catch((error) => console.log(error));
-  }, []);
+  };
   React.useEffect(() => {
     checkToken();
   }, [change]);

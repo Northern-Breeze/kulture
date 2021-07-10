@@ -22,7 +22,7 @@ export default function SignIn(props) {
   const [passwordError, setPasswordError] = React.useState('');
 
   const [networkloading, setNetworkLoading] = React.useState(false);
-  const login = useStoreActions((action) => action.login);
+  const loginCallback = useStoreActions((action) => action.loginCallback);
   const authenticate = async () => {
     try {
       const type = SignInInputs({email, password});
@@ -46,16 +46,21 @@ export default function SignIn(props) {
       const status = response.status;
       if (status === 200) {
         if (response.data.success) {
-          Snackbar.show({
-            text: response.data.message,
-            duration: Snackbar.LENGTH_SHORT,
-          });
           setNetworkLoading(false);
-          AsyncStorage.setItem('token', response.data.token)
-            .then((inserted) => {
-              login();
+          loginCallback(response.data.token)
+            .then(() => {
+              Snackbar.show({
+                text: response.data.message,
+                duration: Snackbar.LENGTH_SHORT,
+              });
             })
             .catch((error) => console.log(error));
+          // AsyncStorage.setItem('token', response.data.token)
+          // .then((inserted) => {
+          //   console.log('inserted', inserted);
+          //   login();
+          //   })
+          //   .catch((error) => console.log(error));
         } else {
           Snackbar.show({
             text: response.data.message,

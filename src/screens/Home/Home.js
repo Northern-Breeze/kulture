@@ -1,63 +1,78 @@
 import React from 'react';
 import {
   View,
-  Text,
   StyleSheet,
   Image,
   FlatList,
   Dimensions,
 } from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
-import styles from './Home.style';
+import SnackBar from 'react-native-snackbar';
 
-import Feed from '../../components/Feed';
-
-const avatar = require('../../assets/images/avatar.png');
+import server from '../../service/server';
 
 const {width, height} = Dimensions.get('screen');
 
 export default function Home(props) {
+  // props
   const {navigation} = props;
-  const IMAGE_SIZE = 80;
-  const SPACING = 10;
+
+  // states
+  const [IMAGE_SIZE] = React.useState(80);
+  const [SPACING] = React.useState(10);
   const [activeIndex, setActiveIndex] = React.useState(0);
+  const [posts, setPost] = React.useState([]);
+  const [loading, setLoading] = React.useState(false);
+  
+  // Refs
   const topRef = React.useRef();
   const bottomRef = React.useRef();
+  const mounted = React.useRef(true);
 
-  const [data] = React.useState([
-    {
-      id: 1,
-      image: 'https://picsum.photos/200/300?random=1',
-    },
-    {
-      id: 2,
-      image: 'https://picsum.photos/200/300?random=2',
-    },
-    {
-      id: 3,
-      image: 'https://picsum.photos/200/300?random=3',
-    },
-    {
-      id: 4,
-      image: 'https://picsum.photos/200/300?random=4',
-    },
-    {
-      id: 5,
-      image: 'https://picsum.photos/200/300?random=5',
-    },
-    {
-      id: 6,
-      image: 'https://picsum.photos/200/300?random=6',
-    },
-    {
-      id: 7,
-      image: 'https://picsum.photos/200/300?random=7',
-    },
-    {
-      id: 8,
-      image: 'https://picsum.photos/200/300?random=8',
-    },
-  ]);
+  const fetchPosts = async () => {
+    try {
+      setLoading(true);
+      const response = await server.getAllPost();
+      if (response.status === 200) {
+        if (response.data.success) {
+          const {data} = response.data;
+          if (mounted.current) {
+            setPost(data);
+            setLoading(false);
+          }
+        } else {
+          SnackBar.show({
+            text: response.data.message,
+            duration: SnackBar.LENGTH_SHORT,
+          });
+          setLoading(false);
+        }
+      } else {
+        SnackBar.show({
+          text: response.data.message,
+          duration: SnackBar.LENGTH_SHORT,
+        });
+        setLoading(false);
+      }
+    } catch (error) {
+      console.log(error);
+      SnackBar.show({
+        text: 'Something went wrong, please try again',
+        duration: SnackBar.LENGTH_SHORT,
+      });
+      setLoading(false);
+    }
+  };
+
+  React.useEffect(() => {
+    fetchPosts();
+  },[]);
+
+  React.useEffect(() => {
+    return () => {
+      mounted.current = false;
+    }
+  },[])
 
   const scrollToActiveIndex = (index) => {
     setActiveIndex(index);
@@ -78,8 +93,8 @@ return (
     <View style={{flex: 1, backgroundColor: '#fff'}}>
       <FlatList
         ref={topRef}
-        data={data}
-        keyExtractor={(item) => item.id.toString()}
+        data={posts}
+        keyExtractor={(item) => item.postId.toString()}
         horizontal
         pagingEnabled
         showsHorizontalScrollIndicator={false}
@@ -101,8 +116,8 @@ return (
       />
       <FlatList
         ref={bottomRef}
-        data={data}
-        keyExtractor={(item) => item.id.toString()}
+        data={posts}
+        keyExtractor={(item) => item.postId.toString()}
         horizontal
         showsHorizontalScrollIndicator={false}
         style={{position: 'absolute', bottom: IMAGE_SIZE}}

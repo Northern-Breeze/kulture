@@ -8,4 +8,4 @@ const prodConfigs = {
     SERVER_URL: secret.SERVER_URL
 }
 
-export const configs = secret.STAGE === 'development'  ? devConfig : prodConfigs
+export const configs = process.env.NODE_ENV === 'development'  ? devConfig : prodConfigs
