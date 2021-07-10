@@ -74,6 +74,12 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         flexDirection: 'row',
         flexWrap: 'wrap',
+    },
+    // Action sheet
+    actionSheet: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: hp(20),
     }
 });
 
