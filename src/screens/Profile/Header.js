@@ -1,13 +1,14 @@
 import React from 'react';
 import {View, Text, Image, TouchableOpacity} from 'react-native';
-import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
-import ActionSheet from 'react-native-actions-sheet';
 import Snackbar from 'react-native-snackbar';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import {configs} from '../../config/config';
 import styles from './Profile.style';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
+//Components
+import ImagePicker from '../../components/ActionSheets/ImagePicker';
 
 export default function Header(props) {
   const {loading, data, fetchProfile} = props;
@@ -17,70 +18,19 @@ export default function Header(props) {
   const updateProfile = () => {
     actionSheetRef.current?.setModalVisible();
   };
-  const handleUseCamera = () => {
-    const options = {
-      mediaType: 'photo',
-      selectionLimit: 1,
-      quality: 1.0,
-      includeBase64: false,
-      saveToPhotos: true,
-    };
-    launchCamera({options}, (response) => {
-      if (response.didCancel) {
-        Snackbar.show({
-          text: 'User cancelled photo picker',
-          duration: Snackbar.LENGTH_SHORT,
-        });
-      } else if (response.error) {
-        Snackbar.show({
-          text: `ImagePicker Error:  ${response.error}`,
-          duration: Snackbar.LENGTH_SHORT,
-        });
-      } else {
-        const {assets} = response;
-        const file = assets[0];
-        uploadToServer(file);
-      }
-    });
-  };
-  const handleUseGallery = () => {
-    const options = {
-      mediaType: 'photo',
-      selectionLimit: 1,
-      includeBase64: false,
-      quality: 1.0,
-    };
-    launchImageLibrary({options}, (response) => {
-      if (response.didCancel) {
-        Snackbar.show({
-          text: 'User cancelled photo picker',
-          duration: Snackbar.LENGTH_SHORT,
-        });
-      } else if (response.error) {
-        Snackbar.show({
-          text: `ImagePicker Error:  ${response.error}`,
-          duration: Snackbar.LENGTH_SHORT,
-        });
-      } else {
-        const {assets} = response;
-        const file = assets[0];
-        uploadToServer(file);
-      }
-    });
-  };
 
   const createFormData = (file) => {
     const data = new FormData();
 
-    data.append("picture", {
+    data.append('picture', {
       name: file.fileName,
       type: file.type,
       uri:
-        Platform.OS === "android" ? file.uri : file.uri.replace("file://", "")
+        Platform.OS === 'android' ? file.uri : file.uri.replace('file://', ''),
     });
 
     return data;
-  }
+  };
 
   const uploadToServer = async (file) => {
     try {
@@ -91,22 +41,26 @@ export default function Header(props) {
         });
         return;
       }
-      const token = await AsyncStorage.getItem('token') || '';
-      const request = await fetch(`${configs.SERVER_URL}/api/v1/profile/update-image`,{
-        body: createFormData(file),
-        method: 'POST',
-        headers : {
-          'Content-Type': 'multipart/form-data',
-          'Authorization': `Bearer ${token}`
-        }
-      });
-      const response = await request.json(); 
+      const token = (await AsyncStorage.getItem('token')) || '';
+      const request = await fetch(
+        `${configs.SERVER_URL}/api/v1/profile/update-image`,
+        {
+          body: createFormData(file),
+          method: 'POST',
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+      const response = await request.json();
       if (response.status === 200) {
         if (response.success) {
           Snackbar.show({
             text: response.message,
             duration: Snackbar.LENGTH_SHORT,
           });
+          actionSheetRef.current?.hide();
           fetchProfile();
         } else {
           Snackbar.show({
@@ -170,22 +124,10 @@ export default function Header(props) {
           </Text>
         </TouchableOpacity>
       </View>
-      <ActionSheet ref={actionSheetRef} animated={true}>
-        <View style={styles.actionSheet}>
-          <TouchableOpacity
-            activeOpacity={0.7}
-            onPress={handleUseCamera}
-            style={styles.imageButtons}>
-            <Text>Use Camera to take a picture</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            activeOpacity={0.7}
-            onPress={handleUseGallery}
-            style={styles.imageButtons}>
-            <Text>Select image from gallery</Text>
-          </TouchableOpacity>
-        </View>
-      </ActionSheet>
+      <ImagePicker
+        actionSheetRef={actionSheetRef}
+        uploadToServer={uploadToServer}
+      />
     </>
   );
 }
