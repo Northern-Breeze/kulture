@@ -4,8 +4,6 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 import {useStoreActions} from 'easy-peasy';
 import Snackbar from 'react-native-snackbar';
 
-import Entypo from 'react-native-vector-icons/Entypo';
-
 // components
 import Button from '../../components/common/Button';
 import Validation from '../../components/Form/Validation';
