@@ -25,6 +25,10 @@ const styles = StyleSheet.create({
         fontFamily: 'Roboto-Regular',
         fontSize: 30,
     },
+    loadingName: {
+        height: hp(5),
+        width: wp(40),
+    },
     locationContainer: {
         justifyContent: 'center',
         alignItems: 'center'

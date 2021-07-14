@@ -14,10 +14,13 @@ import server from '../../service/server';
 import styles from './Profile.style';
 
 import HeaderList from './Header';
+import ProfileSettings from '../../components/Modals/ProfileSettings';
 
 export default function Profile() {
   const [loading, setLoading] = React.useState(false);
   const [data, setData] = React.useState(null);
+  const [visible, setVisible] = React.useState(false);
+
   const [posts, setPost] = React.useState([
     {postId: 1},
     {postId: 1},
@@ -25,7 +28,9 @@ export default function Profile() {
     {postId: 4},
   ]);
   const [isRefreshing, setRefreshing] = React.useState(false);
-
+  const isOdd = (data) => {
+    return data.postId % 2 === 0;
+  }
   const fetchProfile = async () => {
     try {
       setLoading(true);
@@ -35,9 +40,15 @@ export default function Profile() {
           const {posts: postData} = response.data.data;
           const {username, profile, email} = response.data.data;
           const user = {username: username, email: email, profile: profile};
-          setPost(postData);
-          setData(user);
+          if(!isOdd(postData)) {
+            const tempPost = {postId: Math.random(), image: '', title: ''};
+            const data = [...postData, tempPost];
+            setPost(data);
+          } else {
+            setPost(postData);
+          }
           setLoading(false);
+          setData(user);
         } else {
           SnackBar.show({
             text: response.data.message,
@@ -65,6 +76,14 @@ export default function Profile() {
   React.useEffect(() => {
     fetchProfile();
   }, []);
+
+  const onClose = () => { 
+    setVisible(false);
+  }
+
+  const onOpen = () => {
+    setVisible(true);
+  }
 
   const Item = ({image}) => {
     return (
@@ -94,7 +113,7 @@ export default function Profile() {
     <SafeAreaView style={styles.container}>
       <View>
         <FlatList
-          ListHeaderComponent={<HeaderList loading={loading} data={data} fetchProfile={fetchProfile}/>}
+          ListHeaderComponent={<HeaderList onOpen={onOpen} loading={loading} data={data} fetchProfile={fetchProfile}/>}
           numColumns={2}
           refreshControl={
             <RefreshControl
@@ -108,6 +127,10 @@ export default function Profile() {
           keyExtractor={(item) => item.postId}
         />
       </View>
+      <ProfileSettings 
+        visible={visible}
+        onClose={onClose}
+      />
     </SafeAreaView>
   );
 }

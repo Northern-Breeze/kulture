@@ -1,29 +1,26 @@
-import React from 'react';
-import { Text } from 'react-native';
+import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import SplashScreen from 'react-native-splash-screen';
+import { createStore, StoreProvider as Provider } from 'easy-peasy';
 
 // Store
 import Store from './src/store/model';
 
 //components
 import Routes from './src/routes/Routes';
-import linking from './linking'
-
-import { createStore, StoreProvider as Provider } from 'easy-peasy';
 
 const store = createStore(Store);
 
 
 const App = ()  => {
-  
+
   React.useEffect(() => {
     SplashScreen.hide()
   },[]);
 
   return (
     <Provider store={store}>
-      <NavigationContainer linking={linking} fallback={<Text>Loading...</Text>}>
+      <NavigationContainer>
           <Routes />
       </NavigationContainer>
     </Provider>

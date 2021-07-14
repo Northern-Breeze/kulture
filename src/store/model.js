@@ -8,16 +8,16 @@ export default {
     await AsyncStorage.setItem('token', payload);
     actions.login();
   }),
-  login: action((state) => {
-    const oldState = state;
-    oldState.isloggedIn = true;
-  }),
-  setIsLoggin: ((state, payload) => {
+  setIsLoggin: action((state, payload) => {
     const oldState = state;
     if(payload){
       oldState.isloggedIn = true;
     } else {
       oldState.isloggedIn = false;
     }
+  }),
+  login: action((state) => {
+    const oldState = state;
+    oldState.isloggedIn = true;
   }),
 };

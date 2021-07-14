@@ -11,7 +11,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import ImagePicker from '../../components/ActionSheets/ImagePicker';
 
 export default function Header(props) {
-  const {loading, data, fetchProfile} = props;
+  const {loading, data, fetchProfile, onOpen} = props;
 
   const actionSheetRef = React.createRef(true);
 
@@ -103,7 +103,7 @@ export default function Header(props) {
       </View>
       <View>
         <View style={styles.usernameContainer}>
-          {loading && <Text style={styles.username}>loading ...</Text>}
+          {loading && <SkeletonPlaceholder style={styles.loadingName}></SkeletonPlaceholder>}
           {!loading && data !== null && (
             <Text style={styles.username}>{data.username}</Text>
           )}
@@ -113,12 +113,16 @@ export default function Header(props) {
         </View>
       </View>
       <View style={styles.btnContainer}>
-        <TouchableOpacity activeOpacity={0.9} style={styles.button}>
+        <TouchableOpacity activeOpacity={0.9} style={styles.button} disabled={loading}>
           <Text style={styles.buttonTextAdd}>Add New Post</Text>
         </TouchableOpacity>
         <TouchableOpacity
+          disabled={loading}
           style={[styles.button, styles.buttonSettings]}
-          activeOpacity={0.9}>
+          activeOpacity={0.9}
+          onPress={() => {
+            onOpen();
+          }}>
           <Text style={[styles.buttonTextAdd, styles.buttonTextSettings]}>
             Settings
           </Text>
