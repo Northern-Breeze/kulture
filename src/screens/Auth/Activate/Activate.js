@@ -1,17 +1,16 @@
 import React from 'react';
 import {
   View,
-  Text,
   TextInput,
-  TouchableOpacity,
-  ActivityIndicator,
+  Image,
 } from 'react-native';
 
 import Snackbar from 'react-native-snackbar';
-import Button from '../../components/common/Button';
-import server from '../../service/server';
+import server from '../../../service/server';
 
 import styles from './Activate.style';
+
+import Button from '../../../components/common/Button';
 
 export default function Activate(props) {
   const {navigation} = props;
@@ -71,6 +70,9 @@ export default function Activate(props) {
   };
   return (
     <View style={styles.container}>
+      <View>
+        <Image source={require('../../../assets/images/logo.png')} style={styles.logo} />
+      </View>
       <View style={styles.form}>
         <View style={styles.inputs}>
           <TextInput
@@ -99,7 +101,7 @@ export default function Activate(props) {
           />
         </View>
         <View style={styles.buttonContainer}>
-         <Button buttonText="Verify" buttonHandler={submit} isLoading={networkloading} />
+          <Button buttonText="Verify" buttonHandler={submit} isLoading={networkloading} />
         </View>
       </View>
     </View>
