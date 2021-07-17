@@ -1,90 +1,155 @@
-import React from 'react'
-import { View, Text, Image, SafeAreaView, TouchableOpacity } from 'react-native'
-import { ScrollView } from 'react-native-gesture-handler';
-import Feed from '../../components/Feed';
-
+import React from 'react';
+import {
+  View,
+  FlatList,
+  Image,
+  SafeAreaView,
+  TouchableOpacity,
+  RefreshControl,
+} from 'react-native';
+import SnackBar from 'react-native-snackbar';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
+import { useStoreActions } from 'easy-peasy';
+import server from '../../service/server';
 import styles from './Profile.style';
 
-export default function Profile() {
-    const [data] = React.useState([
-        {
-            id: 1,
-            image: 'https://via.placeholder.com/150'
-        },
-        {
-            id: 2,
-            image: 'https://via.placeholder.com/150'
-        },
-        {
-            id: 3,
-            image: 'https://via.placeholder.com/150'
-        },
-        {
-            id: 4,
-            image: 'https://via.placeholder.com/150'
-        },
-        {
-            id: 5,
-            image: 'https://via.placeholder.com/150'
-        },
-        {
-            id: 6,
-            image: 'https://via.placeholder.com/150'
-        },
-        {
-            id: 7,
-            image: 'https://via.placeholder.com/150'
-        },
-        {
-            id: 8,
-            image: 'https://via.placeholder.com/150'
-        },
-    ])
+import HeaderList from './Header';
+import ProfileSettings from '../../components/Modals/ProfileSettings';
+
+export default function Profile(props) {
+  const {navigation} = props;
+  const [loading, setLoading] = React.useState(false);
+  const [data, setData] = React.useState(null);
+  const [visible, setVisible] = React.useState(false);
+
+  const [posts, setPost] = React.useState([
+    {postId: 1},
+    {postId: 1},
+    {postId: 3},
+    {postId: 4},
+  ]);
+  const [isRefreshing, setRefreshing] = React.useState(false);
+  const setIsLoggin = useStoreActions((actions) => actions.setIsLoggin)
+  const isOdd = (data) => {
+    return data.postId % 2 === 0;
+  };
+  const fetchProfile = async () => {
+    try {
+      setLoading(true);
+      const response = await server.getProfile();
+      if (response.status === 401) {
+        setLoading(false);
+        setIsLoggin(false);
+      }
+      if (response.data.success) {
+        const {posts: postData} = response.data.data;
+        const {username, profile, email} = response.data.data;
+        const user = {username: username, email: email, profile: profile};
+        if (!isOdd(postData) && postData.length > 0) {
+          const tempPost = {
+            postId: Math.random(),
+            image: 'https://via.placeholder.com/300/09f.png/fff',
+            title: 'Placeholder',
+          };
+          const data = [...postData, tempPost];
+          setPost(data);
+        } else {
+          setPost(postData);
+        }
+        setLoading(false);
+        setData(user);
+      } else {
+        SnackBar.show({
+          text: response.data.message,
+          duration: SnackBar.LENGTH_SHORT,
+        });
+        setLoading(false);
+      }
+    } catch (error) {
+      console.log(error);
+      SnackBar.show({
+        text: 'Something went wrong, please try again',
+        duration: SnackBar.LENGTH_SHORT,
+      });
+      setLoading(false);
+    }
+  };
+
+  React.useEffect(() => {
+    fetchProfile();
+  }, []);
+
+  const onClose = () => {
+    setVisible(false);
+    AsyncStorage.getItem('token')
+      .then((results) => {
+        if (results === null) {
+          setIsLoggin(false);
+        }
+        console.log(results);
+      })
+      .catch((error) => console.log(error));
+  };
+
+  const onOpen = () => {
+    setVisible(true);
+  };
+
+  const Item = ({image}) => {
     return (
-        <SafeAreaView style={styles.container}>
-            <ScrollView>
-                <View style={styles.avatarContainer}>
-                    <View>
-                        <Image
-                            source={{ uri: 'https://picsum.photos/200/300?grayscale' }}
-                            style={styles.avatar}
-                        />
-                    </View>
-                </View>
-                <View>
-                    <View style={styles.usernameContainer}>
-                        <Text style={styles.username}>Jane</Text>
-                    </View>
-                    <View style={styles.locationContainer}>
-                        <Text style={styles.locations}>
-                            South Africa, Polokwane
-                        </Text>
-                    </View>
-                </View>
-                <View style={styles.btnContainer}>
-                    <TouchableOpacity
-                        activeOpacity={0.9}
-                        style={styles.button}
-                    >
-                        <Text style={styles.buttonTextAdd}>
-                            Add New Post
-                        </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity 
-                            style={[styles.button, styles.buttonSettings]}
-                            activeOpacity={0.9}
-                            >
-                        <Text style={[ styles.buttonTextAdd, styles.buttonTextSettings ]}>
-                            Settings
-                        </Text>
-                    </TouchableOpacity>
-                </View>
-                <View>
-                    <Feed
-                        data={data}
-                    />
-                </View>
-            </ScrollView>
-        </SafeAreaView>
-    )
+      <TouchableOpacity>
+        <Image source={{uri: image}} style={styles.image} />
+      </TouchableOpacity>
+    );
+  };
+
+  const renderFeed = ({item}) => {
+    return <Item image={item.image} />;
+  };
+  const loadingItems = () => {
+    return (
+      <SkeletonPlaceholder>
+        <View style={styles.image} />
+      </SkeletonPlaceholder>
+    );
+  };
+  const handleRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    fetchProfile();
+    setRefreshing(false);
+  }, []);
+
+  return (
+    <SafeAreaView style={styles.container}>
+      <View>
+        <FlatList
+          ListHeaderComponent={
+            <HeaderList
+              onOpen={onOpen}
+              loading={loading}
+              data={data}
+              fetchProfile={fetchProfile}
+            />
+          }
+          numColumns={2}
+          refreshControl={
+            <RefreshControl
+              refreshing={isRefreshing}
+              onRefresh={handleRefresh}
+            />
+          }
+          columnWrapperStyle={styles.container}
+          data={posts}
+          renderItem={loading ? loadingItems : renderFeed}
+          keyExtractor={(item) => item.postId}
+        />
+      </View>
+      <ProfileSettings
+        visible={visible}
+        onClose={onClose}
+        navigation={navigation}
+      />
+    </SafeAreaView>
+  );
 }

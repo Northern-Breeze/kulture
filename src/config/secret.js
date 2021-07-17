@@ -1,4 +1,5 @@
 export default {
     STAGE: 'development',
-    SERVER_URL: 'https://4dd3f200ce2f.ngrok.io'
+    SERVER_URL: 'http://192.168.8.112:8080',
+    SERVER_URL_PROD: 'https://thekulture.herokuapp.com'
 }

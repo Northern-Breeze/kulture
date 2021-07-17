@@ -6,8 +6,6 @@ import EvilIcons from 'react-native-vector-icons/EvilIcons';
 
 import styles from './Preview.style';
 
-// const background = require('../../assets/images/full_image_1.png');
-const avatar = require('../../assets/images/avatar.png');
 
 export default function Preview(props) {
     const { navigation } = props;
@@ -19,7 +17,7 @@ export default function Preview(props) {
                     alignItems:'center'
                 }}>
                     <View>
-                        <Image source={avatar} />
+                        {/* <Image source={avatar} /> */}
                     </View>
                     <View>
                         <Text style={{ 

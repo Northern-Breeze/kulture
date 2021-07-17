@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 const styles = StyleSheet.create({
     container: {
@@ -7,29 +8,22 @@ const styles = StyleSheet.create({
         alignContent: 'center',
         backgroundColor: '#fff'
     },
-    registerContainer: {
-        marginTop: 40,
-        flexDirection: "row",
-        justifyContent: 'flex-start',
+    logo: {
+        justifyContent: 'center',
         alignItems: 'center',
-        marginHorizontal: 16,
-    },
-    registerText:{
-        color: '#000',
-        fontFamily: 'Comfortaa-Regular',
-        fontSize: 30,
+        marginVertical: hp(4)
     },
     input: {
         justifyContent: 'center',
         alignItems: 'center',
     },
     inputValue: {
-        width: 370,
-        height: 52,
+        width: wp(90),
+        height: hp(8),
         borderWidth: 2,
         borderColor: '#000',
-        marginVertical: 5,
-        padding: 13,
+        marginVertical: hp(1),
+        padding: wp(5),
         borderRadius: 2
     },
     button: {
@@ -38,23 +32,22 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: '#000',
         borderRadius: 10,
-        width: 370,
-        height: 52,
+        width: wp(90),
+        height: hp(8),
     },
     nextText: {
         color: '#fff',
-        fontFamily: 'Roboto-black',
-        fontSize: 13,
-        fontWeight: 'bold',
+        fontFamily: 'Comfortaa-Bold',
+        fontSize: wp(4),
     },
     linkbtn: {
-        marginVertical: 10,
-        marginHorizontal: 20,
+        marginVertical: hp(1),
+        marginHorizontal: wp(6),
     },
     linkText: {
         fontFamily: 'Comfortaa-Regular',
-        fontSize: 10
-    }
+        fontSize: wp(3)
+    },
 });
 
 export default styles;

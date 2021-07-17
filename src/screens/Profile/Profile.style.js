@@ -1,9 +1,11 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1
+        flex: 1,
+        justifyContent: 'center',
     },
     avatarContainer: {
         flexDirection: 'row',
@@ -23,6 +25,10 @@ const styles = StyleSheet.create({
     username: {
         fontFamily: 'Roboto-Regular',
         fontSize: 30,
+    },
+    loadingName: {
+        height: hp(5),
+        width: wp(40),
     },
     locationContainer: {
         justifyContent: 'center',
@@ -62,6 +68,26 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontFamily: 'Roboto',
         fontWeight: 'bold'
+    },
+    image: {
+        width: wp(45),
+        height: hp(38),
+        margin: wp(2),
+    },
+    containerImages: {
+        flex: 1,
+        justifyContent: 'center',
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+    },
+    // Action sheet
+    actionSheet: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: hp(20),
+    },
+    imageButtons: {
+        margin: 10
     }
 });
 
