@@ -22,11 +22,12 @@ export default function Feed(props) {
     return (
         <View>
             <FlatList
+                ListHeaderComponent={<Header />}
                 numColumns={2}
                 columnWrapperStyle={styles.container}
                 data={data}
                 renderItem={renderFeed}
-                keyExtractor={( item ) => item.id}
+                keyExtractor={( item ) => item.postId}
             />
         </View>
     )

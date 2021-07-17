@@ -35,7 +35,7 @@ instance.interceptors.request.use(async config => {
   
 instance.interceptors.request.use(async config => {
     const user = await AsyncStorage.getItem('token') || "";
-    const baseURL = `${configs['SERVER_URL']}/api/v1`
+    const baseURL = `${configs.SERVER_URL}/api/v1`
     const token = user;
     if (config.url && config.url.charAt(0) === '/') {
       config.url = `${baseURL}${config.url}`;

@@ -1,4 +1,5 @@
 import * as React from 'react';
+import {Linking, Platform} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import {createStackNavigator} from '@react-navigation/stack';
@@ -10,24 +11,34 @@ import AuthRoute from './AuthRoutes';
 const RootStack = createStackNavigator();
 
 export default function Routes(props) {
-  const isloggedin = useStoreState((state) => state.isloggedIn);
+  const {navigation} = props;
   const setIsLoggin = useStoreActions((actions) => actions.setIsLoggin);
-  const checkToken = React.useCallback(() => {
-    AsyncStorage.getItem('token')
-      .then((token) => {
-        setIsLoggin(token);
-      })
-      .catch((error) => console.log(error));
-  }, []);
+  const isloggedIn = useStoreState((state) => state.isloggedIn);
+
+  const checkToken = React.useCallback(async () => {
+    try {
+      console.log('does it change', isloggedIn);
+      const token = await AsyncStorage.getItem('token');
+      if (token !== null) {
+        setIsLoggin(true);
+      } else {
+        setIsLoggin(false);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }, [isloggedIn]);
+
   React.useEffect(() => {
     checkToken();
-  }, []);
+  }, [checkToken]);
+
   return (
     <RootStack.Navigator
       screenOptions={{
         headerShown: false,
       }}>
-      {isloggedin ? (
+      {isloggedIn ? (
         <RootStack.Screen
           name="Home"
           component={HomeRoute}

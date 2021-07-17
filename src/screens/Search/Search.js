@@ -4,56 +4,53 @@ import {
   Text,
   TextInput,
   FlatList,
-  Image,
   TouchableOpacity,
+  Dimensions,
+  Image,
 } from 'react-native';
-
+import SnackBar from 'react-native-snackbar';
+import server from '../../service/server';
 import styles from './Search.style';
 
-export default function Search() {
+export default function Search(props) {
+  const {navigation} = props;
   const [search, setSearch] = React.useState('');
-  const [data] = React.useState([
-    {
-      id: 1,
-      name: 'Samuel',
-      image: 'https://picsum.photos/200/300?random=1',
-    },
-    {
-      id: 2,
-      name: 'Micheal',
-      image: 'https://picsum.photos/200/300?random=2',
-    },
-    {
-      id: 3,
-      name: 'Rodney',
-      image: 'https://picsum.photos/200/300?random=3',
-    },
-    {
-      id: 4,
-      name: 'Lebohnag',
-      image: 'https://picsum.photos/200/300?random=4',
-    },
-    {
-      id: 5,
-      name: 'Marry',
-      image: 'https://picsum.photos/200/300?random=5',
-    },
-    {
-      id: 6,
-      name: 'Phillip',
-      image: 'https://picsum.photos/200/300?random=6',
-    },
-    {
-      id: 7,
-      name: 'Simpsons',
-      image: 'https://picsum.photos/200/300?random=7',
-    },
-    {
-      id: 8,
-      name: 'Franklin',
-      image: 'https://picsum.photos/200/300?random=8',
-    },
-  ]);
+  const [loading, setLoading] = React.useState(false);
+  const [posts, setPost] = React.useState([]);
+
+  const mounted = React.useRef(true);
+
+  const fetchPosts = async () => {
+    try {
+      setLoading(true);
+      const response = await server.getAllPost();
+
+      if (response.status === 401) {
+        navigation.navigate('signin');
+      }
+      if (response.data.success) {
+        const {data} = response.data;
+        if (mounted.current) {
+          setPost(data);
+          setLoading(false);
+        }
+      } else {
+        SnackBar.show({
+          text: response.data.message,
+          duration: SnackBar.LENGTH_SHORT,
+        });
+        setLoading(false);
+      }
+    } catch (error) {
+      console.log(error);
+      SnackBar.show({
+        text: 'Something went wrong, please try again',
+        duration: SnackBar.LENGTH_SHORT,
+      });
+      setLoading(false);
+    }
+  };
+
   const Item = ({image}) => {
     return (
       <TouchableOpacity>
@@ -62,9 +59,21 @@ export default function Search() {
     );
   };
   const renderFeed = ({item}) => <Item image={item.image} />;
-  const filterImages = data.filter((item) => {
-    return item.name.toLowerCase().includes(search.toLowerCase());
+
+  const filterImages = posts.filter((item) => {
+    return item.title.toLowerCase().includes(search.toLowerCase());
   });
+
+  React.useEffect(() => {
+    fetchPosts();
+  }, []);
+
+  React.useEffect(() => {
+    return () => {
+      mounted.current = false;
+    };
+  }, []);
+  
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -84,13 +93,16 @@ export default function Search() {
         <Text style={styles.results}>All Results</Text>
       </View>
       <View style={styles.resultsContainer}>
-        <FlatList
-          numColumns={2}
-          columnWrapperStyle={styles.images}
-          data={filterImages}
-          renderItem={renderFeed}
-          keyExtractor={(item) => item.id}
-        />
+        {loading && <Text>Loading ...</Text>}
+        {!loading && (
+          <FlatList
+            numColumns={2}
+            columnWrapperStyle={styles.images}
+            data={posts}
+            renderItem={renderFeed}
+            keyExtractor={(item) => item.postId}
+          />
+        )}
       </View>
     </View>
   );

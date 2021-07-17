@@ -1,11 +1,15 @@
 import React from 'react';
-import {View, Text, TextInput, ActivityIndicator} from 'react-native';
+import {View, Text, TextInput, Image} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import Snackbar from 'react-native-snackbar';
 import styles from './SignUp.style';
 
+// helper methods
 import {signUpInputs} from '../../helper/inputvalidator';
+
+// components
 import Validation from '../../components/Form/Validation';
+import Button from '../../components/common/Button';
 
 import server from '../../service/server';
 
@@ -82,8 +86,8 @@ export default function SignUp(props) {
   };
   return (
     <View style={styles.container}>
-      <View style={styles.registerContainer}>
-        <Text style={styles.registerText}>Register</Text>
+      <View style={styles.logo}>
+        <Image source={require('../../assets/images/logo.png')} />
       </View>
       <View style={styles.fields}>
         <View style={styles.input}>
@@ -93,6 +97,7 @@ export default function SignUp(props) {
             onChangeText={setEmail}
             value={email}
             keyboardType="email-address"
+            autoCapitalize="none"
           />
         </View>
         <Validation message={emailError} />
@@ -102,6 +107,7 @@ export default function SignUp(props) {
             placeholder="Enter Username"
             onChangeText={setUsername}
             value={username}
+            autoCapitalize="none"
           />
         </View>
         <Validation message={usernameError} />
@@ -111,13 +117,13 @@ export default function SignUp(props) {
             placeholder="Enter Password"
             onChangeText={setPassword}
             value={password}
+            autoCapitalize="none"
+            secureTextEntry
           />
         </View>
         <Validation message={passwordError} />
         <View style={styles.input}>
-          <TouchableOpacity style={styles.button} onPress={register}>
-            {networkloading ? <ActivityIndicator  size="large" color="#fff" /> : <Text style={styles.nextText}>SIGN UP</Text>}
-          </TouchableOpacity>
+          <Button isLoading={networkloading} buttonHandler={register} buttonText="Register"/>
         </View>
         <View>
           <TouchableOpacity style={styles.linkbtn} onPress={() => {

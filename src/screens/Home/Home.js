@@ -1,108 +1,130 @@
 import React from 'react';
 import {
   View,
-  Text,
-  StyleSheet,
   Image,
   FlatList,
-  Dimensions,
+  Dimensions
 } from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
+import SnackBar from 'react-native-snackbar';
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+
+import server from '../../service/server';
 import styles from './Home.style';
-
-import Feed from '../../components/Feed';
-
-const avatar = require('../../assets/images/avatar.png');
 
 const {width, height} = Dimensions.get('screen');
 
 export default function Home(props) {
+  // props
   const {navigation} = props;
-  const IMAGE_SIZE = 80;
-  const SPACING = 10;
+
+  // states
+  const [IMAGE_SIZE] = React.useState(80);
+  const [SPACING] = React.useState(10);
   const [activeIndex, setActiveIndex] = React.useState(0);
+  const [posts, setPost] = React.useState([]);
+  const [loading, setLoading] = React.useState(false);
+
+  // Refs
   const topRef = React.useRef();
   const bottomRef = React.useRef();
+  const mounted = React.useRef(true);
 
-  const [data] = React.useState([
-    {
-      id: 1,
-      image: 'https://picsum.photos/200/300?random=1',
-    },
-    {
-      id: 2,
-      image: 'https://picsum.photos/200/300?random=2',
-    },
-    {
-      id: 3,
-      image: 'https://picsum.photos/200/300?random=3',
-    },
-    {
-      id: 4,
-      image: 'https://picsum.photos/200/300?random=4',
-    },
-    {
-      id: 5,
-      image: 'https://picsum.photos/200/300?random=5',
-    },
-    {
-      id: 6,
-      image: 'https://picsum.photos/200/300?random=6',
-    },
-    {
-      id: 7,
-      image: 'https://picsum.photos/200/300?random=7',
-    },
-    {
-      id: 8,
-      image: 'https://picsum.photos/200/300?random=8',
-    },
-  ]);
+  const fetchPosts = async () => {
+    try {
+      setLoading(true);
+      const response = await server.getAllPost();
+      if (response.status === 200) {
+        if (response.data.success) {
+          const {data} = response.data;
+          if (mounted.current) {
+            setPost(data);
+            setLoading(false);
+          }
+        } else if (response.status === 401) {
+          navigation.navigate('signin');
+        } else {
+          SnackBar.show({
+            text: response.data.message,
+            duration: SnackBar.LENGTH_SHORT,
+          });
+          if (mounted.current) {
+            setLoading(false);
+          }
+        }
+      } else {
+        SnackBar.show({
+          text: response.data.message,
+          duration: SnackBar.LENGTH_SHORT,
+        });
+        setLoading(false);
+      }
+    } catch (error) {
+      console.log(error);
+      SnackBar.show({
+        text: 'Something went wrong, please try again',
+        duration: SnackBar.LENGTH_SHORT,
+      });
+      setLoading(false);
+    }
+  };
+
+  React.useEffect(() => {
+    fetchPosts();
+  }, []);
+
+  React.useEffect(() => {
+    return () => {
+      mounted.current = false;
+    };
+  }, []);
 
   const scrollToActiveIndex = (index) => {
     setActiveIndex(index);
     if (index * (IMAGE_SIZE + SPACING) - IMAGE_SIZE / 2 > width / 2) {
-        bottomRef?.current?.scrollToOffset({
-            offset: index * (IMAGE_SIZE + SPACING) - width / 2 + IMAGE_SIZE / 2,
-            animated: true,
-        });
+      bottomRef?.current?.scrollToOffset({
+        offset: index * (IMAGE_SIZE + SPACING) - width / 2 + IMAGE_SIZE / 2,
+        animated: true,
+      });
     } else {
-        bottomRef?.current?.scrollToOffset({
-            offset: 0,
-            animated: true,
-        });
+      bottomRef?.current?.scrollToOffset({
+        offset: 0,
+        animated: true,
+      });
     }
-};
+  };
 
-return (
-    <View style={{flex: 1, backgroundColor: '#fff'}}>
+  return (
+    <View style={styles.container}>
       <FlatList
         ref={topRef}
-        data={data}
-        keyExtractor={(item) => item.id.toString()}
+        data={posts}
+        keyExtractor={(item) => item.postId.toString()}
         horizontal
         pagingEnabled
         showsHorizontalScrollIndicator={false}
         onMomentumScrollEnd={(ev) => {
-            scrollToActiveIndex(
-                Math.floor(Math.floor(ev.nativeEvent.contentOffset.x) / Math.floor(width)),
-                );
+          scrollToActiveIndex(
+            Math.floor(
+              Math.floor(ev.nativeEvent.contentOffset.x) / Math.floor(width),
+            ),
+          );
         }}
         renderItem={({item}) => {
           return (
-            <View style={{width, height}}>
+            <TouchableOpacity activeOpacity={0.9}>
               <Image
                 source={{uri: item.image}}
-                style={[StyleSheet.absoluteFillObject]}
+                style={{ width: wp(100), height: hp(100) }}
               />
-            </View>
+            </TouchableOpacity>
           );
         }}
       />
       <FlatList
         ref={bottomRef}
-        data={data}
-        keyExtractor={(item) => item.id.toString()}
+        data={posts}
+        keyExtractor={(item) => item.postId.toString()}
         horizontal
         showsHorizontalScrollIndicator={false}
         style={{position: 'absolute', bottom: IMAGE_SIZE}}
@@ -111,23 +133,21 @@ return (
           return (
             <TouchableOpacity
               onPress={() => {
-                setActiveIndex(index)
+                setActiveIndex(index);
                 topRef?.current?.scrollToOffset({
-                    offset: index * width,
-                    animated: true,
-                  });
+                  offset: index * width,
+                  animated: true,
+                });
               }}
               activeOpacity={0.7}>
               <Image
                 source={{uri: item.image}}
-                style={{
-                  width: IMAGE_SIZE,
-                  height: IMAGE_SIZE,
-                  borderRadius: 12,
-                  borderColor: activeIndex === index ? '#fff' : 'transparent',
-                  borderWidth: 2,
-                  marginRight: SPACING,
-                }}
+                style={[
+                  styles.bottomScroll,
+                  {width: IMAGE_SIZE, height: IMAGE_SIZE},
+                  {borderColor: activeIndex === index ? '#fff' : 'transparent'},
+                  {marginRight: SPACING},
+                ]}
               />
             </TouchableOpacity>
           );
