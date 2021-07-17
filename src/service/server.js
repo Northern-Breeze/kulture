@@ -8,6 +8,7 @@ const server = {
     updateProfileImage: (data) => Axios.post('/profile/update-image', data),
     getAllPost: () => Axios.get('/post'),
     forgotPassword: (data) => Axios.post('/auth/forgotpasswordrequest', data),
+    changePassword: (data) => Axios.post('/auth/changepassword', data),
 }
 
 export default server;

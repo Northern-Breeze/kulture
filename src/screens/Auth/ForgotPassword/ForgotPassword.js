@@ -21,7 +21,7 @@ export default function ForgotPassword(props) {
           email: email
       });
       if (response.data.success) {
-        navigation.navigate('activate');
+        navigation.navigate('changepassword');
         setLoading(false);
       } else {
         Snackbar.show({
