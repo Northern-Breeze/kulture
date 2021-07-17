@@ -12,6 +12,20 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-end',
         padding: wp(5),
     },
+    control: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        padding: 10,
+        marginHorizontal: 20
+    },
+    button: {
+        marginLeft: 10, 
+    },
+    logoutText: {
+        color: '#000',
+        fontFamily: 'Comfortaa-Regular',
+        fontSize: wp(6),
+    }
 });
 
 export default styles;

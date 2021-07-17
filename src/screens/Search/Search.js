@@ -4,14 +4,16 @@ import {
   Text,
   TextInput,
   FlatList,
-  Image,
   TouchableOpacity,
+  Dimensions,
+  Image,
 } from 'react-native';
 import SnackBar from 'react-native-snackbar';
 import server from '../../service/server';
 import styles from './Search.style';
 
-export default function Search() {
+export default function Search(props) {
+  const {navigation} = props;
   const [search, setSearch] = React.useState('');
   const [loading, setLoading] = React.useState(false);
   const [posts, setPost] = React.useState([]);
@@ -22,18 +24,14 @@ export default function Search() {
     try {
       setLoading(true);
       const response = await server.getAllPost();
-      if (response.status === 200) {
-        if (response.data.success) {
-          const {data} = response.data;
-          if (mounted.current) {
-            setPost(data);
-            setLoading(false);
-          }
-        } else {
-          SnackBar.show({
-            text: response.data.message,
-            duration: SnackBar.LENGTH_SHORT,
-          });
+
+      if (response.status === 401) {
+        navigation.navigate('signin');
+      }
+      if (response.data.success) {
+        const {data} = response.data;
+        if (mounted.current) {
+          setPost(data);
           setLoading(false);
         }
       } else {
@@ -61,18 +59,21 @@ export default function Search() {
     );
   };
   const renderFeed = ({item}) => <Item image={item.image} />;
-  console.log('xxxxxxxxx', posts);
+
   const filterImages = posts.filter((item) => {
     return item.title.toLowerCase().includes(search.toLowerCase());
   });
+
   React.useEffect(() => {
     fetchPosts();
   }, []);
+
   React.useEffect(() => {
     return () => {
       mounted.current = false;
     };
   }, []);
+  
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -97,7 +98,7 @@ export default function Search() {
           <FlatList
             numColumns={2}
             columnWrapperStyle={styles.images}
-            data={filterImages}
+            data={posts}
             renderItem={renderFeed}
             keyExtractor={(item) => item.postId}
           />

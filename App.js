@@ -5,7 +5,7 @@ import { createStore, StoreProvider as Provider } from 'easy-peasy';
 
 // Store
 import Store from './src/store/model';
-
+import storage from './src/store/storage/storage';
 //components
 import Routes from './src/routes/Routes';
 

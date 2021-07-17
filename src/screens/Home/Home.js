@@ -1,15 +1,16 @@
 import React from 'react';
 import {
   View,
-  StyleSheet,
   Image,
   FlatList,
-  Dimensions,
+  Dimensions
 } from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import SnackBar from 'react-native-snackbar';
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 import server from '../../service/server';
+import styles from './Home.style';
 
 const {width, height} = Dimensions.get('screen');
 
@@ -23,7 +24,7 @@ export default function Home(props) {
   const [activeIndex, setActiveIndex] = React.useState(0);
   const [posts, setPost] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
-  
+
   // Refs
   const topRef = React.useRef();
   const bottomRef = React.useRef();
@@ -40,12 +41,16 @@ export default function Home(props) {
             setPost(data);
             setLoading(false);
           }
+        } else if (response.status === 401) {
+          navigation.navigate('signin');
         } else {
           SnackBar.show({
             text: response.data.message,
             duration: SnackBar.LENGTH_SHORT,
           });
-          setLoading(false);
+          if (mounted.current) {
+            setLoading(false);
+          }
         }
       } else {
         SnackBar.show({
@@ -66,31 +71,31 @@ export default function Home(props) {
 
   React.useEffect(() => {
     fetchPosts();
-  },[]);
+  }, []);
 
   React.useEffect(() => {
     return () => {
       mounted.current = false;
-    }
-  },[])
+    };
+  }, []);
 
   const scrollToActiveIndex = (index) => {
     setActiveIndex(index);
     if (index * (IMAGE_SIZE + SPACING) - IMAGE_SIZE / 2 > width / 2) {
-        bottomRef?.current?.scrollToOffset({
-            offset: index * (IMAGE_SIZE + SPACING) - width / 2 + IMAGE_SIZE / 2,
-            animated: true,
-        });
+      bottomRef?.current?.scrollToOffset({
+        offset: index * (IMAGE_SIZE + SPACING) - width / 2 + IMAGE_SIZE / 2,
+        animated: true,
+      });
     } else {
-        bottomRef?.current?.scrollToOffset({
-            offset: 0,
-            animated: true,
-        });
+      bottomRef?.current?.scrollToOffset({
+        offset: 0,
+        animated: true,
+      });
     }
-};
+  };
 
-return (
-    <View style={{flex: 1, backgroundColor: '#fff'}}>
+  return (
+    <View style={styles.container}>
       <FlatList
         ref={topRef}
         data={posts}
@@ -99,18 +104,20 @@ return (
         pagingEnabled
         showsHorizontalScrollIndicator={false}
         onMomentumScrollEnd={(ev) => {
-            scrollToActiveIndex(
-                Math.floor(Math.floor(ev.nativeEvent.contentOffset.x) / Math.floor(width)),
-                );
+          scrollToActiveIndex(
+            Math.floor(
+              Math.floor(ev.nativeEvent.contentOffset.x) / Math.floor(width),
+            ),
+          );
         }}
         renderItem={({item}) => {
           return (
-            <View style={{width, height}}>
+            <TouchableOpacity activeOpacity={0.9}>
               <Image
                 source={{uri: item.image}}
-                style={[StyleSheet.absoluteFillObject]}
+                style={{ width: wp(100), height: hp(100) }}
               />
-            </View>
+            </TouchableOpacity>
           );
         }}
       />
@@ -126,23 +133,21 @@ return (
           return (
             <TouchableOpacity
               onPress={() => {
-                setActiveIndex(index)
+                setActiveIndex(index);
                 topRef?.current?.scrollToOffset({
-                    offset: index * width,
-                    animated: true,
-                  });
+                  offset: index * width,
+                  animated: true,
+                });
               }}
               activeOpacity={0.7}>
               <Image
                 source={{uri: item.image}}
-                style={{
-                  width: IMAGE_SIZE,
-                  height: IMAGE_SIZE,
-                  borderRadius: 12,
-                  borderColor: activeIndex === index ? '#fff' : 'transparent',
-                  borderWidth: 2,
-                  marginRight: SPACING,
-                }}
+                style={[
+                  styles.bottomScroll,
+                  {width: IMAGE_SIZE, height: IMAGE_SIZE},
+                  {borderColor: activeIndex === index ? '#fff' : 'transparent'},
+                  {marginRight: SPACING},
+                ]}
               />
             </TouchableOpacity>
           );
