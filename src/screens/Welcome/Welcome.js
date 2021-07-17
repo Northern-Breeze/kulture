@@ -7,7 +7,6 @@ const backgroundImage = require('../../assets/images/background.png')
 const logo = require('../../assets/images/logo.png')
 
 export default function Welcome(props) {
-    console.log(props);
     const { navigation } = props;
     const goTo = (place) => {
         navigation.navigate(place);

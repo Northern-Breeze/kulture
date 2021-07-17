@@ -8,15 +8,17 @@ import {
   RefreshControl,
 } from 'react-native';
 import SnackBar from 'react-native-snackbar';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
-
+import { useStoreActions } from 'easy-peasy';
 import server from '../../service/server';
 import styles from './Profile.style';
 
 import HeaderList from './Header';
 import ProfileSettings from '../../components/Modals/ProfileSettings';
 
-export default function Profile() {
+export default function Profile(props) {
+  const {navigation} = props;
   const [loading, setLoading] = React.useState(false);
   const [data, setData] = React.useState(null);
   const [visible, setVisible] = React.useState(false);
@@ -28,34 +30,35 @@ export default function Profile() {
     {postId: 4},
   ]);
   const [isRefreshing, setRefreshing] = React.useState(false);
+  const setIsLoggin = useStoreActions((actions) => actions.setIsLoggin)
   const isOdd = (data) => {
     return data.postId % 2 === 0;
-  }
+  };
   const fetchProfile = async () => {
     try {
       setLoading(true);
       const response = await server.getProfile();
-      if (response.status === 200) {
-        if (response.data.success) {
-          const {posts: postData} = response.data.data;
-          const {username, profile, email} = response.data.data;
-          const user = {username: username, email: email, profile: profile};
-          if(!isOdd(postData)) {
-            const tempPost = {postId: Math.random(), image: '', title: ''};
-            const data = [...postData, tempPost];
-            setPost(data);
-          } else {
-            setPost(postData);
-          }
-          setLoading(false);
-          setData(user);
+      if (response.status === 401) {
+        setLoading(false);
+        setIsLoggin(false);
+      }
+      if (response.data.success) {
+        const {posts: postData} = response.data.data;
+        const {username, profile, email} = response.data.data;
+        const user = {username: username, email: email, profile: profile};
+        if (!isOdd(postData) && postData.length > 0) {
+          const tempPost = {
+            postId: Math.random(),
+            image: 'https://via.placeholder.com/300/09f.png/fff',
+            title: 'Placeholder',
+          };
+          const data = [...postData, tempPost];
+          setPost(data);
         } else {
-          SnackBar.show({
-            text: response.data.message,
-            duration: SnackBar.LENGTH_SHORT,
-          });
-          setLoading(false);
+          setPost(postData);
         }
+        setLoading(false);
+        setData(user);
       } else {
         SnackBar.show({
           text: response.data.message,
@@ -77,13 +80,21 @@ export default function Profile() {
     fetchProfile();
   }, []);
 
-  const onClose = () => { 
+  const onClose = () => {
     setVisible(false);
-  }
+    AsyncStorage.getItem('token')
+      .then((results) => {
+        if (results === null) {
+          setIsLoggin(false);
+        }
+        console.log(results);
+      })
+      .catch((error) => console.log(error));
+  };
 
   const onOpen = () => {
     setVisible(true);
-  }
+  };
 
   const Item = ({image}) => {
     return (
@@ -113,7 +124,14 @@ export default function Profile() {
     <SafeAreaView style={styles.container}>
       <View>
         <FlatList
-          ListHeaderComponent={<HeaderList onOpen={onOpen} loading={loading} data={data} fetchProfile={fetchProfile}/>}
+          ListHeaderComponent={
+            <HeaderList
+              onOpen={onOpen}
+              loading={loading}
+              data={data}
+              fetchProfile={fetchProfile}
+            />
+          }
           numColumns={2}
           refreshControl={
             <RefreshControl
@@ -127,9 +145,10 @@ export default function Profile() {
           keyExtractor={(item) => item.postId}
         />
       </View>
-      <ProfileSettings 
+      <ProfileSettings
         visible={visible}
         onClose={onClose}
+        navigation={navigation}
       />
     </SafeAreaView>
   );
