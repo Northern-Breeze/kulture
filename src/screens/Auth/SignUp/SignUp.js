@@ -2,6 +2,22 @@ import React from 'react';
 import {View, Text, TextInput, Image} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import Snackbar from 'react-native-snackbar';
+import {
+  getUniqueId,
+  getManufacturer,
+  getAndroidId,
+  getApplicationName,
+  getBaseOs,
+  getCarrier,
+  getBrand,
+  getBuildNumber,
+  getFirstInstallTime,
+  getFingerprint,
+  getLastUpdateTime,
+  getVersion
+} from 'react-native-device-info';
+
+// Styles
 import styles from './SignUp.style';
 
 // helper methods
@@ -23,7 +39,34 @@ export default function SignUp(props) {
   const [emailError, setEmailError] = React.useState('');
   const [usernameError, setUsernameError] = React.useState('');
   const [passwordError, setPasswordError] = React.useState('');
-
+  const getDetails = async () => {
+    const androidId = await getAndroidId();
+    const os = await getBaseOs();
+    const carrier = await getCarrier();
+    const timeInstalled = await getFirstInstallTime();
+    const fingerPrint = await getFingerprint()
+    const lastUpdateTime = await getLastUpdateTime();
+    const applicationName = getApplicationName();
+    const manufacturer = getManufacturer();
+    const buildNumber = getBuildNumber();
+    const branch = getBrand();
+    const uniqueId = getUniqueId();
+    const version =  getVersion();
+    return {
+      appName: applicationName,
+      deviceId: uniqueId,
+      androidId: androidId,
+      baseOs: os,
+      manufacturer: manufacturer,
+      carrier: carrier,
+      timeInstalled: timeInstalled,
+      lastUpdateTime: lastUpdateTime,
+      fingerPrint: fingerPrint,
+      buildNumber: buildNumber,
+      branch: branch,
+      version: version
+    };
+  };
   const register = async () => {
     try {
       const type = signUpInputs({email, username, password});
@@ -44,10 +87,12 @@ export default function SignUp(props) {
         return;
       }
       setNetworkLoading(true);
+      const user = await getDetails();
       const response = await server.register({
         username: username,
         email: email,
         password: password,
+        userData: user
       });
       const status = response.status;
       if (status === 201) {
@@ -123,12 +168,18 @@ export default function SignUp(props) {
         </View>
         <Validation message={passwordError} />
         <View style={styles.input}>
-          <Button isLoading={networkloading} buttonHandler={register} buttonText="Register"/>
+          <Button
+            isLoading={networkloading}
+            buttonHandler={register}
+            buttonText="Register"
+          />
         </View>
         <View>
-          <TouchableOpacity style={styles.linkbtn} onPress={() => {
-            goTo('signin')
-          }}>
+          <TouchableOpacity
+            style={styles.linkbtn}
+            onPress={() => {
+              goTo('signin');
+            }}>
             <Text style={styles.linkText}>Already have an account? Login</Text>
           </TouchableOpacity>
         </View>
