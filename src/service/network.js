@@ -42,7 +42,8 @@ instance.interceptors.request.use(async config => {
     }
    
     config.headers.authorization = `Bearer ${token}`;
-   
+    config.headers['mobile-token'] = 'nrC^L9pjG)/4MZ>2';
+
     return config;
    }, error => Promise.reject(error));
 

@@ -1,18 +1,50 @@
-import React from 'react'
+import * as React from 'react'
 import { View, Text, ImageBackground, Image, StatusBar } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import styles from './Welcome.style';
+
+import server from '../../service/server';
 
 const backgroundImage = require('../../assets/images/background.png')
 const logo = require('../../assets/images/logo.png')
 
 export default function Welcome(props) {
     const { navigation } = props;
+    
+    const [post, setPost] = React.useState(null);
+
+    const mounted = React.useRef(true);
+    
     const goTo = (place) => {
         navigation.navigate(place);
     }
+
+    const getPost = async () => {
+        try {
+            const response = await server.getMostLiked();
+            if(response.data.success){
+                const { data } = response.data;
+                if(mounted.current){
+                    setPost(data); 
+                    console.log(post);
+                }
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    React.useEffect(() => {
+        getPost();
+    },[]);
+
+    React.useEffect(() => {
+        return () => {
+            mounted.current = false;
+        }
+    },[])
     return (
-        <ImageBackground source={backgroundImage} style={styles.imageContainer}>
+        <ImageBackground source={post ? {uri : post.image_ref} : backgroundImage} style={styles.imageContainer}>
             <StatusBar barStyle="light-content" backgroundColor="transparent" translucent={true}/>
             <View style={styles.second}>
                 <View style={styles.brandlogo}>
