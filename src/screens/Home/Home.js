@@ -7,10 +7,13 @@ import {
 } from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import SnackBar from 'react-native-snackbar';
-import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 import server from '../../service/server';
 import styles from './Home.style';
+
+// Components
+import TopList from '../../components/Feed/TopList';
+import BottomList from '../../components/Feed/BottomList';
 
 const {width, height} = Dimensions.get('screen');
 
@@ -96,63 +99,8 @@ export default function Home(props) {
 
   return (
     <View style={styles.container}>
-      <FlatList
-        ref={topRef}
-        data={posts}
-        keyExtractor={(item) => item.postId.toString()}
-        horizontal
-        pagingEnabled
-        showsHorizontalScrollIndicator={false}
-        onMomentumScrollEnd={(ev) => {
-          scrollToActiveIndex(
-            Math.floor(
-              Math.floor(ev.nativeEvent.contentOffset.x) / Math.floor(width),
-            ),
-          );
-        }}
-        renderItem={({item}) => {
-          return (
-            <TouchableOpacity activeOpacity={0.9}>
-              <Image
-                source={{uri: item.image}}
-                style={{ width: wp(100), height: hp(100) }}
-              />
-            </TouchableOpacity>
-          );
-        }}
-      />
-      <FlatList
-        ref={bottomRef}
-        data={posts}
-        keyExtractor={(item) => item.postId.toString()}
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        style={{position: 'absolute', bottom: IMAGE_SIZE}}
-        contentContainerStyle={{paddingHorizontal: SPACING}}
-        renderItem={({item, index}) => {
-          return (
-            <TouchableOpacity
-              onPress={() => {
-                setActiveIndex(index);
-                topRef?.current?.scrollToOffset({
-                  offset: index * width,
-                  animated: true,
-                });
-              }}
-              activeOpacity={0.7}>
-              <Image
-                source={{uri: item.image}}
-                style={[
-                  styles.bottomScroll,
-                  {width: IMAGE_SIZE, height: IMAGE_SIZE},
-                  {borderColor: activeIndex === index ? '#fff' : 'transparent'},
-                  {marginRight: SPACING},
-                ]}
-              />
-            </TouchableOpacity>
-          );
-        }}
-      />
+     <TopList posts={posts} topRef={topRef} scrollToActiveIndex={scrollToActiveIndex} />
+     <BottomList bottomRef={bottomRef} posts={posts} IMAGE_SIZE={IMAGE_SIZE} SPACING={SPACING} setActiveIndex={setActiveIndex} activeIndex={activeIndex} />
     </View>
   );
 }
