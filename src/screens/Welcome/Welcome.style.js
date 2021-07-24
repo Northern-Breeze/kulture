@@ -6,7 +6,8 @@ const styles = StyleSheet.create({
         height: '100%',
         flex: 1,
         justifyContent: "flex-end",
-        alignItems: "center"
+        alignItems: "center",
+        resizeMode: 'cover'
     },
     brand: {
         fontFamily: 'Comfortaa-Regular',

@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  View,
-  Image,
-  FlatList,
-  Dimensions
-} from 'react-native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import {View, Dimensions} from 'react-native';
 import SnackBar from 'react-native-snackbar';
 
 import server from '../../service/server';
@@ -15,7 +9,7 @@ import styles from './Home.style';
 import TopList from '../../components/Feed/TopList';
 import BottomList from '../../components/Feed/BottomList';
 
-const {width, height} = Dimensions.get('screen');
+const {width} = Dimensions.get('screen');
 
 export default function Home(props) {
   // props
@@ -45,7 +39,7 @@ export default function Home(props) {
             setLoading(false);
           }
         } else if (response.status === 401) {
-          navigation.navigate('signin');
+          //
         } else {
           SnackBar.show({
             text: response.data.message,
@@ -99,8 +93,20 @@ export default function Home(props) {
 
   return (
     <View style={styles.container}>
-     <TopList posts={posts} topRef={topRef} scrollToActiveIndex={scrollToActiveIndex} />
-     <BottomList bottomRef={bottomRef} posts={posts} IMAGE_SIZE={IMAGE_SIZE} SPACING={SPACING} setActiveIndex={setActiveIndex} activeIndex={activeIndex} />
+      <TopList
+        posts={posts}
+        topRef={topRef}
+        scrollToActiveIndex={scrollToActiveIndex}
+        activeIndex={activeIndex}
+      />
+      <BottomList
+        bottomRef={bottomRef}
+        posts={posts}
+        IMAGE_SIZE={IMAGE_SIZE}
+        SPACING={SPACING}
+        setActiveIndex={setActiveIndex}
+        activeIndex={activeIndex}
+      />
     </View>
   );
 }
