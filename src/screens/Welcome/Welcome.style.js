@@ -15,7 +15,6 @@ const styles = StyleSheet.create({
     },
     brandlogo: {
         flexDirection: "row",
-        // justifyContent: "space-evenly",
     },
     logo: {
         flexDirection: 'row',
@@ -71,6 +70,15 @@ const styles = StyleSheet.create({
         fontSize: 13,
         color: '#fff',
         fontWeight: 'bold',
+    },
+    InternetConnected: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    notConnectedText: {
+        fontFamily: 'Comfortaa-Regular',
+        fontSize: 20,
     }
     
 });
