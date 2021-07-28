@@ -11,6 +11,9 @@ import {
 import SnackBar from 'react-native-snackbar';
 import server from '../../service/server';
 import styles from './Search.style';
+import { useNetInfo } from '@react-native-community/netinfo';
+import NotConnected from '../../components/NotConnected';
+
 
 export default function Search(props) {
   const {navigation} = props;
@@ -19,7 +22,7 @@ export default function Search(props) {
   const [posts, setPost] = React.useState([]);
 
   const mounted = React.useRef(true);
-
+  const netinfo = useNetInfo();
   const fetchPosts = async () => {
     try {
       setLoading(true);
@@ -74,6 +77,11 @@ export default function Search(props) {
     };
   }, []);
   
+
+  if (!netinfo.isConnected) {
+    return <NotConnected />;
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
