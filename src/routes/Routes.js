@@ -1,5 +1,4 @@
 import * as React from 'react';
-import {Linking, Platform} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import {createStackNavigator} from '@react-navigation/stack';
@@ -17,7 +16,6 @@ export default function Routes(props) {
 
   const checkToken = React.useCallback(async () => {
     try {
-      console.log('does it change', isloggedIn);
       const token = await AsyncStorage.getItem('token');
       if (token !== null) {
         setIsLoggin(true);

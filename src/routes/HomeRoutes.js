@@ -26,7 +26,7 @@ export default function HomeRoute() {
                 options={{
                     tabBarLabel: 'Home',
                     tabBarIcon: ({ color }) => (
-                      <AntDesign name="home" color={color} size={26} />
+                      <AntDesign name="home" color="#fff" size={26} />
                     ),
                   }}
                 />
@@ -36,7 +36,7 @@ export default function HomeRoute() {
                 options={{
                     tabBarLabel: 'Search',
                     tabBarIcon: ({ color }) => (
-                      <EvilIcons name="search" color={color} size={26} />
+                      <EvilIcons name="search" color="#fff" size={26} />
                     ),
                   }}
                 />
@@ -46,7 +46,7 @@ export default function HomeRoute() {
                 options={{
                     tabBarLabel: 'Add',
                     tabBarIcon: ({ color }) => (
-                      <EvilIcons name="plus" color={color} size={26} />
+                      <EvilIcons name="plus" color="#fff" size={26} />
                     ),
                   }}
                 />
@@ -56,7 +56,7 @@ export default function HomeRoute() {
                 options={{
                     tabBarLabel: 'Profile',
                     tabBarIcon: ({ color }) => (
-                      <AntDesign name="user" color={color} size={26} />
+                      <AntDesign name="user" color="#fff" size={26} />
                     ),
                   }}
                 />

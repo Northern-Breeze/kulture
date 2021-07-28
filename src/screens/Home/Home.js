@@ -1,13 +1,13 @@
 import React from 'react';
-import {View, Dimensions} from 'react-native';
+import {View, Dimensions, Text} from 'react-native';
 import SnackBar from 'react-native-snackbar';
 
 import server from '../../service/server';
-import styles from './Home.style';
 
 // Components
 import TopList from '../../components/Feed/TopList';
 import BottomList from '../../components/Feed/BottomList';
+import EmptyList from '../../components/EmptyList';
 
 const {width} = Dimensions.get('screen');
 
@@ -91,22 +91,78 @@ export default function Home(props) {
     }
   };
 
+  const handleLoadMore = () => {
+    //
+    console.log('end reached');
+  }
+
+  const refreshHandler = async () => {
+    try {
+      setLoading(true);
+      const response = await server.getAllPost();
+      if (response.status === 200) {
+        if (response.data.success) {
+          const {data} = response.data;
+          if (mounted.current) {
+            setPost(data);
+            setLoading(false);
+          }
+        } else if (response.status === 401) {
+          //
+        } else {
+          SnackBar.show({
+            text: response.data.message,
+            duration: SnackBar.LENGTH_SHORT,
+          });
+          if (mounted.current) {
+            setLoading(false);
+          }
+        }
+      } else {
+        SnackBar.show({
+          text: response.data.message,
+          duration: SnackBar.LENGTH_SHORT,
+        });
+        setLoading(false);
+      }
+    } catch (error) {
+      console.log(error);
+      SnackBar.show({
+        text: 'Something went wrong, please try again',
+        duration: SnackBar.LENGTH_SHORT,
+      });
+      setLoading(false);
+    }
+  };
+
+  if (loading) {
+    <View>
+      <Text>Loading ...</Text>
+    </View>;
+  }
+
   return (
-    <View style={styles.container}>
-      <TopList
-        posts={posts}
-        topRef={topRef}
-        scrollToActiveIndex={scrollToActiveIndex}
-        activeIndex={activeIndex}
-      />
-      <BottomList
-        bottomRef={bottomRef}
-        posts={posts}
-        IMAGE_SIZE={IMAGE_SIZE}
-        SPACING={SPACING}
-        setActiveIndex={setActiveIndex}
-        activeIndex={activeIndex}
-      />
-    </View>
+    <>
+      {posts.length === 0 && <EmptyList refreshHandler={refreshHandler} />}
+      {posts.length > 0 && (
+        <>
+          <TopList
+            posts={posts}
+            topRef={topRef}
+            scrollToActiveIndex={scrollToActiveIndex}
+            activeIndex={activeIndex}
+            handleLoadMore={handleLoadMore}
+          />
+          <BottomList
+            bottomRef={bottomRef}
+            posts={posts}
+            IMAGE_SIZE={IMAGE_SIZE}
+            SPACING={SPACING}
+            setActiveIndex={setActiveIndex}
+            activeIndex={activeIndex}
+          />
+        </>
+      )}
+    </>
   );
 }

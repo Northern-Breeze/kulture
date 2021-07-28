@@ -1,5 +1,6 @@
 import React from 'react';
 import {FlatList, Dimensions} from 'react-native';
+import Footer from '../Footer';
 
 import Item from './Item';
 
@@ -7,11 +8,7 @@ const {width} = Dimensions.get('screen');
 
 export default function TopList(props) {
   // Props
-  const {posts, topRef, scrollToActiveIndex, activeIndex} = props;
-  // const  onViewableItemsChanged = ({ viewableItems, changed }) => {
-  //   console.log("Visible items are", viewableItems);
-  //   console.log("Changed in this iteration", changed);
-  // }
+  const {posts, topRef, scrollToActiveIndex, activeIndex, handleLoadMore} = props;
   return (
     <FlatList
       ref={topRef}
@@ -19,7 +16,11 @@ export default function TopList(props) {
       keyExtractor={(item) => item.postId.toString()}
       horizontal
       pagingEnabled
+      ListFooterComponent={<Footer />}
+      onEndReached={handleLoadMore}
       showsHorizontalScrollIndicator={false}
+      onEndReachedThreshold={0.5}
+      initialNumToRender={6}
       onMomentumScrollEnd={(ev) => {
         scrollToActiveIndex(
           Math.floor(
