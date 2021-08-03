@@ -13,7 +13,7 @@ export default function TopList(props) {
     <FlatList
       ref={topRef}
       data={posts}
-      keyExtractor={(item) => item.postId.toString()}
+      keyExtractor={(_, index) => index.toString()}
       horizontal
       pagingEnabled
       ListFooterComponent={<Footer />}

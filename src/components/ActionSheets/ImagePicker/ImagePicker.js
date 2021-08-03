@@ -2,12 +2,13 @@ import React from 'react';
 import {View, Text, TouchableOpacity} from 'react-native';
 import ActionSheet from 'react-native-actions-sheet';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import Snackbar from 'react-native-snackbar';
 
 import styles from './ImagePicker.style';
 
 export default function ImagePicker(props) {
-  const {actionSheetRef, uploadToServer} = props;
+  const {actionSheetRef, setImage} = props;
   const handleUseCamera = () => {
     const options = {
       mediaType: 'photo',
@@ -30,7 +31,7 @@ export default function ImagePicker(props) {
       } else {
         const {assets} = response;
         const file = assets[0];
-        uploadToServer(file);
+          setImage(file);
       }
     });
   };
@@ -55,25 +56,37 @@ export default function ImagePicker(props) {
       } else {
         const {assets} = response;
         const file = assets[0];
-        uploadToServer(file);
+        setImage(file);
       }
     });
   };
   return (
     <ActionSheet ref={actionSheetRef} animated={true}>
       <View style={styles.actionSheet}>
-        <TouchableOpacity
-          activeOpacity={0.7}
-          onPress={handleUseCamera}
-          style={styles.imageButtons}>
-          <Text>Use Camera to take a picture</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          activeOpacity={0.7}
-          onPress={handleUseGallery}
-          style={styles.imageButtons}>
-          <Text>Select image from gallery</Text>
-        </TouchableOpacity>
+        <View style={styles.container}>
+          <TouchableOpacity
+            activeOpacity={0.7}
+            onPress={handleUseCamera}
+            style={styles.imageButtons}>
+            <View>
+              <AntDesign name="camera" color="#000" size={20} />
+            </View>
+            <View style={styles.textContainer}>
+              <Text>Use Camera to take a picture</Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity
+            activeOpacity={0.7}
+            onPress={handleUseGallery}
+            style={styles.imageButtons}>
+            <View>
+              <AntDesign name="folder1" color="#000" size={20} />
+            </View>
+            <View style={styles.textContainer}>
+              <Text>Select image from gallery</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
       </View>
     </ActionSheet>
   );

@@ -5,12 +5,14 @@ import {
   TextInput,
   FlatList,
   TouchableOpacity,
-  Dimensions,
   Image,
 } from 'react-native';
 import SnackBar from 'react-native-snackbar';
 import server from '../../service/server';
 import styles from './Search.style';
+import { useNetInfo } from '@react-native-community/netinfo';
+import NotConnected from '../../components/NotConnected';
+
 
 export default function Search(props) {
   const {navigation} = props;
@@ -19,11 +21,11 @@ export default function Search(props) {
   const [posts, setPost] = React.useState([]);
 
   const mounted = React.useRef(true);
-
+  const netinfo = useNetInfo();
   const fetchPosts = async () => {
     try {
       setLoading(true);
-      const response = await server.getAllPost();
+      const response = await server.getAllPost({ page: 0, size: 5 });
 
       if (response.status === 401) {
         navigation.navigate('signin');
@@ -41,6 +43,7 @@ export default function Search(props) {
         });
         setLoading(false);
       }
+      setLoading(false);
     } catch (error) {
       console.log(error);
       SnackBar.show({
@@ -74,6 +77,11 @@ export default function Search(props) {
     };
   }, []);
   
+
+  if (!netinfo.isConnected) {
+    return <NotConnected />;
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -98,7 +106,7 @@ export default function Search(props) {
           <FlatList
             numColumns={2}
             columnWrapperStyle={styles.images}
-            data={posts}
+            data={filterImages}
             renderItem={renderFeed}
             keyExtractor={(item) => item.postId}
           />

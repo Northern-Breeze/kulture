@@ -6,9 +6,21 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         height: hp(20),
+        flexDirection: 'row',
+    },
+    container: {
+        flexDirection: 'column'
     },
     imageButtons: {
-        margin: 10
+        flexDirection: 'row',
+        alignItems: 'center',
+        margin: 15
+    },
+    textContainer: {
+        marginHorizontal: 10
+    },
+    text: {
+        fontFamily: 'Comfortaa-Regular'
     }
 });
 
