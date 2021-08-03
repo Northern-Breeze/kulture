@@ -1,10 +1,12 @@
 import React from 'react';
-import {FlatList, TouchableOpacity, Image} from 'react-native';
+import {FlatList, TouchableOpacity, Image, Dimensions} from 'react-native';
+
+const { width } = Dimensions.get('window')
 
 import styles from './BottomList.style';
 
 export default function BottomList(props) {
-    const { bottomRef, posts, IMAGE_SIZE, SPACING, setActiveIndex, activeIndex } = props;
+    const { bottomRef, posts, IMAGE_SIZE, SPACING, setActiveIndex, activeIndex, topRef } = props;
   return (
     <FlatList
       ref={bottomRef}

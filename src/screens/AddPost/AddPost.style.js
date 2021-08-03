@@ -39,6 +39,19 @@ const styles = StyleSheet.create({
         fontFamily: 'Comfortaa',
         color: '#fff',
         fontSize: 18,
+    },
+    imagePlaceholder: {
+        alignItems: 'center',
+    },
+    placeholder: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: 400,
+        width: '70%',
+        backgroundColor: '#eee',
+        borderWidth: 2,
+        borderColor: '#000',
+        resizeMode: 'contain',
     }
 });
 

@@ -6,7 +6,7 @@ import {useNetInfo} from '@react-native-community/netinfo';
 import styles from './Welcome.style';
 
 import server from '../../service/server';
-import NotConnected from '../../components/NotConnected/NotConnected';
+import NotConnected from '../../components/NotConnected';
 
 const backgroundImage = require('../../assets/images/background.png');
 

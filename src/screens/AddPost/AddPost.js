@@ -1,18 +1,19 @@
 import React from 'react';
-import {View, Text, TextInput, TouchableOpacity} from 'react-native';
+import {View, Text, TextInput, TouchableOpacity, Image} from 'react-native';
 import ImagePicker from '../../components/ActionSheets/ImagePicker';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Snackbar from 'react-native-snackbar';
 
 import styles from './AddPost.style';
 
 // helpers
-import { configs } from '../../config/config';
+import {configs} from '../../config/config';
 
 export default function AddPost() {
   const [title, setTitle] = React.useState('');
   const actionSheetRef = React.useRef(true);
-
+  const [image, setImage] = React.useState('');
   const createPost = () => {
     actionSheetRef.current?.setModalVisible();
   };
@@ -34,9 +35,9 @@ export default function AddPost() {
     return data;
   };
 
-  const uploadToServer = async (file, body) => {
+  const uploadToServer = async () => {
     try {
-      if (typeof file === 'undefined') {
+      if (typeof image === 'undefined' || image === '') {
         Snackbar.show({
           text: 'Please Upload A File',
           duration: Snackbar.LENGTH_SHORT,
@@ -44,17 +45,14 @@ export default function AddPost() {
         return;
       }
       const token = (await AsyncStorage.getItem('token')) || '';
-      const request = await fetch(
-        `${configs.SERVER_URL}/api/v1/post/add`,
-        {
-          body: createFormData(file, {title}),
-          method: 'POST',
-          headers: {
-            'Content-Type': 'multipart/form-data',
-            Authorization: `Bearer ${token}`,
-          },
+      const request = await fetch(`${configs.SERVER_URL}/api/v1/post/add`, {
+        body: createFormData(image, {title: 'post'}),
+        method: 'POST',
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${token}`,
         },
-      );
+      });
       const response = await request.json();
       if (response.status === 200) {
         if (response.success) {
@@ -84,40 +82,50 @@ export default function AddPost() {
       });
     }
   };
-
+  const evalString = (value) => {
+    if(typeof value !== 'string' && typeof value !== 'undefined'){
+      return true;
+    }
+    return false;
+  }
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
         <Text style={styles.header}>Add Post</Text>
       </View>
-      <View style={styles.inputs}>
-        <View style={styles.tagHeader}>
-          <Text style={styles.tags}>Tags</Text>
-        </View>
-        <View>
-          <TextInput
-            placeholder="Title"
-            value={title}
-            style={styles.input}
-            onChangeText={(val) => {
-              setTitle(val);
-            }}
-          />
-        </View>
-        <View>
+      <View>
+        {evalString(image) && (
           <TouchableOpacity
-            style={styles.button}
+            style={styles.imagePlaceholder}
             onPress={() => {
               createPost();
             }}>
-            <Text style={styles.actions}>Select or Take a picture</Text>
+            <Image source={{uri: image.uri}} style={styles.placeholder} />
+          </TouchableOpacity>
+        )}
+      </View>
+      <View style={styles.imagePlaceholder}>
+        {!image && (
+          <TouchableOpacity
+            style={styles.placeholder}
+            onPress={() => {
+              createPost();
+            }}>
+            <AntDesign name="camerao" color="#000" size={30} />
+          </TouchableOpacity>
+        )}
+      </View>
+      <View style={styles.inputs}>
+        <View>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={uploadToServer}
+            >
+            <Text style={styles.actions}>Add Post</Text>
           </TouchableOpacity>
         </View>
       </View>
-      <ImagePicker
-        actionSheetRef={actionSheetRef}
-        uploadToServer={uploadToServer}
-      />
+      <ImagePicker actionSheetRef={actionSheetRef} setImage={setImage} />
     </View>
   );
 }
