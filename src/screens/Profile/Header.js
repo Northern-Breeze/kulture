@@ -12,12 +12,18 @@ import ImagePicker from '../../components/ActionSheets/ImagePicker';
 
 export default function Header(props) {
   const {loading, data, fetchProfile, onOpen} = props;
-
+  const [fullyLoaded, setFullyLoaded] = React.useState(false);
+  const [image, setImage] = React.useState('');
   const actionSheetRef = React.createRef(true);
 
   const updateProfile = () => {
     actionSheetRef.current?.setModalVisible();
   };
+
+  const setFile = (file) => {
+      setImage(file);
+      uploadToServer();
+  }
 
   const createFormData = (file) => {
     const data = new FormData();
@@ -32,9 +38,10 @@ export default function Header(props) {
     return data;
   };
 
-  const uploadToServer = async (file) => {
+
+  const uploadToServer = async () => {
     try {
-      if (typeof file === 'undefined') {
+      if (typeof image === 'undefined' || image === '') {
         Snackbar.show({
           text: 'Please Upload A File',
           duration: Snackbar.LENGTH_SHORT,
@@ -45,7 +52,7 @@ export default function Header(props) {
       const request = await fetch(
         `${configs.SERVER_URL}/api/v1/profile/update-image`,
         {
-          body: createFormData(file),
+          body: createFormData(image),
           method: 'POST',
           headers: {
             'Content-Type': 'multipart/form-data',
@@ -91,9 +98,13 @@ export default function Header(props) {
           onPress={() => {
             updateProfile();
           }}>
-          {data !== null && (
-            <Image source={{uri: data.profile}} style={styles.avatar} />
-          )}
+          {data !==
+            null && (
+              <Image
+                source={{uri: data.profile}}
+                style={styles.avatar}
+              />
+            )}
           {loading && data === null && (
             <SkeletonPlaceholder>
               <View style={styles.avatar} />
@@ -103,7 +114,10 @@ export default function Header(props) {
       </View>
       <View>
         <View style={styles.usernameContainer}>
-          {loading && <SkeletonPlaceholder style={styles.loadingName}></SkeletonPlaceholder>}
+          {loading && (
+            <SkeletonPlaceholder
+              style={styles.loadingName}></SkeletonPlaceholder>
+          )}
           {!loading && data !== null && (
             <Text style={styles.username}>{data.username}</Text>
           )}
@@ -113,7 +127,10 @@ export default function Header(props) {
         </View>
       </View>
       <View style={styles.btnContainer}>
-        <TouchableOpacity activeOpacity={0.9} style={styles.button} disabled={loading}>
+        <TouchableOpacity
+          activeOpacity={0.9}
+          style={styles.button}
+          disabled={loading}>
           <Text style={styles.buttonTextAdd}>Add New Post</Text>
         </TouchableOpacity>
         <TouchableOpacity
@@ -130,7 +147,7 @@ export default function Header(props) {
       </View>
       <ImagePicker
         actionSheetRef={actionSheetRef}
-        uploadToServer={uploadToServer}
+        setImage={setFile}
       />
     </>
   );

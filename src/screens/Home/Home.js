@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Dimensions, Text} from 'react-native';
+import {Dimensions} from 'react-native';
 import SnackBar from 'react-native-snackbar';
 import {useNetInfo} from '@react-native-community/netinfo';
 
@@ -24,7 +24,11 @@ export default function Home(props) {
   const [activeIndex, setActiveIndex] = React.useState(0);
   const [posts, setPost] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
+  const [loadingMore, setLoadingMore] = React.useState(false);
 
+  // data set
+  const [page, setPage] = React.useState(0);
+  const [size, setSize] = React.useState(5);
   const netinfo = useNetInfo();
 
   // Refs
@@ -35,7 +39,7 @@ export default function Home(props) {
   const fetchPosts = async () => {
     try {
       setLoading(true);
-      const response = await server.getAllPost();
+      const response = await server.getAllPost({ page, size});
       if (response.status === 401) {
         setLoading(false);
       }
@@ -90,31 +94,33 @@ export default function Home(props) {
     }
   };
 
-  const handleLoadMore = () => {
-    //
-    console.log('end reached');
-  };
-
-  const refreshHandler = async () => {
+  const handleLoadMore = async () => {
     try {
-      setLoading(true);
-      const response = await server.getAllPost();
-      if (response.status === 200) {
-        if (response.data.success) {
-          const {data} = response.data;
-          if (mounted.current) {
-            setPost(data);
-            setLoading(false);
-          }
-        } else if (response.status === 401) {
-          //
-        } else {
-          SnackBar.show({
-            text: response.data.message,
-            duration: SnackBar.LENGTH_SHORT,
-          });
-          if (mounted.current) {
-            setLoading(false);
+      setPage((p) => p + 1);
+      setLoadingMore(true);
+      const response = await server.getAllPost({ page, size});
+      if (response.status === 401) {
+        setLoadingMore(false);
+      }
+      if (response.data.success) {
+        const {data} = response.data;
+        if (mounted.current) {
+          if(data.length === 0){
+            SnackBar.show({
+              text: 'You have reached the end, A post?',
+              action: {
+                text: 'Add Post',
+                textColor: 'green',
+                onPress: () => {
+                  navigation.navigate('Add');
+                }
+              }
+            })
+            setLoadingMore(false);
+          } else {
+            const combined = [...posts, ...data];
+            setPost(combined);
+            setLoadingMore(false);
           }
         }
       } else {
@@ -122,8 +128,44 @@ export default function Home(props) {
           text: response.data.message,
           duration: SnackBar.LENGTH_SHORT,
         });
+        if (mounted.current) {
+          setLoadingMore(false);
+        }
+      }
+      setLoadingMore(false);
+    } catch (error) {
+      console.log(error);
+      SnackBar.show({
+        text: 'Something went wrong',
+        duration: SnackBar.LENGTH_SHORT
+      })
+      setLoadingMore(false);
+    }
+  };
+
+  const refreshHandler = async () => {
+    try {
+      setLoading(true);
+      const response = await server.getAllPost({ page, size});
+      if (response.status === 401) {
         setLoading(false);
       }
+      if (response.data.success) {
+        const {data} = response.data;
+        if (mounted.current) {
+          setPost(data);
+          setLoading(false);
+        }
+      } else {
+        SnackBar.show({
+          text: response.data.message,
+          duration: SnackBar.LENGTH_SHORT,
+        });
+        if (mounted.current) {
+          setLoading(false);
+        }
+      }
+      setLoading(false);
     } catch (error) {
       console.log(error);
       SnackBar.show({
@@ -158,6 +200,7 @@ export default function Home(props) {
           />
           <BottomList
             bottomRef={bottomRef}
+            topRef={topRef}
             posts={posts}
             IMAGE_SIZE={IMAGE_SIZE}
             SPACING={SPACING}

@@ -5,7 +5,6 @@ import {
   TextInput,
   FlatList,
   TouchableOpacity,
-  Dimensions,
   Image,
 } from 'react-native';
 import SnackBar from 'react-native-snackbar';
@@ -26,7 +25,7 @@ export default function Search(props) {
   const fetchPosts = async () => {
     try {
       setLoading(true);
-      const response = await server.getAllPost();
+      const response = await server.getAllPost({ page: 0, size: 5 });
 
       if (response.status === 401) {
         navigation.navigate('signin');
@@ -44,6 +43,7 @@ export default function Search(props) {
         });
         setLoading(false);
       }
+      setLoading(false);
     } catch (error) {
       console.log(error);
       SnackBar.show({
@@ -106,7 +106,7 @@ export default function Search(props) {
           <FlatList
             numColumns={2}
             columnWrapperStyle={styles.images}
-            data={posts}
+            data={filterImages}
             renderItem={renderFeed}
             keyExtractor={(item) => item.postId}
           />

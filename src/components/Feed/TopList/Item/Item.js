@@ -14,19 +14,21 @@ export default function Item(props) {
 
   React.useEffect(() => {
     if (index === activeIndex) {
-      setTimeout(() => {
-        if (!liked.current) {
-          liked.current = true;
-          server
-            .likeAPost({
-              postId: item.postId,
-            })
-            .then()
-            .catch((error) => {
-              console.log(error);
-            });
-        }
-      }, 8000);
+      if (typeof item.postId !== 'undefined') {
+        setTimeout(() => {
+          if (!liked.current) {
+            liked.current = true;
+            server
+              .likeAPost({
+                postId: item.postId,
+              })
+              .then()
+              .catch((error) => {
+                console.log(error);
+              });
+          }
+        }, 8000);
+      }
     }
   }, [activeIndex]);
 
