@@ -1,9 +1,12 @@
 import React from 'react';
-import {Dimensions} from 'react-native';
+import {Dimensions, View, Text, Pressable} from 'react-native';
 import SnackBar from 'react-native-snackbar';
 import {useNetInfo} from '@react-native-community/netinfo';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import {useStoreActions} from 'easy-peasy';
 
 import server from '../../service/server';
+import styles from './Home.style';
 
 // Components
 import TopList from '../../components/Feed/TopList';
@@ -25,11 +28,15 @@ export default function Home(props) {
   const [posts, setPost] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
   const [loadingMore, setLoadingMore] = React.useState(false);
+  const [requestStatus, setRequestStatus] = React.useState('LOADING')
+
+  const setIsLoggin = useStoreActions((actions) => actions.setIsLoggin);
+  const netinfo = useNetInfo();
+
 
   // data set
-  const [page, setPage] = React.useState(0);
+  const [page, setPage] = React.useState(1);
   const [size, setSize] = React.useState(5);
-  const netinfo = useNetInfo();
 
   // Refs
   const topRef = React.useRef();
@@ -38,16 +45,20 @@ export default function Home(props) {
 
   const fetchPosts = async () => {
     try {
-      setLoading(true);
+      setRequestStatus('LOADING');
       const response = await server.getAllPost({ page, size});
+
+      // UnAuthorize 
       if (response.status === 401) {
-        setLoading(false);
+        setIsLoggin(false);
+        setRequestStatus('FAILED');
       }
+      
       if (response.data.success) {
         const {data} = response.data;
         if (mounted.current) {
           setPost(data);
-          setLoading(false);
+          setRequestStatus('SUCCESS');
         }
       } else {
         SnackBar.show({
@@ -55,8 +66,9 @@ export default function Home(props) {
           duration: SnackBar.LENGTH_SHORT,
         });
         if (mounted.current) {
-          setLoading(false);
+          setRequestStatus('FAILED');
         }
+        setRequestStatus('FAILED');
       }
       setLoading(false);
     } catch (error) {
@@ -65,7 +77,7 @@ export default function Home(props) {
         text: 'Something went wrong, please try again',
         duration: SnackBar.LENGTH_SHORT,
       });
-      setLoading(false);
+      setRequestStatus('FAILED');
     }
   };
 
@@ -99,9 +111,12 @@ export default function Home(props) {
       setPage((p) => p + 1);
       setLoadingMore(true);
       const response = await server.getAllPost({ page, size});
+
+      // UnAuthorized
       if (response.status === 401) {
         setLoadingMore(false);
       }
+
       if (response.data.success) {
         const {data} = response.data;
         if (mounted.current) {
@@ -176,20 +191,32 @@ export default function Home(props) {
     }
   };
 
-  if (loading) {
-    return <Loading />;
-  }
-
   if (!netinfo.isConnected) {
     return <NotConnected />;
   }
 
   return (
     <>
-      {posts.length === 0 && !loading && (
+      {requestStatus === 'FAILED' && (
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+          <MaterialIcons name="error-outline" color="#000" size={50} />
+          <Text style={[styles.subheaderText, { color: '#000' }]}>
+            Something Error Occurred
+          </Text>
+          <Pressable style={styles.button} onPress={fetchPosts}>
+            <Text style={styles.subheaderText}>
+              Reload
+            </Text>
+          </Pressable>
+        </View>
+      )}
+      {requestStatus === 'EMPTY' && (
         <EmptyList refreshHandler={refreshHandler} />
       )}
-      {posts.length > 0 && (
+      {requestStatus === 'LOADING' && (
+        <Loading />
+      )}
+      {requestStatus === 'SUCCESS' && (
         <>
           <TopList
             posts={posts}
