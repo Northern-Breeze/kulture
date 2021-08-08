@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "50748777757",
+    "project_id": "kulture-dfb3c",
+    "storage_bucket": "kulture-dfb3c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:50748777757:android:91cb131942f434c6516df4",
+        "android_client_info": {
+          "package_name": "com.northernbreeze.kulture"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "50748777757-v8fqg4n3migo8uc7f9rd7ojqoeolp78a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAAE8M9kO_wvzpE-pyZAY4U07i3M-xROq0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "50748777757-v8fqg4n3migo8uc7f9rd7ojqoeolp78a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
