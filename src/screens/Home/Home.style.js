@@ -1,4 +1,5 @@
 import {StyleSheet, Dimensions} from 'react-native';
+import { heightPercentageToDP, widthPercentageToDP } from 'react-native-responsive-screen';
 
 const styles = StyleSheet.create({
   topScroll: {
@@ -30,7 +31,8 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
   },
   subheaderText: {
-    fontSize: 13,
+    fontSize: 23,
+    color: '#fff',
     fontFamily: 'Roboto-black',
   },
 
@@ -70,7 +72,15 @@ const styles = StyleSheet.create({
     fontFamily: 'Roboto-Regular',
     fontSize: 11,
   },
-
+  button: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#000',
+    height: heightPercentageToDP(8),
+    width: widthPercentageToDP(80),
+    borderRadius: 10,
+    marginVertical: 10,
+  },
   // Browse all
   browseAll: {
     marginHorizontal: 15,

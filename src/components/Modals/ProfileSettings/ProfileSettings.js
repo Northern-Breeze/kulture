@@ -2,18 +2,20 @@ import React from 'react';
 import {View, Modal, Alert, TouchableOpacity, Text} from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { useStoreActions } from 'easy-peasy';
 import Snackbar from 'react-native-snackbar';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 import styles from './ProfileSettings.style';
 export default function ProfileSettings(props) {
-  const {visible, onClose, navigation} = props;
+  const {visible, onClose} = props;
 
+  const setIsLoggin = useStoreActions((actions) => actions.setIsLoggin);
+  
   const handleLogOut = async () => {
     try {
-      await AsyncStorage.removeItem('token');
+      setIsLoggin(false);
       onClose();
     } catch (error) {
       Snackbar.open({
@@ -52,6 +54,22 @@ export default function ProfileSettings(props) {
             <TouchableOpacity onPress={() => {}} style={styles.button}>
               <Text style={styles.logoutText}>
                   Dark Mode
+              </Text>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.control}>
+            <Ionicons name="heart-circle" color="#000" size={31} />
+            <TouchableOpacity onPress={() => {}} style={styles.button}>
+              <Text style={styles.logoutText}>
+                  Support Me
+              </Text>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.control}>
+            <MaterialCommunityIcons name="office-building" color="#000" size={31} />
+            <TouchableOpacity onPress={() => {}} style={styles.button}>
+              <Text style={styles.logoutText}>
+                  About Kulture
               </Text>
             </TouchableOpacity>
           </View>
