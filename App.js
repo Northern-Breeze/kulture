@@ -1,34 +1,77 @@
-import React from 'react';
-import { Text } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
+import * as React from 'react';
+import {View, Text} from 'react-native';
+import {
+  NavigationContainer,
+} from '@react-navigation/native';
+import SplashScreen from 'react-native-splash-screen';
+import {
+  createStore,
+  StoreProvider as Provider,
+  persist,
+  useStoreRehydrated,
+} from 'easy-peasy';
+import analytics from '@react-native-firebase/analytics';
+
+// Store
 import Store from './src/store/model';
 import storage from './src/store/storage/storage';
-
+//components
 import Routes from './src/routes/Routes';
 
-import {  createStore, StoreProvider as Provider, persist } from 'easy-peasy';
+const store = createStore(
+  persist(Store, {
+    storage: storage,
+  }),
+);
 
-// const store = createStore(
-//   persist(Store, {
-//     storage: storage,
-//   })
-// );
+export const RootWrapper = () => {
+  const isHydrated = useStoreRehydrated();
 
-const store = createStore(Store);
+  const routeNameRef = React.useRef();
+  const navigationRef = React.useRef();
 
+  if (isHydrated) {
+    return (
+      <NavigationContainer
+        ref={navigationRef}
+        onReady={() => {
+          routeNameRef.current = navigationRef.current.getCurrentRoute().name
+        }}
+        onStateChange={async () => {
+          const previousRouteName = routeNameRef.current;
+          const currentRouteName = navigationRef.current.getCurrentRoute().name
 
-const App = ()  => {
-  const linking = {
-    prefixes: ['https://app.example.com'],
-  };
-  return (
-    <Provider store={store}>
-      <NavigationContainer linking={linking} fallback={<Text>Loading...</Text>}>
-          <Routes />
+          if (previousRouteName !== currentRouteName) {
+            await analytics().logScreenView({
+              screen_name: currentRouteName,
+              screen_class: currentRouteName,
+            });
+          }
+
+          routeNameRef.current = currentRouteName;
+        
+        }}>
+        <Routes />
       </NavigationContainer>
-    </Provider>
+    );
+  }
+  return (
+    <View>
+      <Text>Loading ...</Text>
+    </View>
   );
 };
 
+const App = () => {
+  React.useEffect(() => {
+    SplashScreen.hide();
+  }, []);
+
+  return (
+    <Provider store={store}>
+      <RootWrapper />
+    </Provider>
+  );
+};
 
 export default App;
