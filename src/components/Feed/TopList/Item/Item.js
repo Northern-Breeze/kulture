@@ -13,14 +13,19 @@ import server from '../../../../service/server';
 
 export default function Item(props) {
   // Props
-  const {item, index, activeIndex} = props;
+  const {item, index, activeIndex, navigation} = props;
 
   // Refs
   const mounted = React.useRef(true);
   const liked = React.useRef(false);
 
+  const handleProfilePress = () => {
+    navigation.navigate('Profile');
+  }
+  const handlePostPress = () => {
+    navigation.navigate('Preview', { username: item.username, avatar: item.avatar, image: item.image });
+  }
   React.useEffect(() => {
-    console.log(item.avatar);
     if (index === activeIndex) {
       if (typeof item.postId !== 'undefined') {
         setTimeout(() => {
@@ -47,13 +52,13 @@ export default function Item(props) {
   }, []);
 
   return (
-    <TouchableOpacity activeOpacity={0.9} style={styles.container}>
+    <TouchableOpacity activeOpacity={0.9} style={styles.container} onPress={handlePostPress}>
       <ImageBackground
         source={{uri: item.image}}
         style={styles.backgroundImage}
         blurRadius={80}>
         <View style={styles.nameContainer}>
-          <Pressable style={styles.usernameContainer}>
+          <Pressable style={styles.usernameContainer} onPress={handleProfilePress}>
             <Image source={{uri: item.avatar}} style={styles.avatar} />
           </Pressable>
           <View

@@ -1,15 +1,16 @@
 import * as React from 'react';
 import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
-import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 // Screens
 import Home from './Home';
-import Profile from '../screens/Profile';
 import AddPost from '../screens/AddPost';
 import Search from '../screens/Search';
 import Live from '../screens/Tab/Live';
+
+
+// Stacks
+import ProfileStack from './Profile';
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -62,7 +63,7 @@ export default function HomeRoute() {
       />
       <Tab.Screen
         name="Profile"
-        component={Profile}
+        component={ProfileStack}
         options={{
           tabBarLabel: 'Profile',
           tabBarIcon: ({color}) => (
