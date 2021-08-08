@@ -1,6 +1,4 @@
 import * as React from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-
 import {createStackNavigator} from '@react-navigation/stack';
 import {useStoreState} from 'easy-peasy';
 

@@ -15,6 +15,25 @@ const styles = StyleSheet.create({
         width: wp(100),
         height: hp(100),
         resizeMode: 'contain'
+    },
+    nameContainer: {
+        top: 1,
+        flexDirection: "row",
+        alignItems: 'center'
+    },
+    usernameContainer: {
+        backgroundColor: '#80bfff',
+        minWidth: wp(35),
+        bottom: -40,
+        marginHorizontal: wp(2),
+        padding: wp(1.5),
+        borderRadius: wp(4),
+        opacity: 0.8
+    },
+    username: {
+        color: '#fff',
+        fontSize: 16,
+        fontWeight: 'bold'
     }
 });
 

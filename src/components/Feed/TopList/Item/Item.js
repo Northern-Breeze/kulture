@@ -1,5 +1,12 @@
 import * as React from 'react';
-import {TouchableOpacity, Image, ImageBackground} from 'react-native';
+import {
+  TouchableOpacity,
+  Image,
+  ImageBackground,
+  View,
+  Text,
+  Pressable,
+} from 'react-native';
 import styles from './Item.style';
 
 import server from '../../../../service/server';
@@ -44,6 +51,11 @@ export default function Item(props) {
         source={{uri: item.image}}
         style={styles.backgroundImage}
         blurRadius={80}>
+        <View style={styles.nameContainer}>
+          <Pressable style={styles.usernameContainer}>
+            <Text style={styles.username}>@{item.username}</Text>
+          </Pressable>
+        </View>
         <Image source={{uri: item.image}} style={styles.fullImage} />
       </ImageBackground>
     </TouchableOpacity>
