@@ -14,22 +14,22 @@ export default function Routes(props) {
   const setIsLoggin = useStoreActions((actions) => actions.setIsLoggin);
   const isloggedIn = useStoreState((state) => state.isloggedIn);
 
-  const checkToken = React.useCallback(async () => {
-    try {
-      const token = await AsyncStorage.getItem('token');
-      if (token !== null) {
-        setIsLoggin(true);
-      } else {
-        setIsLoggin(false);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  }, [isloggedIn]);
+  // const checkToken = React.useCallback(async () => {
+  //   try {
+  //     const token = await AsyncStorage.getItem('token');
+  //     if (token !== null) {
+  //       setIsLoggin(true);
+  //     } else {
+  //       setIsLoggin(false);
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // }, [isloggedIn]);
 
-  React.useEffect(() => {
-    checkToken();
-  }, [checkToken]);
+  // React.useEffect(() => {
+  //   checkToken();
+  // }, [checkToken]);
 
   return (
     <RootStack.Navigator
