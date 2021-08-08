@@ -1,45 +1,62 @@
-import React from 'react';
-import {View, Text, Pressable} from 'react-native';
-import Video from 'react-native-video';
+import * as React from 'react';
+import {FlatList} from 'react-native';
+
+// Components
+import Video from '../../../components/Video/Video';
 
 import styles from './Tab.style';
 
 export default function Live() {
-  const [paused, setPaused] = React.useState(true);
-
-  // refs
-  const videoRef = React.useRef();
-
-  // Events
-  const onBuffer = (buffer) => {
-    console.log('buffer: ', buffer);
-  };
-
-  const handleError = (error) => {
-    console.log('error', error);
-  };
-
-  const handleVideoPress = () => {
-    setPaused(false);
-  };
-  
+  const [videos, setVideos] = React.useState([
+    {
+      video:
+        'https://northernbreeze-bucket.sfo3.digitaloceanspaces.com/kulture-videos/Nature%20Beautiful%20short%20video%20720p%20HD.mp4',
+      isFullWidth: true,
+    },
+    {
+      video:
+        'https://northernbreeze-bucket.sfo3.digitaloceanspaces.com/kulture-videos/y2mate.com%20-%20TAKI%20TAKI%20%20DJ%20Snake%20ft%20Ozuna%20Cardi%20B%20Selena%20Gomez%20Dance%20Video%20%20Namit%20Chhajed%20Choreography_1080pFHR.mp4',
+      isFullWidth: false,
+    },
+    {
+      video:
+        'https://northernbreeze-bucket.sfo3.digitaloceanspaces.com/kulture-videos/y2mate.com%20-%20TAKI%20TAKI%20%20DJ%20Snake%20ft%20Ozuna%20Cardi%20B%20Selena%20Gomez%20Dance%20Video%20%20Namit%20Chhajed%20Choreography_1080pFHR.mp4',
+      isFullWidth: false,
+    },
+    {
+      video:
+        'https://northernbreeze-bucket.sfo3.digitaloceanspaces.com/kulture-videos/y2mate.com%20-%20TAKI%20TAKI%20%20DJ%20Snake%20ft%20Ozuna%20Cardi%20B%20Selena%20Gomez%20Dance%20Video%20%20Namit%20Chhajed%20Choreography_1080pFHR.mp4',
+      isFullWidth: true,
+    },
+    {
+      video:
+        'https://northernbreeze-bucket.sfo3.digitaloceanspaces.com/kulture-videos/y2mate.com%20-%20TAKI%20TAKI%20%20DJ%20Snake%20ft%20Ozuna%20Cardi%20B%20Selena%20Gomez%20Dance%20Video%20%20Namit%20Chhajed%20Choreography_1080pFHR.mp4',
+      isFullWidth: false,
+    },
+    {
+      video:
+        'https://northernbreeze-bucket.sfo3.digitaloceanspaces.com/kulture-videos/y2mate.com%20-%20TAKI%20TAKI%20%20DJ%20Snake%20ft%20Ozuna%20Cardi%20B%20Selena%20Gomez%20Dance%20Video%20%20Namit%20Chhajed%20Choreography_1080pFHR.mp4',
+      isFullWidth: false,
+    },
+  ]);
   return (
-    <View style={styles.container}>
-      <Pressable onPress={handleVideoPress} style={styles.videoContainer}>
-        <Video
-          poster="https://northernbreeze-bucket.sfo3.digitaloceanspaces.com/android-chrome-512x512.png"
-          source={{
-            uri:
-              'https://northernbreeze-bucket.sfo3.digitaloceanspaces.com/kulture-videos/Nature%20Beautiful%20short%20video%20720p%20HD.mp4',
-          }}
-          ref={videoRef}
-          paused={paused}
-          onBuffer={onBuffer}
-          onError={handleError}
-          style={styles.backgroundVideo}
-          repeat
-        />
-      </Pressable>
-    </View>
+    <>
+      <FlatList
+        data={videos}
+        columnWrapperStyle={{
+          flex: 1,
+          justifyContent: 'flex-start',
+          flexDirection: 'row',
+          flexWrap: 'wrap',
+        }}
+        numColumns={2}
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={({item}) => {
+          return (
+              <Video video={item.video} fullWidth={item.isFullWidth} />
+          )
+        }}
+      />
+    </>
   );
 }

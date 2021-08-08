@@ -1,6 +1,7 @@
 import * as React from 'react';
 import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 // Screens
 import Home from './Home';
@@ -47,7 +48,7 @@ export default function HomeRoute() {
         options={{
           tabBarLabel: 'Add',
           tabBarIcon: ({color}) => (
-            <AntDesign name="upload" color="#fff" size={23} />
+            <Ionicons name="add-circle" color="#fff" size={23} />
           ),
         }}
       />
