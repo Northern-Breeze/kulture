@@ -20,6 +20,7 @@ export default function Item(props) {
   const liked = React.useRef(false);
 
   React.useEffect(() => {
+    console.log(item.avatar);
     if (index === activeIndex) {
       if (typeof item.postId !== 'undefined') {
         setTimeout(() => {
@@ -53,8 +54,29 @@ export default function Item(props) {
         blurRadius={80}>
         <View style={styles.nameContainer}>
           <Pressable style={styles.usernameContainer}>
-            <Text style={styles.username}>@{item.username}</Text>
+            <Image source={{uri: item.avatar}} style={styles.avatar} />
           </Pressable>
+          <View
+            style={styles.tagContainer}>
+            <Pressable
+              style={styles.tag}>
+              <Text style={styles.tagText}>
+                #summer_time
+              </Text>
+            </Pressable>
+            <Pressable
+              style={styles.tag}>
+              <Text style={styles.tagText}>
+                #alway_there
+              </Text>
+            </Pressable>
+            <Pressable
+              style={styles.tag}>
+              <Text style={styles.tagText}>
+                #finally
+              </Text>
+            </Pressable>
+          </View>
         </View>
         <Image source={{uri: item.image}} style={styles.fullImage} />
       </ImageBackground>
