@@ -3,14 +3,12 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
+
 const styles = StyleSheet.create({
-  videoContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
+  
+  backgroundVideo: {
     marginVertical: hp(0.5),
     marginHorizontal: wp(2),
-  },
-  backgroundVideo: {
     width: wp(95),
     height: hp(50),
     borderRadius: 5,
