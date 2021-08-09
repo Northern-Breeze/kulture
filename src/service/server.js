@@ -10,7 +10,8 @@ const server = {
     forgotPassword: (data) => Axios.post('/auth/forgotpasswordrequest', data),
     changePassword: (data) => Axios.post('/auth/changepassword', data),
     likeAPost: (data) => Axios.post('/likes/add', data),
-    getMostLiked: () => Axios.get('/likes/likes')
+    getMostLiked: () => Axios.get('/likes/likes'),
+    getProfileAccount: ({ userId }) => Axios.get(`/profile/user?userId=${userId}`)
 }
 
 export default server;

@@ -9,10 +9,10 @@ import styles from './Preview.style';
 
 export default function Preview(props) {
     const { navigation, route } = props;
-    const {avatar, username, image} = route.params; 
+    const {avatar, username, image, userId} = route.params; 
 
     const handleProfilePress = () => {
-        navigation.navigate('Profile');
+        navigation.navigate('Profile', { userId: userId });
     }
     
     return (
