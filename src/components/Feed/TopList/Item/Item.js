@@ -23,7 +23,7 @@ export default function Item(props) {
     navigation.navigate('Profile');
   }
   const handlePostPress = () => {
-    navigation.navigate('Preview', { username: item.username, avatar: item.avatar, image: item.image });
+    navigation.navigate('Preview', { username: item.username, avatar: item.avatar, image: item.image, userId: item.userId });
   }
   React.useEffect(() => {
     if (index === activeIndex) {
