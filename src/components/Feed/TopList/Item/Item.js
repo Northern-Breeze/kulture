@@ -66,19 +66,7 @@ export default function Item(props) {
             <Pressable
               style={styles.tag}>
               <Text style={styles.tagText}>
-                #summer_time
-              </Text>
-            </Pressable>
-            <Pressable
-              style={styles.tag}>
-              <Text style={styles.tagText}>
-                #alway_there
-              </Text>
-            </Pressable>
-            <Pressable
-              style={styles.tag}>
-              <Text style={styles.tagText}>
-                #finally
+                @{item.username}
               </Text>
             </Pressable>
           </View>
