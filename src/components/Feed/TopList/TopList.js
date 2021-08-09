@@ -8,7 +8,7 @@ const {width} = Dimensions.get('screen');
 
 export default function TopList(props) {
   // Props
-  const {posts, topRef, scrollToActiveIndex, activeIndex, handleLoadMore} = props;
+  const {posts, topRef, scrollToActiveIndex, activeIndex, handleLoadMore, navigation} = props;
   return (
     <FlatList
       ref={topRef}
@@ -29,7 +29,7 @@ export default function TopList(props) {
         );
       }}
       renderItem={({item, index}) => {
-        return <Item item={item} index={index} activeIndex={activeIndex} />;
+        return <Item item={item} index={index} activeIndex={activeIndex} navigation={navigation}/>;
       }}
     />
   );
