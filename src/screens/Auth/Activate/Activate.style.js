@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
     },
     logo: {
         margin: hp(4),
-        width: wp(55),
+        width: wp(60),
     },
     otpbtn : {
         borderRadius: wp(2),

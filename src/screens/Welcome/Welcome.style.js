@@ -1,9 +1,10 @@
 import { StyleSheet } from 'react-native';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 const styles = StyleSheet.create({
     imageContainer : {
-        width: '100%',
-        height: '100%',
+        width: wp(100),
+        height: hp(100),
         flex: 1,
         justifyContent: "flex-end",
         alignItems: "center",
@@ -11,7 +12,7 @@ const styles = StyleSheet.create({
     },
     brand: {
         fontFamily: 'Comfortaa-Regular',
-        fontSize: 30
+        fontSize: wp(10)
     },
     brandlogo: {
         flexDirection: "row",
@@ -24,7 +25,7 @@ const styles = StyleSheet.create({
     first: {
         flex: 1,
         backgroundColor: '#fff',
-        width: '100%',
+        width: wp(100),
         justifyContent: 'center',
         alignContent: "center",
     },
@@ -36,8 +37,8 @@ const styles = StyleSheet.create({
     loginbtn: {
         justifyContent:'center',
         alignItems: 'center',
-        width: 167,
-        height: 52,
+        width: wp(44),
+        height: hp(8),
         borderColor: '#000',
         borderWidth: 2,
         margin: 5,
@@ -57,8 +58,8 @@ const styles = StyleSheet.create({
     registerbtn: {
         justifyContent:'center',
         alignItems: 'center',
-        width: 167,
-        height: 52,
+        width: wp(44),
+        height: hp(8),
         borderColor: '#000',
         borderWidth: 1,
         margin: 5,
