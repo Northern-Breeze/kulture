@@ -31,21 +31,20 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   nameContainer: {
-    top: 1,
+    zIndex: 5,
     position: 'relative',
     alignItems: 'center',
   },
   usernameContainer: {
-    bottom: -90,
+    top: hp(14),
   },
   viewContainer: {
     borderRadius: wp(4),
     padding: wp(1.5),
-    opacity: 0.8,
     marginHorizontal: wp(2),
     marginVertical: wp(2),
     width: wp(35),
-    backgroundColor: '#80bfff',
+    backgroundColor: 'blue',
   },
   username: {
     color: '#fff',
