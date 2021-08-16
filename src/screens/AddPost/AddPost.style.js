@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 const styles = StyleSheet.create({
     container: {
@@ -13,8 +14,8 @@ const styles = StyleSheet.create({
         fontFamily: 'Comfortaa'
     },
     inputs: {
-        padding: 10,
-        marginHorizontal: 10,
+        padding: wp(2),
+        marginHorizontal: hp(1),
     },
     tagHeader: {
         paddingVertical: 10,
@@ -23,9 +24,22 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontFamily: 'Comfortaa'
     },  
+    containerInput: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
     input: {
+        width: wp(70),
+        height: hp(6),
         borderWidth: 2,
+        borderRadius: 10,
+        padding: 10,
         borderColor: '#000',
+    },
+    addContainer: {
+        marginHorizontal: 14,
+        marginVertical: 10,
     },
     button: {
         alignItems: 'center',
@@ -41,17 +55,19 @@ const styles = StyleSheet.create({
         fontSize: 18,
     },
     imagePlaceholder: {
+        marginTop: 10,
         alignItems: 'center',
     },
     placeholder: {
         justifyContent: 'center',
         alignItems: 'center',
         height: 400,
-        width: '70%',
+        width: '80%',
         backgroundColor: '#eee',
         borderWidth: 2,
         borderColor: '#000',
         resizeMode: 'contain',
+        borderRadius: 10,
     }
 });
 

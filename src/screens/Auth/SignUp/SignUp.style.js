@@ -14,11 +14,11 @@ const styles = StyleSheet.create({
         marginVertical: hp(4)
     },
     registerContainer: {
-        marginTop: 40,
+        marginTop: hp(5),
         flexDirection: "row",
         justifyContent: 'flex-start',
         alignItems: 'center',
-        marginHorizontal: 16,
+        marginHorizontal: wp(10),
     },
     registerText:{
         color: '#000',
@@ -30,12 +30,12 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     inputValue: {
-        width: 370,
-        height: 52,
+        width: wp(90),
+        height: hp(8),
         borderWidth: 2,
         borderColor: '#000',
         marginVertical: 5,
-        padding: 13,
+        padding: wp(5),
         borderRadius: 2
     },
     button: {
@@ -44,22 +44,22 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: '#000',
         borderRadius: 10,
-        width: 370,
-        height: 52,
+        width: wp(80),
+        height: hp(10),
     },
     nextText: {
         color: '#fff',
         fontFamily: 'Roboto-black',
-        fontSize: 13,
+        fontSize: wp(5),
         fontWeight: 'bold',
     },
     linkbtn: {
-        marginVertical: 10,
-        marginHorizontal: 20,
+        marginVertical: hp(2),
+        marginHorizontal: wp(6),
     },
     linkText: {
         fontFamily: 'Comfortaa-Regular',
-        fontSize: 10
+        fontSize: wp(3)
     }
 });
 

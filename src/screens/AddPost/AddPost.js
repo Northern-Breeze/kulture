@@ -1,20 +1,42 @@
 import React from 'react';
-import {View, Text, TextInput, TouchableOpacity, Image} from 'react-native';
-import ImagePicker from '../../components/ActionSheets/ImagePicker';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Image,
+  KeyboardAvoidingView,
+} from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Snackbar from 'react-native-snackbar';
 
 import styles from './AddPost.style';
 
+// components
+import ImagePicker from '../../components/ActionSheets/ImagePicker';
+import PostTypePicker from '../../components/ActionSheets/PostTypePicker';
+
 // helpers
 import {configs} from '../../config/config';
+import Loading from '../../components/Loading';
 
-export default function AddPost() {
-  const [title, setTitle] = React.useState('');
-  const actionSheetRef = React.useRef(true);
+export default function AddPost(props) {
+  // props
+  const { navigation } = props;
+
+  // state
   const [image, setImage] = React.useState('');
+  const [pickerType, setPickerType] = React.useState('');
+  const [requestStatus, setRequestStatus] = React.useState('IDLE');
+
+  // refs
+  const actionSheetRef = React.useRef(true);
+  const pickerRef = React.useRef();
+
   const createPost = () => {
+    if (pickerType === '') {
+      pickerRef.current?.setModalVisible();
+    }
     actionSheetRef.current?.setModalVisible();
   };
 
@@ -44,6 +66,7 @@ export default function AddPost() {
         });
         return;
       }
+      setRequestStatus('LOADING');
       const token = (await AsyncStorage.getItem('token')) || '';
       const request = await fetch(`${configs.SERVER_URL}/api/v1/post/add`, {
         body: createFormData(image, {title: 'post'}),
@@ -62,17 +85,21 @@ export default function AddPost() {
           });
           actionSheetRef.current?.hide();
           fetchProfile();
+          navigation.navigate('Home');
+          setRequestStatus('SUCCESS');
         } else {
           Snackbar.show({
             text: response.message,
             duration: Snackbar.LENGTH_SHORT,
           });
+          setRequestStatus('FAILED');
         }
       } else {
         Snackbar.show({
           text: response.message,
           duration: Snackbar.LENGTH_SHORT,
         });
+        setRequestStatus('FAILED');
       }
     } catch (error) {
       console.log(error);
@@ -80,52 +107,64 @@ export default function AddPost() {
         text: 'Something went wrong, please try again',
         duration: Snackbar.LENGTH_SHORT,
       });
+      setRequestStatus('FAILED');
     }
   };
   const evalString = (value) => {
-    if(typeof value !== 'string' && typeof value !== 'undefined'){
+    if (typeof value !== 'string' && typeof value !== 'undefined') {
       return true;
     }
     return false;
-  }
+  };
+
   return (
     <View style={styles.container}>
-      <View style={styles.headerContainer}>
-        <Text style={styles.header}>Add Post</Text>
-      </View>
-      <View>
-        {evalString(image) && (
-          <TouchableOpacity
-            style={styles.imagePlaceholder}
-            onPress={() => {
-              createPost();
-            }}>
-            <Image source={{uri: image.uri}} style={styles.placeholder} />
-          </TouchableOpacity>
-        )}
-      </View>
-      <View style={styles.imagePlaceholder}>
-        {!image && (
-          <TouchableOpacity
-            style={styles.placeholder}
-            onPress={() => {
-              createPost();
-            }}>
-            <AntDesign name="camerao" color="#000" size={30} />
-          </TouchableOpacity>
-        )}
-      </View>
-      <View style={styles.inputs}>
-        <View>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={uploadToServer}
-            >
-            <Text style={styles.actions}>Add Post</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-      <ImagePicker actionSheetRef={actionSheetRef} setImage={setImage} />
+      {requestStatus === 'LOADING' && <Loading />}
+      {requestStatus !== 'LOADING' && (
+        <>
+          <KeyboardAvoidingView
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+            <View>
+              {evalString(image) && (
+                <TouchableOpacity
+                  style={styles.imagePlaceholder}
+                  onPress={() => {
+                    createPost();
+                  }}>
+                  <Image source={{uri: image.uri}} style={styles.placeholder} />
+                </TouchableOpacity>
+              )}
+            </View>
+            <View style={styles.imagePlaceholder}>
+              {!evalString(image) && (
+                <TouchableOpacity
+                  style={styles.placeholder}
+                  onPress={() => {
+                    createPost();
+                  }}>
+                  <AntDesign name="camerao" color="#000" size={30} />
+                </TouchableOpacity>
+              )}
+            </View>
+            <View style={styles.inputs}>
+              <View>
+                <TouchableOpacity
+                  style={styles.button}
+                  onPress={uploadToServer}>
+                  <Text style={styles.actions}>Add Post</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </KeyboardAvoidingView>
+          <View>
+          </View>
+          <ImagePicker
+            actionSheetRef={actionSheetRef}
+            setImage={setImage}
+            pickerType={pickerType}
+          />
+        </>
+      )}
     </View>
   );
 }
