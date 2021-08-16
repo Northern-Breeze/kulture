@@ -13,16 +13,55 @@ const Stack = createStackNavigator();
 
 export default function AuthRoutes(props) {
   return (
-    <Stack.Navigator
-      screenOptions={{
-        headerShown: false,
-      }}>
-      <Stack.Screen name="welcome" component={Welcome} />
-      <Stack.Screen name="signup" component={SignUp} />
-      <Stack.Screen name="signin" component={SignIn} />
-      <Stack.Screen name="forgotpassword" component={ForgotPassword} />
-      <Stack.Screen name="changepassword" component={ChangePassword} />
-      <Stack.Screen name="activate" component={Activate} />
+    <Stack.Navigator>
+      <Stack.Screen
+        name="welcome"
+        component={Welcome}
+        options={{
+          title: '',
+          headerTransparent: true,
+        }}
+      />
+      <Stack.Screen
+        name="signup"
+        component={SignUp}
+        options={{
+          title: 'Sign Up',
+          headerTransparent: true,
+        }}
+      />
+      <Stack.Screen
+        name="signin"
+        component={SignIn}
+        options={{
+          title: 'Sign In',
+          headerTransparent: true,
+        }}
+      />
+      <Stack.Screen
+        name="forgotpassword"
+        component={ForgotPassword}
+        options={{
+          title: 'Forgot Password',
+          headerTransparent: true,
+        }}
+      />
+      <Stack.Screen
+        name="changepassword"
+        component={ChangePassword}
+        options={{
+          title: 'New Password',
+          headerTransparent: true,
+        }}
+      />
+      <Stack.Screen
+        name="activate"
+        component={Activate}
+        options={{
+          title: 'Activate',
+          headerTransparent: true,
+        }}
+      />
     </Stack.Navigator>
   );
 }
