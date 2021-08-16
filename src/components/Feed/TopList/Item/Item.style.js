@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   usernameContainer: {
-    top: hp(14),
+    top: hp(12),
   },
   viewContainer: {
     borderRadius: wp(4),
