@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
     },
     inputValue: {
         width: wp(90),
-        height: hp(8),
+        height: hp(10),
         borderWidth: 2,
         borderColor: '#000',
         marginVertical: hp(1),

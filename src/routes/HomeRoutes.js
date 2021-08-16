@@ -3,12 +3,13 @@ import {createMaterialBottomTabNavigator} from '@react-navigation/material-botto
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
+// functions
+
 // Screens
 import Home from './Home';
 import AddPost from '../screens/AddPost';
 import Search from '../screens/Search';
-import Live from '../screens/Tab/Live';
-
+import Message from '../screens/Message';
 
 // Stacks
 import ProfileStack from './Profile';
@@ -16,6 +17,12 @@ import ProfileStack from './Profile';
 const Tab = createMaterialBottomTabNavigator();
 
 export default function HomeRoute() {
+
+  // hooks
+
+  // refs
+
+
   return (
     <Tab.Navigator
       initialRouteName="Home"
@@ -53,12 +60,12 @@ export default function HomeRoute() {
         }}
       />
       <Tab.Screen
-        name="Live"
-        component={Live}
+        name="Message"
+        component={Message}
         options={{
-          tabBarLabel: 'Live',
+          tabBarLabel: 'Messages',
           tabBarIcon: ({color}) => (
-            <AntDesign name="videocamera" color="#fff" size={23} />
+            <AntDesign name="message1" color="#fff" size={23} />
           ),
         }}
       />
