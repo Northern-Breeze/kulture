@@ -6,7 +6,7 @@ export default {
   token: '',
   loginCallback: thunk(async (actions, payload) => {
     await AsyncStorage.setItem('token', payload);
-    actions.login();
+    actions.login(payload);
   }),
   setIsLoggin: action((state, payload) => {
     const oldState = state;
@@ -16,8 +16,9 @@ export default {
       oldState.isloggedIn = false;
     }
   }),
-  login: action((state) => {
+  login: action((state, payload) => {
     const oldState = state;
     oldState.isloggedIn = true;
+    oldState.token = payload
   }),
 };

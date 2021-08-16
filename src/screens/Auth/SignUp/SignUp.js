@@ -173,7 +173,6 @@ export default function SignUp(props) {
             buttonHandler={register}
             buttonText="Register"
           />
-        </View>
         <View>
           <TouchableOpacity
             style={styles.linkbtn}
@@ -182,6 +181,7 @@ export default function SignUp(props) {
             }}>
             <Text style={styles.linkText}>Already have an account? Login</Text>
           </TouchableOpacity>
+        </View>
         </View>
       </View>
     </View>

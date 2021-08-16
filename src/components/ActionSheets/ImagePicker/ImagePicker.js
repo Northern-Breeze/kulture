@@ -8,10 +8,10 @@ import Snackbar from 'react-native-snackbar';
 import styles from './ImagePicker.style';
 
 export default function ImagePicker(props) {
-  const {actionSheetRef, setImage} = props;
+  const {actionSheetRef, setImage, pickerType} = props;
   const handleUseCamera = () => {
     const options = {
-      mediaType: 'photo',
+      mediaType: pickerType,
       selectionLimit: 1,
       quality: 1.0,
       includeBase64: false,
@@ -31,13 +31,14 @@ export default function ImagePicker(props) {
       } else {
         const {assets} = response;
         const file = assets[0];
-          setImage(file);
+        setImage(file);
+        actionSheetRef.current?.hide();
       }
     });
   };
   const handleUseGallery = () => {
     const options = {
-      mediaType: 'photo',
+      mediaType: pickerType,
       selectionLimit: 1,
       includeBase64: false,
       quality: 1.0,
@@ -57,6 +58,7 @@ export default function ImagePicker(props) {
         const {assets} = response;
         const file = assets[0];
         setImage(file);
+        actionSheetRef.current?.hide();
       }
     });
   };

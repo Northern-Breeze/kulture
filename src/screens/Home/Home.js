@@ -224,6 +224,7 @@ export default function Home(props) {
             scrollToActiveIndex={scrollToActiveIndex}
             activeIndex={activeIndex}
             handleLoadMore={handleLoadMore}
+            navigation={navigation}
           />
           <BottomList
             bottomRef={bottomRef}
