@@ -6,23 +6,17 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 // functions
 
 // Screens
-import Home from './Home';
 import AddPost from '../screens/AddPost';
 import Search from '../screens/Search';
-import Message from '../screens/Message';
 
 // Stacks
+import Home from './Home';
 import ProfileStack from './Profile';
+import Messages from './Messages';
 
 const Tab = createMaterialBottomTabNavigator();
 
 export default function HomeRoute() {
-
-  // hooks
-
-  // refs
-
-
   return (
     <Tab.Navigator
       initialRouteName="Home"
@@ -60,8 +54,8 @@ export default function HomeRoute() {
         }}
       />
       <Tab.Screen
-        name="Message"
-        component={Message}
+        name="Messages"
+        component={Messages}
         options={{
           tabBarLabel: 'Messages',
           tabBarIcon: ({color}) => (
