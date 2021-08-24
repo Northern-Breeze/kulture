@@ -29,6 +29,7 @@ export default function Search(props) {
   const [users, setUsers] = React.useState([]);
   const [requestStatus, setRequestStatus] = React.useState('IDLE');
   const [username, setUsername] = React.useState('');
+  const [idUser, setUserId] = React.useState(0);
 
   // ref
   const mounted = React.useRef(true);
@@ -56,9 +57,10 @@ export default function Search(props) {
     }
   };
 
-  const profilePress = (username) => {
+  const profilePress = (username, userId) => {
     actionSheetRef.current?.setModalVisible();
-    setUsername(username)
+    setUsername(username);
+    setUserId(userId);
   }
 
   const handleSearch = async (data) => {
@@ -66,17 +68,17 @@ export default function Search(props) {
     await fetchUsers(data);
   }
 
-  const Item = ({image, username}) => {
+  const Item = ({image, username, userId}) => {
     return (
       <Pressable onPress={() => {
-        profilePress(username);
+        profilePress(username, userId);
       }}>
         <Image source={{uri: image}} style={styles.image} />
       </Pressable>
     );
   };
 
-  const renderFeed = ({item}) => <Item image={item.profile} username={item.username}/>;
+  const renderFeed = ({item}) => <Item image={item.profile} username={item.username} userId={item.userId}/>;
 
   React.useEffect(() => {
     return () => {
@@ -114,6 +116,7 @@ export default function Search(props) {
       </View>
       <ActionsSheet  
         username={username}
+        userId={idUser}
         actionSheetRef={actionSheetRef}
       />
     </View>
