@@ -10,10 +10,10 @@ import {
   persist,
   useStoreRehydrated,
 } from 'easy-peasy';
-import dynamicLinks from '@react-native-firebase/dynamic-links';
 import analytics from '@react-native-firebase/analytics';
 
-import createLink from './src/utils/generateLink'
+import FlashMessage from "react-native-flash-message";
+
 
 // Store
 import Store from './src/store/model';
@@ -32,39 +32,6 @@ export const RootWrapper = () => {
 
   const routeNameRef = React.useRef();
   const navigationRef = React.useRef();
-
-
-  
-  // const getAppLaunchLink = async () => {
-  //   try {
-  //     const {url} = await dynamicLinks().getInitialLink();
-  //     //handle your link here
-  //     console.log(url);
-  //   } catch (error) {
-  //     console.log(error);
-  //     //handle errors
-  //   }
-  // };
-  
-  React.useEffect(() => {
-    async () => {
-      const value = await createLink('name', 'test');
-    }
-  },[]);
-
-  // React.useEffect(() => {
-  //   getAppLaunchLink();
-  // }, []);
-  
-  React.useEffect(() => {
-    const unsubscribeDynamicLinks = dynamicLinks().onLink(({url}) => {
-      //handle your url here
-      console.log(url);
-    });
-
-    return () => unsubscribeDynamicLinks();
-
-  }, [])
 
   if (isHydrated) {
     return (
@@ -106,6 +73,7 @@ const App = () => {
   return (
     <Provider store={store}>
       <RootWrapper />
+      <FlashMessage position="top" />
     </Provider>
   );
 };
