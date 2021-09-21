@@ -11,7 +11,7 @@ export default function BottomList(props) {
     <FlatList
       ref={bottomRef}
       data={posts}
-      keyExtractor={(item) => item.postId.toString()}
+      keyExtractor={(_, index) => index.toString() + Math.random().toString()}
       horizontal
       showsHorizontalScrollIndicator={false}
       style={{position: 'absolute', bottom: IMAGE_SIZE}}
