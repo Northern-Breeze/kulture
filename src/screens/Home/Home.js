@@ -59,6 +59,7 @@ export default function Home(props) {
         if (mounted.current) {
           setPost(data);
           setRequestStatus('SUCCESS');
+          setPage((p) => p + 1);
         }
       } else {
         SnackBar.show({
@@ -108,7 +109,6 @@ export default function Home(props) {
 
   const handleLoadMore = async () => {
     try {
-      setPage((p) => p + 1);
       setLoadingMore(true);
       const response = await server.getAllPost({ page, size});
 
@@ -133,9 +133,13 @@ export default function Home(props) {
             })
             setLoadingMore(false);
           } else {
+            // const list = posts;
+            // const combined = list.concat(data);
             const combined = [...posts, ...data];
             setPost(combined);
             setLoadingMore(false);
+            setPage((p) => p + 1);
+
           }
         }
       } else {
@@ -232,6 +236,7 @@ export default function Home(props) {
             posts={posts}
             IMAGE_SIZE={IMAGE_SIZE}
             SPACING={SPACING}
+            handleLoadMore={handleLoadMore}
             setActiveIndex={setActiveIndex}
             activeIndex={activeIndex}
           />

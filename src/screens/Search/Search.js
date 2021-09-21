@@ -19,7 +19,7 @@ import styles from './Search.style';
 // components
 import NotConnected from '../../components/NotConnected';
 import ActionsSheet from '../../components/ActionSheets/UserAction';
-
+import EmptyList from './EmptyList'
 export default function Search(props) {
   // props
   const {navigation} = props;
@@ -70,10 +70,23 @@ export default function Search(props) {
 
   const Item = ({image, username, userId}) => {
     return (
-      <Pressable onPress={() => {
-        profilePress(username, userId);
-      }}>
-        <Image source={{uri: image}} style={styles.image} />
+      <Pressable 
+        style={styles.rowResults}
+        onPress={() => {
+          profilePress(username, userId);
+        }}
+      >
+        <View>
+          <Image source={{uri: image}} style={styles.image} />
+        </View>
+        <View>
+          <View>
+            <Text style={styles.headerText}>{username}</Text>
+          </View>
+          <View>
+            <Text style={styles.headerText}>Unknown Location</Text>
+          </View>
+        </View>
       </Pressable>
     );
   };
@@ -106,10 +119,9 @@ export default function Search(props) {
       <View style={styles.resultsContainer}>
         {requestStatus === 'SUCCESS' && (
           <FlatList
-            numColumns={2}
-            columnWrapperStyle={styles.images}
             data={users}
             renderItem={renderFeed}
+            ListEmptyComponent={<EmptyList />}
             keyExtractor={(item, index) => index.toString()}
           />
         )}
