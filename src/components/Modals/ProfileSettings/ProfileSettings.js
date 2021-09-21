@@ -55,14 +55,6 @@ export default function ProfileSettings(props) {
             </TouchableOpacity>
           </View>
           <View style={styles.control}>
-            <Ionicons name="ios-color-palette" color="#000" size={31} />
-            <TouchableOpacity onPress={() => {}} style={styles.button}>
-              <Text style={styles.logoutText}>
-                  Dark Mode
-              </Text>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.control}>
             <Ionicons name="heart-circle" color="#000" size={31} />
             <TouchableOpacity onPress={handleSupport} style={styles.button}>
               <Text style={styles.logoutText}>

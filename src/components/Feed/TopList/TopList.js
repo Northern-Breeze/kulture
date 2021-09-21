@@ -13,13 +13,13 @@ export default function TopList(props) {
     <FlatList
       ref={topRef}
       data={posts}
-      keyExtractor={(_, index) => index.toString()}
+      keyExtractor={(_, index) => index.toString() + Math.random().toString()}
       horizontal
       pagingEnabled
       ListFooterComponent={<Footer />}
       onEndReached={handleLoadMore}
       showsHorizontalScrollIndicator={false}
-      onEndReachedThreshold={0.5}
+      onEndReachedThreshold={0.05}
       initialNumToRender={6}
       onMomentumScrollEnd={(ev) => {
         scrollToActiveIndex(
