@@ -33,16 +33,19 @@ const style = StyleSheet.create({
     flexWrap: 'wrap',
     alignItems: 'flex-start'
   },
-  images: {
+  resultsContainer: {
     flex: 1,
-    justifyContent: 'center',
+  },
+  rowResults: {
     flexDirection: 'row',
-    flexWrap: 'wrap',
+    alignItems: 'center'
   },
   image: {
-    width: wp(45),
-    height: hp(40),
+    width: wp(30),
+    height: hp(17),
     margin: wp(2),
+    borderRadius: wp(20),
+    resizeMode: 'cover'
   }
 });
 
