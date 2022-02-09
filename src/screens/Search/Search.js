@@ -19,7 +19,7 @@ import styles from './Search.style';
 // components
 import NotConnected from '../../components/NotConnected';
 import ActionsSheet from '../../components/ActionSheets/UserAction';
-
+import EmptyList from './EmptyList'
 export default function Search(props) {
   // props
   const {navigation} = props;
@@ -29,6 +29,7 @@ export default function Search(props) {
   const [users, setUsers] = React.useState([]);
   const [requestStatus, setRequestStatus] = React.useState('IDLE');
   const [username, setUsername] = React.useState('');
+  const [idUser, setUserId] = React.useState(0);
 
   // ref
   const mounted = React.useRef(true);
@@ -56,9 +57,10 @@ export default function Search(props) {
     }
   };
 
-  const profilePress = (username) => {
+  const profilePress = (username, userId) => {
     actionSheetRef.current?.setModalVisible();
-    setUsername(username)
+    setUsername(username);
+    setUserId(userId);
   }
 
   const handleSearch = async (data) => {
@@ -66,17 +68,30 @@ export default function Search(props) {
     await fetchUsers(data);
   }
 
-  const Item = ({image, username}) => {
+  const Item = ({image, username, userId}) => {
     return (
-      <Pressable onPress={() => {
-        profilePress(username);
-      }}>
-        <Image source={{uri: image}} style={styles.image} />
+      <Pressable 
+        style={styles.rowResults}
+        onPress={() => {
+          profilePress(username, userId);
+        }}
+      >
+        <View>
+          <Image source={{uri: image}} style={styles.image} />
+        </View>
+        <View>
+          <View>
+            <Text style={styles.headerText}>{username}</Text>
+          </View>
+          <View>
+            <Text style={styles.headerText}>Unknown Location</Text>
+          </View>
+        </View>
       </Pressable>
     );
   };
 
-  const renderFeed = ({item}) => <Item image={item.profile} username={item.username}/>;
+  const renderFeed = ({item}) => <Item image={item.profile} username={item.username} userId={item.userId}/>;
 
   React.useEffect(() => {
     return () => {
@@ -104,16 +119,16 @@ export default function Search(props) {
       <View style={styles.resultsContainer}>
         {requestStatus === 'SUCCESS' && (
           <FlatList
-            numColumns={2}
-            columnWrapperStyle={styles.images}
             data={users}
             renderItem={renderFeed}
+            ListEmptyComponent={<EmptyList />}
             keyExtractor={(item, index) => index.toString()}
           />
         )}
       </View>
       <ActionsSheet  
         username={username}
+        userId={idUser}
         actionSheetRef={actionSheetRef}
       />
     </View>

@@ -11,7 +11,8 @@ import server from '../../service/server';
 import MessageList from '../../components/MessageList/MessageList';
 
 export default function Message(props) {
-  const {navigation} = props;
+  const {navigation, route} = props;
+  const { groupName } = route.params;
   const [users, setUsers] = React.useState([]);
   const [messages, setMessages] = React.useState([]);
   const [profile, setProfile] = React.useState({
@@ -58,25 +59,18 @@ export default function Message(props) {
       },
     });
 
-    socketRef.current.on('users', (data) => {
-      const value = JSON.parse(data);
-      setUsers(value);
+    socketRef.current.emit('joinRoom', { room: groupName });
+
+    socketRef.current.on('roomUsers', ({ room, users }) => {
+      setUsers(users);
     });
 
-    // get room info
-    socketRef.current.on('user', (user) => {
-      const value = JSON.parse(user);
-      setUsers([...users, value]);
-      console;
-    });
-
-    socketRef.current.on('chat message', (msg) => {
+    socketRef.current.on('message', (msg) => {
       setMessages((previousMessages) =>
         GiftedChat.append(previousMessages, msg),
       );
     });
 
-    socketRef.current.emit('new');
 
     return () => {
       socketRef.current.close();
@@ -84,7 +78,7 @@ export default function Message(props) {
   }, []);
 
   const onSend = React.useCallback((messages = []) => {
-    socketRef.current.emit('chat message', messages);
+    socketRef.current.emit('chatMessage', messages);
   }, []);
 
   return (
