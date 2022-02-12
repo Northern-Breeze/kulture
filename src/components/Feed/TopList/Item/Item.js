@@ -31,14 +31,6 @@ export default function Item(props) {
         setTimeout(() => {
           if (!liked.current) {
             liked.current = true;
-            server
-              .likeAPost({
-                postId: item.postId,
-              })
-              .then()
-              .catch((error) => {
-                console.log(error);
-              });
           }
         }, 8000);
       }
