@@ -1,14 +1,14 @@
 import React from 'react';
 import {View, Text, Image, TouchableOpacity} from 'react-native';
-import Snackbar from 'react-native-snackbar';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
-import {configs} from '../../config/config';
 import styles from './Profile.style';
 
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 //Components
 import ImagePicker from '../../components/ActionSheets/ImagePicker';
+
+// Functions
+import uploadToServer from '../../helper/uploadToServer';
 
 export default function Header(props) {
   const {loading, data, fetchProfile, onOpen} = props;
@@ -21,73 +21,9 @@ export default function Header(props) {
 
   const setFile = (file) => {
       setImage(file);
-      uploadToServer();
+      uploadToServer(file);
   }
 
-  const createFormData = (file) => {
-    const data = new FormData();
-
-    data.append('picture', {
-      name: file.fileName,
-      type: file.type,
-      uri:
-        Platform.OS === 'android' ? file.uri : file.uri.replace('file://', ''),
-    });
-
-    return data;
-  };
-
-
-  const uploadToServer = async () => {
-    try {
-      if (typeof image === 'undefined' || image === '') {
-        Snackbar.show({
-          text: 'Please Upload A File',
-          duration: Snackbar.LENGTH_SHORT,
-        });
-        return;
-      }
-      const token = (await AsyncStorage.getItem('token')) || '';
-      const request = await fetch(
-        `${configs.SERVER_URL}/api/v1/profile/update-image`,
-        {
-          body: createFormData(image),
-          method: 'POST',
-          headers: {
-            'Content-Type': 'multipart/form-data',
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      );
-      const response = await request.json();
-      if (response.status === 200) {
-        if (response.success) {
-          Snackbar.show({
-            text: response.message,
-            duration: Snackbar.LENGTH_SHORT,
-          });
-          actionSheetRef.current?.hide();
-          fetchProfile();
-        } else {
-          Snackbar.show({
-            text: response.message,
-            duration: Snackbar.LENGTH_SHORT,
-          });
-        }
-      } else {
-        Snackbar.show({
-          text: response.message,
-          duration: Snackbar.LENGTH_SHORT,
-        });
-      }
-    } catch (error) {
-      console.log(error);
-      Snackbar.show({
-        text: 'Something went wrong, please try again',
-        duration: Snackbar.LENGTH_SHORT,
-      });
-    }
-  };
 
   return (
     <>
@@ -100,9 +36,9 @@ export default function Header(props) {
           {data !==
             null && (
               <Image
-                source={{uri: data.profile}}
-                style={styles.avatar}
-              />
+              source={{uri: data.profile}}
+              style={styles.avatar}
+          />
             )}
           {loading && data === null && (
             <SkeletonPlaceholder>
