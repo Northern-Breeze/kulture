@@ -70,7 +70,7 @@ export default function Welcome(props) {
       {requestStatus === 'LOADING' && <Loading />}
       {requestStatus === 'SUCCESS' && (
         <ImageBackground
-          source={{uri: post.asset}}
+          source={backgroundImage}
           style={styles.imageContainer}>
           <StatusBar
             barStyle="light-content"
