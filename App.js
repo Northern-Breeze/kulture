@@ -12,6 +12,8 @@ import {
 } from 'easy-peasy';
 import analytics from '@react-native-firebase/analytics';
 
+import FlashMessage from "react-native-flash-message";
+
 // Store
 import Store from './src/store/model';
 import storage from './src/store/storage/storage';
@@ -29,7 +31,6 @@ export const RootWrapper = () => {
 
   const routeNameRef = React.useRef();
   const navigationRef = React.useRef();
-
 
   if (isHydrated) {
     return (
@@ -71,6 +72,7 @@ const App = () => {
   return (
     <Provider store={store}>
       <RootWrapper />
+      <FlashMessage position="top" />
     </Provider>
   );
 };

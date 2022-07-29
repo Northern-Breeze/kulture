@@ -12,7 +12,6 @@ import ImagePicker from '../../components/ActionSheets/ImagePicker';
 
 export default function Header(props) {
   const {loading, data, fetchProfile, onOpen} = props;
-  const [fullyLoaded, setFullyLoaded] = React.useState(false);
   const [image, setImage] = React.useState('');
   const actionSheetRef = React.createRef(true);
 

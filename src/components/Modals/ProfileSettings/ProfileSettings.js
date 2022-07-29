@@ -9,7 +9,7 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 import styles from './ProfileSettings.style';
 export default function ProfileSettings(props) {
-  const {visible, onClose} = props;
+  const {visible, onClose, navigation} = props;
 
   const setIsLoggin = useStoreActions((actions) => actions.setIsLoggin);
   
@@ -23,6 +23,11 @@ export default function ProfileSettings(props) {
         duration: 3000,
       })
     }
+  }
+
+  const handleSupport = () => {
+    onClose()
+    navigation.navigate('profile_support');
   }
 
   return (
@@ -50,16 +55,8 @@ export default function ProfileSettings(props) {
             </TouchableOpacity>
           </View>
           <View style={styles.control}>
-            <Ionicons name="ios-color-palette" color="#000" size={31} />
-            <TouchableOpacity onPress={() => {}} style={styles.button}>
-              <Text style={styles.logoutText}>
-                  Dark Mode
-              </Text>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.control}>
             <Ionicons name="heart-circle" color="#000" size={31} />
-            <TouchableOpacity onPress={() => {}} style={styles.button}>
+            <TouchableOpacity onPress={handleSupport} style={styles.button}>
               <Text style={styles.logoutText}>
                   Support Me
               </Text>
