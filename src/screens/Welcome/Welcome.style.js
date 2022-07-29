@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
         borderColor: '#000',
         borderWidth: 2,
         margin: 5,
-        borderRadius: 6,
+        borderRadius: 1,
     },
     loginText : {
         fontFamily: 'Roboto-Regular',
@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
         borderColor: '#000',
         borderWidth: 1,
         margin: 5,
-        borderRadius: 6,
+        borderRadius: 1,
         backgroundColor: '#000'
     },
     registerText: {

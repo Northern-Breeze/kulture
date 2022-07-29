@@ -10,7 +10,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#000',
-    borderRadius: 10,
     width: wp(90),
     height: hp(8),
   },
