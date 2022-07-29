@@ -14,6 +14,7 @@ const server = {
     getProfile: () => Axios.get('/profile'),
     getProfileAccount: ({ userId }) => Axios.get(`/profile/user?userId=${userId}`),
     searchUsers: ({ name }) => Axios.get(`/profile/users?name=${name}`),
+    followUser: ({ userId }) => Axios.post(`/profile/users/follow?userId=${userId}`)
 }
 
 export default server;
