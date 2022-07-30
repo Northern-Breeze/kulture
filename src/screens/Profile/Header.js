@@ -11,7 +11,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import ImagePicker from '../../components/ActionSheets/ImagePicker';
 
 export default function Header(props) {
-  const {loading, data, fetchProfile, onOpen} = props;
+  const {loading, data, fetchProfile, onOpen, navigation} = props;
   const [image, setImage] = React.useState('');
   const actionSheetRef = React.createRef(true);
 
@@ -22,6 +22,10 @@ export default function Header(props) {
   const setFile = (file) => {
       setImage(file);
       uploadToServer();
+  }
+
+  const handleNavigate = () => {
+    navigation.navigate('Add');
   }
 
   const createFormData = (file) => {
@@ -129,7 +133,9 @@ export default function Header(props) {
         <TouchableOpacity
           activeOpacity={0.9}
           style={styles.button}
-          disabled={loading}>
+          disabled={loading}
+          onPress={handleNavigate}
+          >
           <Text style={styles.buttonTextAdd}>Add New Post</Text>
         </TouchableOpacity>
         <TouchableOpacity

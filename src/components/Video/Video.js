@@ -12,7 +12,7 @@ export default function VideoItem(props) {
 
   // Events
   const onBuffer = (buffer) => {
-    console.log('buffer: ', buffer);
+    //
   };
 
   const handleError = (error) => {
