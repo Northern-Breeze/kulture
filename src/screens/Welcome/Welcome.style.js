@@ -40,13 +40,12 @@ const styles = StyleSheet.create({
         width: wp(44),
         height: hp(8),
         borderColor: '#000',
-        borderWidth: 2,
-        margin: 5,
-        borderRadius: 1,
+        borderWidth: wp(0.5),
+        margin: wp(2),
     },
     loginText : {
         fontFamily: 'Roboto-Regular',
-        fontSize: 13,
+        fontSize: wp(3),
         color: '#000',
         fontWeight: 'bold',
     },
@@ -61,14 +60,13 @@ const styles = StyleSheet.create({
         width: wp(44),
         height: hp(8),
         borderColor: '#000',
-        borderWidth: 1,
-        margin: 5,
-        borderRadius: 1,
+        borderWidth: wp(1),
+        margin: wp(2),
         backgroundColor: '#000'
     },
     registerText: {
         fontFamily: 'Roboto-Regular',
-        fontSize: 13,
+        fontSize: wp(3),
         color: '#fff',
         fontWeight: 'bold',
     },
@@ -79,7 +77,7 @@ const styles = StyleSheet.create({
     },
     notConnectedText: {
         fontFamily: 'Comfortaa-Regular',
-        fontSize: 20,
+        fontSize: wp(3),
     }
     
 });
