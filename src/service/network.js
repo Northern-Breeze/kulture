@@ -24,16 +24,6 @@ const instance = axios.create({
 })
 
 instance.interceptors.request.use(async config => {
-  if (config.url && config.url.charAt(0) === '/') {
-    config.url = `${baseURL}${config.url}`;
-  }
-  const token = await AsyncStorage.getItem('token') || "";
-  config.headers.authorization = `Bearer ${token}`;
-
-  return config;
-}, error => Promise.reject(error));
-  
-instance.interceptors.request.use(async config => {
     const user = await AsyncStorage.getItem('token') || "";
     const baseURL = `${configs.SERVER_URL}/api/v1`
     const token = user;
