@@ -205,7 +205,7 @@ export default function Home(props) {
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
           <MaterialIcons name="error-outline" color="#000" size={50} />
           <Text style={[styles.subheaderText, { color: '#000' }]}>
-            Something Error Occurred
+            Something Wrong Occurred
           </Text>
           <Pressable style={styles.button} onPress={fetchPosts}>
             <Text style={styles.subheaderText}>

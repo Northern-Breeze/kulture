@@ -12,7 +12,6 @@ export default function UserAction(props) {
     const { actionSheetRef, username, userId } = props;
     const followUserHandler = async (id) => {
       try {
-        console.log(id);
         const response = await server.followUser(id);
         if (response.data.success) {
           showMessage({
