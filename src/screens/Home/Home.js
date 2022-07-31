@@ -1,5 +1,5 @@
 import React from 'react';
-import {Dimensions, View, Text, Pressable} from 'react-native';
+import {View, Text, Pressable} from 'react-native';
 import SnackBar from 'react-native-snackbar';
 import {useNetInfo} from '@react-native-community/netinfo';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -23,8 +23,8 @@ export default function Home(props) {
   const netinfo = useNetInfo();
 
   // data set
-  const [page, setPage] = React.useState(1);
-  const [size, _] = React.useState(5);
+  const [page] = React.useState(1);
+  const [size] = React.useState(5);
 
   // Refs
   const mounted = React.useRef(true);
@@ -129,8 +129,7 @@ export default function Home(props) {
   const refreshHandler = async () => {
     try {
       const response = await server.getAllPost({page, size});
-      if (response.status === 401) {
-      }
+      
       if (response.data.success) {
         const {data} = response.data;
         if (mounted.current) {
@@ -141,8 +140,6 @@ export default function Home(props) {
           text: response.data.message,
           duration: SnackBar.LENGTH_SHORT,
         });
-        if (mounted.current) {
-        }
       }
     } catch (error) {
       console.log(error);
