@@ -14,7 +14,6 @@ import styles from './AddPost.style';
 
 // components
 import ImagePicker from '../../components/ActionSheets/ImagePicker';
-import PostTypePicker from '../../components/ActionSheets/PostTypePicker';
 
 // helpers
 import {configs} from '../../config/config';
@@ -77,23 +76,15 @@ export default function AddPost(props) {
         },
       });
       const response = await request.json();
-      if (response.status === 200) {
-        if (response.success) {
-          Snackbar.show({
-            text: response.message,
-            duration: Snackbar.LENGTH_SHORT,
-          });
-          actionSheetRef.current?.hide();
-          fetchProfile();
-          navigation.navigate('Home');
-          setRequestStatus('SUCCESS');
-        } else {
-          Snackbar.show({
-            text: response.message,
-            duration: Snackbar.LENGTH_SHORT,
-          });
-          setRequestStatus('FAILED');
-        }
+      if (response.success) {
+        Snackbar.show({
+          text: response.message,
+          duration: Snackbar.LENGTH_SHORT,
+        });
+        actionSheetRef.current?.hide();
+        setImage('');
+        navigation.navigate('Home');
+        setRequestStatus('SUCCESS');
       } else {
         Snackbar.show({
           text: response.message,
