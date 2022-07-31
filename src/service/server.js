@@ -10,11 +10,12 @@ const server = {
     changePassword: (data) => Axios.post('/auth/changepassword', data),
     likeAPost: (data) => Axios.post('/likes/add', data),
     getMostLiked: () => Axios.get('/likes/likes'),
-    // users
     getProfile: () => Axios.get('/profile'),
     getProfileAccount: ({ userId }) => Axios.get(`/profile/user?userId=${userId}`),
     searchUsers: ({ name }) => Axios.get(`/profile/users?name=${name}`),
-    followUser: ({ userId }) => Axios.post(`/profile/users/follow?userId=${userId}`)
+    followUser: ({ userId }) => Axios.post(`/profile/users/follow?userId=${userId}`),
+    // users
+    getAllUsers: () => Axios.get(`/users/get-all-users`)
 }
 
 export default server;

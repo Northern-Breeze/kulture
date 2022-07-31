@@ -11,7 +11,6 @@ import Button from '../../../components/common/Button';
 import styles from './SignIn.style';
 
 //helper
-import {SignInInputs} from '../../../helper/inputvalidator';
 import server from '../../../service/server';
 
 export default function SignIn(props) {
@@ -23,9 +22,6 @@ export default function SignIn(props) {
   const [password, setPassword] = React.useState('');
   const [networkloading, setNetworkLoading] = React.useState(false);
   const [isViewAble, setIsViewAble] = React.useState(false);
-  // Error states
-  const [emailError, setEmailError] = React.useState('');
-  const [passwordError, setPasswordError] = React.useState('');
 
   // globs and actions
   const loginCallback = useStoreActions((action) => action.loginCallback);
@@ -34,20 +30,9 @@ export default function SignIn(props) {
   }
   const authenticate = async () => {
     try {
-      const type = SignInInputs({email, password});
 
-      if (type.email) {
-        setEmailError(type.email.message);
-      }
-
-      if (type.password) {
-        setPasswordError(type.password.message);
-      }
-
-      if (type.email.message || type.password.message) {
-        return;
-      }
       setNetworkLoading(true);
+      
       const response = await server.login({
         email: email,
         password: password,
