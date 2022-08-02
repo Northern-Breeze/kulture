@@ -1,10 +1,14 @@
 import * as React from 'react';
-import {View, Text, StatusBar, FlatList} from 'react-native';
+import {View, Text, StatusBar} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 
 import styles from './EmptyList.style';
 
-export default function EmptyList(props) {
+type Props = {
+  refreshHandler(): void;
+}
+
+export default function EmptyList(props: Props) {
   const {refreshHandler} = props;
   return (
     <View style={styles.container}>

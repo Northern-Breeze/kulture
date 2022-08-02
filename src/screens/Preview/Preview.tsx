@@ -16,6 +16,7 @@ import styles from './Preview.style';
 
 import server from '../../service/server';
 import {isOdd} from '../../helper/isOdd';
+import ListEmpty from '../../components/ListEmpty';
 
 type Props = {
   navigation: any;
@@ -136,6 +137,7 @@ export default function Preview(props: Props) {
                 navigation={navigation}
               />
             }
+            ListEmptyComponent={<ListEmpty />}
             numColumns={2}
             columnWrapperStyle={styles.container}
             data={posts}

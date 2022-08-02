@@ -41,7 +41,6 @@ export const RootWrapper: React.FC = () => {
   if (isHydrated) {
     return (
       <NavigationContainer
-        // @ts-ignore
         ref={navigationRef}
         onReady={() => {
           routeNameRef.current = navigationRef?.current.getCurrentRoute().name
@@ -77,7 +76,6 @@ const App = () => {
   }, []);
 
   return (
-    // @ts-ignore
     <Provider store={store}>
       <RootWrapper />
       <FlashMessage position="top" />
