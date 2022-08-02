@@ -13,6 +13,7 @@ import {
 import analytics from '@react-native-firebase/analytics';
 
 import FlashMessage from "react-native-flash-message";
+import * as Sentry from "@sentry/react-native";
 
 // Store
 import Store from './src/store/model';
@@ -26,22 +27,28 @@ const store = createStore(
   }),
 );
 
-export const RootWrapper = () => {
+
+Sentry.init({
+  dsn: "https://6cb908ee0a3c4f06897a13b16bdb84c3@o1229278.ingest.sentry.io/6595975",
+});
+
+export const RootWrapper: React.FC = () => {
   const isHydrated = useStoreRehydrated();
 
-  const routeNameRef = React.useRef();
-  const navigationRef = React.useRef();
+  const routeNameRef = React.useRef<any>();
+  const navigationRef = React.useRef<any>();
 
   if (isHydrated) {
     return (
       <NavigationContainer
+        // @ts-ignore
         ref={navigationRef}
         onReady={() => {
-          routeNameRef.current = navigationRef.current.getCurrentRoute().name
+          routeNameRef.current = navigationRef?.current.getCurrentRoute().name
         }}
         onStateChange={async () => {
           const previousRouteName = routeNameRef.current;
-          const currentRouteName = navigationRef.current.getCurrentRoute().name
+          const currentRouteName = navigationRef?.current.getCurrentRoute().name
 
           if (previousRouteName !== currentRouteName) {
             await analytics().logScreenView({
@@ -70,6 +77,7 @@ const App = () => {
   }, []);
 
   return (
+    // @ts-ignore
     <Provider store={store}>
       <RootWrapper />
       <FlashMessage position="top" />
@@ -77,4 +85,4 @@ const App = () => {
   );
 };
 
-export default App;
+export default Sentry.wrap(App);

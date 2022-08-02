@@ -1,31 +1,41 @@
 import React from 'react';
 import {View, Text, TouchableOpacity} from 'react-native';
 import ActionSheet from 'react-native-actions-sheet';
-import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import {
+  launchCamera,
+  launchImageLibrary,
+  CameraOptions,
+  ImageLibraryOptions,
+} from 'react-native-image-picker';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Snackbar from 'react-native-snackbar';
 
 import styles from './ImagePicker.style';
 
-export default function ImagePicker(props) {
+type Props = {
+  actionSheetRef: any;
+  setImage: any;
+  pickerType: any;
+};
+
+const ImagePicker: React.FC<any> = (props: Props) => {
   const {actionSheetRef, setImage, pickerType} = props;
   const handleUseCamera = () => {
-    const options = {
+    const options: CameraOptions = {
       mediaType: pickerType,
-      selectionLimit: 1,
       quality: 1.0,
       includeBase64: false,
       saveToPhotos: true,
     };
-    launchCamera({options}, (response) => {
+    launchCamera(options, (response) => {
       if (response.didCancel) {
         Snackbar.show({
           text: 'User cancelled photo picker',
           duration: Snackbar.LENGTH_SHORT,
         });
-      } else if (response.error) {
+      } else if (response.errorMessage) {
         Snackbar.show({
-          text: `ImagePicker Error:  ${response.error}`,
+          text: `ImagePicker Error:  ${response.errorMessage}`,
           duration: Snackbar.LENGTH_SHORT,
         });
       } else {
@@ -37,21 +47,21 @@ export default function ImagePicker(props) {
     });
   };
   const handleUseGallery = () => {
-    const options = {
+    const options: ImageLibraryOptions = {
       mediaType: pickerType,
       selectionLimit: 1,
       includeBase64: false,
       quality: 1.0,
     };
-    launchImageLibrary({options}, (response) => {
+    launchImageLibrary(options, (response) => {
       if (response.didCancel) {
         Snackbar.show({
           text: 'User cancelled photo picker',
           duration: Snackbar.LENGTH_SHORT,
         });
-      } else if (response.error) {
+      } else if (response.errorMessage) {
         Snackbar.show({
-          text: `ImagePicker Error:  ${response.error}`,
+          text: `ImagePicker Error:  ${response.errorMessage}`,
           duration: Snackbar.LENGTH_SHORT,
         });
       } else {
@@ -63,6 +73,7 @@ export default function ImagePicker(props) {
     });
   };
   return (
+    // @ts-ignore
     <ActionSheet ref={actionSheetRef} animated={true}>
       <View style={styles.actionSheet}>
         <View style={styles.container}>
@@ -92,4 +103,6 @@ export default function ImagePicker(props) {
       </View>
     </ActionSheet>
   );
-}
+};
+
+export default ImagePicker;

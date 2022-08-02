@@ -168,7 +168,7 @@ export default function SignUp(props) {
           <TouchableOpacity
             style={styles.linkbtn}
             onPress={() => goTo('signin')}>
-            <Text style={styles.linkText}>Already have an account? Register</Text>
+            <Text style={styles.linkText}>Already have an account? Login</Text>
           </TouchableOpacity>
         </View>
         <View>

@@ -2,7 +2,20 @@ import * as React from 'react';
 import {TouchableOpacity, Image} from 'react-native';
 import styles from './Item.style';
 
-export default function Item(props) {
+type Props = {
+  item: {
+    name: string;
+    avatar: string;
+    username: string;
+    id: number;
+    image: string;
+  };
+  navigation: {
+    navigate: (location: string, param: any) => void
+  };
+};
+
+export default function Item(props: Props) {
   // Props
   const {item, navigation} = props;
 
@@ -13,10 +26,9 @@ export default function Item(props) {
 
   const handlePostPress = () => {
     navigation.navigate('Preview', {
-      username: item.username,
+      username: item.name,
       avatar: item.avatar,
-      image: item.image,
-      userId: item.userId,
+      userId: item.id,
     });
   };
 

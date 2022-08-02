@@ -1,3 +1,4 @@
 export const isOdd = (data) => {
-    return data.postId % 2 === 0;
+    if (data) data.postId % 2 === 0 
+    return false;
 };
