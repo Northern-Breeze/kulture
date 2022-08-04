@@ -17,6 +17,7 @@ const styles = StyleSheet.create({
     brandlogo: {
         flexDirection: "row",
     },
+    avatar: {},
     logo: {
         flexDirection: 'row',
         justifyContent: 'center',

@@ -2,33 +2,38 @@ import React from 'react';
 import MasonryList from '@react-native-seoul/masonry-list';
 
 import Item from './Item';
+import ListEmpty from '../../ListEmpty';
 
-export default function TopList(props) {
+type Props = {
+  users: {
+    avatar: string;
+    name: string;
+    id: number;
+  }[];
+  navigation: {
+    navigate: () => void;
+  };
+};
+
+export default function TopList(props: Props) {
   // Props
-  const {
-    users,
-    activeIndex,
-    handleLoadMore,
-    navigation,
-  } = props;
+  const {users, navigation} = props;
   return (
     <MasonryList
       data={users}
       keyExtractor={(_, index) => index.toString() + Math.random().toString()}
       numColumns={2}
+      ListEmptyComponent={<ListEmpty />}
       showsVerticalScrollIndicator={false}
-      renderItem={({item, index}) => {
+      renderItem={({item}) => {
         return (
           <Item
             item={item}
-            index={index}
-            activeIndex={activeIndex}
             navigation={navigation}
           />
         );
       }}
       onEndReachedThreshold={0.05}
-      onEndReached={handleLoadMore}
     />
   );
 }
