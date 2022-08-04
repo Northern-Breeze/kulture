@@ -1,17 +1,17 @@
 import React from 'react';
 import {View, Text, Image, TouchableOpacity} from 'react-native';
-import Snackbar from 'react-native-snackbar';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
-import {configs} from '../../config/config';
 import styles from './Profile.style';
 
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 //Components
 import ImagePicker from '../../components/ActionSheets/ImagePicker';
 
+// Functions
+import uploadToServer from '../../helper/uploadToServer';
+
 export default function Header(props) {
-  const {loading, data, fetchProfile, onOpen} = props;
+  const {loading, data, fetchProfile, onOpen, navigation} = props;
   const [image, setImage] = React.useState('');
   const actionSheetRef = React.createRef(true);
 
@@ -21,7 +21,11 @@ export default function Header(props) {
 
   const setFile = (file) => {
       setImage(file);
-      uploadToServer();
+      uploadToServer(file);
+  }
+
+  const handleNavigate = () => {
+    navigation.navigate('Add');
   }
 
   const createFormData = (file) => {
@@ -100,9 +104,9 @@ export default function Header(props) {
           {data !==
             null && (
               <Image
-                source={{uri: data.profile}}
-                style={styles.avatar}
-              />
+              source={{uri: data.profile}}
+              style={styles.avatar}
+          />
             )}
           {loading && data === null && (
             <SkeletonPlaceholder>
@@ -129,7 +133,9 @@ export default function Header(props) {
         <TouchableOpacity
           activeOpacity={0.9}
           style={styles.button}
-          disabled={loading}>
+          disabled={loading}
+          onPress={handleNavigate}
+          >
           <Text style={styles.buttonTextAdd}>Add New Post</Text>
         </TouchableOpacity>
         <TouchableOpacity

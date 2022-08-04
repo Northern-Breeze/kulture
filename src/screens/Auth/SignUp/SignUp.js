@@ -16,15 +16,11 @@ import {
   getLastUpdateTime,
   getVersion
 } from 'react-native-device-info';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 // Styles
 import styles from './SignUp.style';
 
-// helper methods
-import {signUpInputs} from '../../../helper/inputvalidator';
-
-// components
-import Validation from '../../../components/Form/Validation';
 import Button from '../../../components/common/Button';
 
 import server from '../../../service/server';
@@ -35,10 +31,12 @@ export default function SignUp(props) {
   const [username, setUsername] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [networkloading, setNetworkLoading] = React.useState(false);
-  // Error messages
-  const [emailError, setEmailError] = React.useState('');
-  const [usernameError, setUsernameError] = React.useState('');
-  const [passwordError, setPasswordError] = React.useState('');
+  const [isViewAble, setIsViewAble] = React.useState(false);
+
+  const handleToggle = () => {
+    setIsViewAble(t => !t);
+  }
+
   const getDetails = async () => {
     const androidId = await getAndroidId();
     const os = await getBaseOs();
@@ -69,23 +67,7 @@ export default function SignUp(props) {
   };
   const register = async () => {
     try {
-      const type = signUpInputs({email, username, password});
-      if (type.email) {
-        setEmailError(type.email.message);
-      }
-      if (type.username) {
-        setUsernameError(type.username.message);
-      }
-      if (type.password) {
-        setPasswordError(type.password.message);
-      }
-      if (
-        type.email.message ||
-        type.password.message ||
-        type.username.message
-      ) {
-        return;
-      }
+
       setNetworkLoading(true);
       const user = await getDetails();
       const response = await server.register({
@@ -131,57 +113,77 @@ export default function SignUp(props) {
   };
   return (
     <View style={styles.container}>
-      <View style={styles.logo}>
-        <Image source={require('../../../assets/images/logo.png')} />
+      <View style={styles.avatarContainer}>
+        <Image
+          source={require('../../../assets/images/logo.png')}
+          style={styles.logo}
+        />
       </View>
       <View style={styles.fields}>
-        <View style={styles.input}>
+        <View style={styles.inputs}>
           <TextInput
             style={styles.inputValue}
             placeholder="Enter Email Address"
             onChangeText={setEmail}
             value={email}
-            keyboardType="email-address"
             autoCapitalize="none"
+            keyboardType="email-address"
           />
         </View>
-        <Validation message={emailError} />
-        <View style={styles.input}>
+        <View style={styles.inputs}>
           <TextInput
             style={styles.inputValue}
             placeholder="Enter Username"
             onChangeText={setUsername}
             value={username}
             autoCapitalize="none"
+            keyboardType="email-address"
           />
         </View>
-        <Validation message={usernameError} />
-        <View style={styles.input}>
+        <View style={styles.inputs}>
           <TextInput
             style={styles.inputValue}
             placeholder="Enter Password"
             onChangeText={setPassword}
-            value={password}
             autoCapitalize="none"
-            secureTextEntry
+            value={password}
+            secureTextEntry={!isViewAble}
           />
+          <TouchableOpacity style={styles.eyeIcon} onPress={handleToggle}>
+            <Ionicons
+              name={isViewAble ? 'eye-sharp' : 'eye-off'}
+              size={30}
+              color="#000"
+            />
+          </TouchableOpacity>
         </View>
-        <Validation message={passwordError} />
-        <View style={styles.input}>
+        <View style={styles.inputs}>
           <Button
-            isLoading={networkloading}
             buttonHandler={register}
             buttonText="Register"
+            isLoading={networkloading}
           />
+        </View>
         <View>
           <TouchableOpacity
             style={styles.linkbtn}
-            onPress={() => {
-              goTo('signin');
-            }}>
-            <Text style={styles.linkText}>Already have an account? Login</Text>
+            onPress={() => goTo('signin')}>
+            <Text style={styles.linkText}>Already have an account? Register</Text>
           </TouchableOpacity>
         </View>
+        <View>
+          <TouchableOpacity
+            style={styles.linkbtn}
+            onPress={() => goTo('forgotpassword')}>
+            <Text style={styles.linkText}>Forgot password? request</Text>
+          </TouchableOpacity>
+        </View>
+        <View>
+          <TouchableOpacity
+            style={styles.linkbtn}
+            onPress={() => goTo('activate')}>
+            <Text style={styles.linkText}>Activate Account</Text>
+          </TouchableOpacity>
         </View>
       </View>
     </View>
