@@ -30,7 +30,7 @@ instance.interceptors.request.use(async config => {
     if (config.url && config.url.charAt(0) === '/') {
       config.url = `${baseURL}${config.url}`;
     }
-   
+    console.log(config.url);
     config.headers.authorization = `Bearer ${token}`;
     config.headers['mobile-token'] = 'nrC^L9pjG)/4MZ>2';
 

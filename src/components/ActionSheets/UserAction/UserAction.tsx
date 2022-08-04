@@ -39,7 +39,6 @@ export default function UserAction(props: Props) {
     }
   };
   return (
-    // @ts-ignore
     <ActionSheet ref={actionSheetRef} animated={true}>
       <View style={styles.actionSheet}>
         <View style={styles.container}>

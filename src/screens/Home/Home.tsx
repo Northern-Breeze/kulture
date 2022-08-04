@@ -42,10 +42,10 @@ export default function Home(props: Props) {
   // Refs
   const mounted = React.useRef(true);
 
-  const fetchUsers = React.useCallback(async () => {
+  const fetchUsers = async () => {
     try {
       setRequestStatus('LOADING');
-      const response = await server.getAllUsers({ page, size });
+      const response = await server.getAllUsers();
 
       // UnAuthorize
       if (response.status === 401) {
@@ -72,12 +72,6 @@ export default function Home(props: Props) {
       console.log(error);
       setRequestStatus('FAILED');
     }
-  }, [page]);
-
-  const handleLoadMore = async () => {
-    if (!pageEnd) {
-      setPage(page + 1);
-    }
   };
 
   React.useEffect(() => {
@@ -89,7 +83,7 @@ export default function Home(props: Props) {
 
   React.useEffect(() => {
     fetchUsers();
-  }, [page]);
+  }, []);
 
 
   if (!netinfo.isConnected) {

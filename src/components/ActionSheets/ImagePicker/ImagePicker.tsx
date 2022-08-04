@@ -12,17 +12,32 @@ import Snackbar from 'react-native-snackbar';
 
 import styles from './ImagePicker.style';
 
+type FileSelect = {
+  base64?: string;
+  uri?: string;
+  width?: number;
+  height?: number;
+  fileSize?: number;
+  type?: string;
+  fileName?: string;
+  duration?: number;
+  bitrate?: number;
+  timestamp?: string;
+  id?: string;
+}
+
 type Props = {
   actionSheetRef: any;
-  setImage: any;
-  pickerType: any;
+  setImage(file: FileSelect): void;
 };
 
-const ImagePicker: React.FC<any> = (props: Props) => {
-  const {actionSheetRef, setImage, pickerType} = props;
+const ImagePicker = (props: Props) => {
+  
+  const {actionSheetRef, setImage} = props;
+
   const handleUseCamera = () => {
     const options: CameraOptions = {
-      mediaType: pickerType,
+      mediaType: 'photo',
       quality: 1.0,
       includeBase64: false,
       saveToPhotos: true,
@@ -40,15 +55,17 @@ const ImagePicker: React.FC<any> = (props: Props) => {
         });
       } else {
         const {assets} = response;
-        const file = assets[0];
-        setImage(file);
+        if (assets) {
+          const file = assets[0];
+          setImage(file);
+        }
         actionSheetRef.current?.hide();
       }
     });
   };
   const handleUseGallery = () => {
     const options: ImageLibraryOptions = {
-      mediaType: pickerType,
+      mediaType: 'photo',
       selectionLimit: 1,
       includeBase64: false,
       quality: 1.0,
@@ -66,14 +83,15 @@ const ImagePicker: React.FC<any> = (props: Props) => {
         });
       } else {
         const {assets} = response;
-        const file = assets[0];
-        setImage(file);
+        if (assets) {
+          const file = assets[0];
+          setImage(file);
+        }
         actionSheetRef.current?.hide();
       }
     });
   };
   return (
-    // @ts-ignore
     <ActionSheet ref={actionSheetRef} animated={true}>
       <View style={styles.actionSheet}>
         <View style={styles.container}>
