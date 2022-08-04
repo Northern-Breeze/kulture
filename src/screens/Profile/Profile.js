@@ -18,6 +18,8 @@ import server from '../../service/server';
 
 import styles from './Profile.style';
 
+import { isOdd } from '../../helper/isOdd';
+
 // Components
 import HeaderList from './Header';
 import ProfileSettings from '../../components/Modals/ProfileSettings';
@@ -37,9 +39,13 @@ export default function Profile(props) {
   ]);
   const [isRefreshing, setRefreshing] = React.useState(false);
   const setIsLoggin = useStoreActions((actions) => actions.setIsLoggin);
-  const isOdd = (data) => {
-    return data.postId % 2 === 0;
+
+  const handleRefresh = () => {
+    setRefreshing(true);
+    fetchProfile();
+    setRefreshing(false);
   };
+
   const fetchProfile = async () => {
     try {
       setLoading(true);
@@ -121,17 +127,13 @@ export default function Profile(props) {
   const renderFeed = ({item}) => {
     return <Item image={item.image} />;
   };
+
   const loadingItems = () => {
     return (
       <SkeletonPlaceholder>
         <View style={styles.image} />
       </SkeletonPlaceholder>
     );
-  };
-  const handleRefresh = () => {
-    setRefreshing(true);
-    fetchProfile();
-    setRefreshing(false);
   };
 
   return (
@@ -158,6 +160,7 @@ export default function Profile(props) {
                 loading={loading}
                 data={data}
                 fetchProfile={fetchProfile}
+                navigation={navigation}
               />
             }
             numColumns={2}

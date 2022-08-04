@@ -1,18 +1,16 @@
 import React from 'react';
-import {View, Text, TextInput, Image} from 'react-native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import {View, Text, TextInput, Image, TouchableOpacity} from 'react-native';
 import {useStoreActions} from 'easy-peasy';
 import Snackbar from 'react-native-snackbar';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 // components
 import Button from '../../../components/common/Button';
-import Validation from '../../../components/Form/Validation';
 
 // Styles
 import styles from './SignIn.style';
 
 //helper
-import {SignInInputs} from '../../../helper/inputvalidator';
 import server from '../../../service/server';
 
 export default function SignIn(props) {
@@ -23,30 +21,18 @@ export default function SignIn(props) {
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [networkloading, setNetworkLoading] = React.useState(false);
-  const [see, setSee] = React.useState(false);
-  // Error states
-  const [emailError, setEmailError] = React.useState('');
-  const [passwordError, setPasswordError] = React.useState('');
+  const [isViewAble, setIsViewAble] = React.useState(false);
 
   // globs and actions
   const loginCallback = useStoreActions((action) => action.loginCallback);
-
+  const handleToggle = () => {
+    setIsViewAble(t => !t);
+  }
   const authenticate = async () => {
     try {
-      const type = SignInInputs({email, password});
 
-      if (type.email) {
-        setEmailError(type.email.message);
-      }
-
-      if (type.password) {
-        setPasswordError(type.password.message);
-      }
-
-      if (type.email.message || type.password.message) {
-        return;
-      }
       setNetworkLoading(true);
+      
       const response = await server.login({
         email: email,
         password: password,
@@ -91,11 +77,14 @@ export default function SignIn(props) {
   };
   return (
     <View style={styles.container}>
-      <View style={styles.logo}>
-        <Image source={require('../../../assets/images/logo.png')} />
+      <View style={styles.avatarContainer}>
+        <Image
+          source={require('../../../assets/images/logo.png')}
+          style={styles.logo}
+        />
       </View>
       <View style={styles.fields}>
-        <View style={styles.input}>
+        <View style={styles.inputs}>
           <TextInput
             style={styles.inputValue}
             placeholder="Enter Email Address"
@@ -105,19 +94,24 @@ export default function SignIn(props) {
             keyboardType="email-address"
           />
         </View>
-        <Validation message={emailError} />
-        <View style={styles.input}>
+        <View style={styles.inputs}>
           <TextInput
             style={styles.inputValue}
             placeholder="Enter Password"
             onChangeText={setPassword}
             autoCapitalize="none"
             value={password}
-            secureTextEntry={true}
+            secureTextEntry={!isViewAble}
           />
+          <TouchableOpacity style={styles.eyeIcon} onPress={handleToggle}>
+            <Ionicons
+              name={isViewAble ? 'eye-sharp' : 'eye-off'}
+              size={30}
+              color="#000"
+            />
+          </TouchableOpacity>
         </View>
-        <Validation message={passwordError} />
-        <View style={styles.input}>
+        <View style={styles.inputs}>
           <Button
             buttonHandler={authenticate}
             buttonText="Login"

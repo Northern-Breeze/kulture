@@ -14,7 +14,6 @@ import analytics from '@react-native-firebase/analytics';
 
 import FlashMessage from "react-native-flash-message";
 
-
 // Store
 import Store from './src/store/model';
 import storage from './src/store/storage/storage';

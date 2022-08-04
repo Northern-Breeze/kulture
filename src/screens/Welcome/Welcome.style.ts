@@ -78,11 +78,7 @@ const styles = StyleSheet.create({
     },
     notConnectedText: {
         fontFamily: 'Comfortaa-Regular',
-<<<<<<< HEAD:src/screens/Welcome/Welcome.style.ts
         fontSize: wp(3),
-=======
-        fontSize: 20,
->>>>>>> development:src/screens/Welcome/Welcome.style.js
     }
     
 });

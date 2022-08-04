@@ -10,11 +10,7 @@ export default {
   }),
   setIsLoggin: action((state, payload) => {
     const oldState = state;
-    if(payload){
-      oldState.isloggedIn = true;
-    } else {
-      oldState.isloggedIn = false;
-    }
+    oldState.isloggedIn = payload;
   }),
   login: action((state, payload) => {
     const oldState = state;

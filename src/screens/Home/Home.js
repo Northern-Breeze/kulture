@@ -1,65 +1,49 @@
 import React from 'react';
-import {Dimensions, View, Text, Pressable} from 'react-native';
+import {View, Text, Pressable} from 'react-native';
 import SnackBar from 'react-native-snackbar';
 import {useNetInfo} from '@react-native-community/netinfo';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import {useStoreActions} from 'easy-peasy';
 
 import server from '../../service/server';
-import styles from './Home.style';
 
 // Components
 import TopList from '../../components/Feed/TopList';
-import BottomList from '../../components/Feed/BottomList';
 import EmptyList from '../../components/EmptyList';
 import NotConnected from '../../components/NotConnected';
 import Loading from '../../components/Loading';
-
-const {width} = Dimensions.get('screen');
 
 export default function Home(props) {
   // props
   const {navigation} = props;
 
   // states
-  const [IMAGE_SIZE] = React.useState(80);
-  const [SPACING] = React.useState(10);
-  const [activeIndex, setActiveIndex] = React.useState(0);
-  const [posts, setPost] = React.useState([]);
-  const [loading, setLoading] = React.useState(false);
-  const [loadingMore, setLoadingMore] = React.useState(false);
-  const [requestStatus, setRequestStatus] = React.useState('LOADING')
+  const [users, setUsers] = React.useState([]);
+  const [requestStatus, setRequestStatus] = React.useState('LOADING');
 
-  const setIsLoggin = useStoreActions((actions) => actions.setIsLoggin);
   const netinfo = useNetInfo();
 
-
   // data set
-  const [page, setPage] = React.useState(1);
-  const [size, setSize] = React.useState(5);
+  const [page] = React.useState(1);
+  const [size] = React.useState(5);
 
   // Refs
-  const topRef = React.useRef();
-  const bottomRef = React.useRef();
   const mounted = React.useRef(true);
 
   const fetchPosts = async () => {
     try {
       setRequestStatus('LOADING');
-      const response = await server.getAllPost({ page, size});
+      const response = await server.getAllUsers();
 
-      // UnAuthorize 
+      // UnAuthorize
       if (response.status === 401) {
-        setIsLoggin(false);
         setRequestStatus('FAILED');
       }
-      
+
       if (response.data.success) {
         const {data} = response.data;
         if (mounted.current) {
-          setPost(data);
+          setUsers(data);
           setRequestStatus('SUCCESS');
-          setPage((p) => p + 1);
         }
       } else {
         SnackBar.show({
@@ -71,7 +55,6 @@ export default function Home(props) {
         }
         setRequestStatus('FAILED');
       }
-      setLoading(false);
     } catch (error) {
       console.log(error);
       SnackBar.show({
@@ -92,25 +75,10 @@ export default function Home(props) {
     };
   }, []);
 
-  const scrollToActiveIndex = (index) => {
-    setActiveIndex(index);
-    if (index * (IMAGE_SIZE + SPACING) - IMAGE_SIZE / 2 > width / 2) {
-      bottomRef?.current?.scrollToOffset({
-        offset: index * (IMAGE_SIZE + SPACING) - width / 2 + IMAGE_SIZE / 2,
-        animated: true,
-      });
-    } else {
-      bottomRef?.current?.scrollToOffset({
-        offset: 0,
-        animated: true,
-      });
-    }
-  };
-
   const handleLoadMore = async () => {
     try {
       setLoadingMore(true);
-      const response = await server.getAllPost({ page, size});
+      const response = await server.getAllPost({page, size});
 
       // UnAuthorized
       if (response.status === 401) {
@@ -120,7 +88,7 @@ export default function Home(props) {
       if (response.data.success) {
         const {data} = response.data;
         if (mounted.current) {
-          if(data.length === 0){
+          if (data.length === 0) {
             SnackBar.show({
               text: 'You have reached the end, A post?',
               action: {
@@ -128,18 +96,14 @@ export default function Home(props) {
                 textColor: 'green',
                 onPress: () => {
                   navigation.navigate('Add');
-                }
-              }
-            })
+                },
+              },
+            });
             setLoadingMore(false);
           } else {
-            // const list = posts;
-            // const combined = list.concat(data);
             const combined = [...posts, ...data];
-            setPost(combined);
+            setUsers(combined);
             setLoadingMore(false);
-            setPage((p) => p + 1);
-
           }
         }
       } else {
@@ -156,42 +120,33 @@ export default function Home(props) {
       console.log(error);
       SnackBar.show({
         text: 'Something went wrong',
-        duration: SnackBar.LENGTH_SHORT
-      })
+        duration: SnackBar.LENGTH_SHORT,
+      });
       setLoadingMore(false);
     }
   };
 
   const refreshHandler = async () => {
     try {
-      setLoading(true);
-      const response = await server.getAllPost({ page, size});
-      if (response.status === 401) {
-        setLoading(false);
-      }
+      const response = await server.getAllPost({page, size});
+      
       if (response.data.success) {
         const {data} = response.data;
         if (mounted.current) {
-          setPost(data);
-          setLoading(false);
+          setUsers(data);
         }
       } else {
         SnackBar.show({
           text: response.data.message,
           duration: SnackBar.LENGTH_SHORT,
         });
-        if (mounted.current) {
-          setLoading(false);
-        }
       }
-      setLoading(false);
     } catch (error) {
       console.log(error);
       SnackBar.show({
         text: 'Something went wrong, please try again',
         duration: SnackBar.LENGTH_SHORT,
       });
-      setLoading(false);
     }
   };
 
@@ -202,45 +157,24 @@ export default function Home(props) {
   return (
     <>
       {requestStatus === 'FAILED' && (
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
           <MaterialIcons name="error-outline" color="#000" size={50} />
-          <Text style={[styles.subheaderText, { color: '#000' }]}>
-            Something Error Occurred
-          </Text>
-          <Pressable style={styles.button} onPress={fetchPosts}>
-            <Text style={styles.subheaderText}>
-              Reload
-            </Text>
+          <Text>Something Wrong Occurred</Text>
+          <Pressable onPress={fetchPosts}>
+            <Text>Reload</Text>
           </Pressable>
         </View>
       )}
       {requestStatus === 'EMPTY' && (
         <EmptyList refreshHandler={refreshHandler} />
       )}
-      {requestStatus === 'LOADING' && (
-        <Loading />
-      )}
+      {requestStatus === 'LOADING' && <Loading />}
       {requestStatus === 'SUCCESS' && (
-        <>
           <TopList
-            posts={posts}
-            topRef={topRef}
-            scrollToActiveIndex={scrollToActiveIndex}
-            activeIndex={activeIndex}
+            users={users}
             handleLoadMore={handleLoadMore}
             navigation={navigation}
           />
-          <BottomList
-            bottomRef={bottomRef}
-            topRef={topRef}
-            posts={posts}
-            IMAGE_SIZE={IMAGE_SIZE}
-            SPACING={SPACING}
-            handleLoadMore={handleLoadMore}
-            setActiveIndex={setActiveIndex}
-            activeIndex={activeIndex}
-          />
-        </>
       )}
     </>
   );
