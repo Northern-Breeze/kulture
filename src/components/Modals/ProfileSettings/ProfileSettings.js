@@ -30,11 +30,14 @@ export default function ProfileSettings(props) {
     navigation.navigate('profile_support');
   }
 
+<<<<<<< HEAD
   const handleAbout = () => {
     onClose()
     navigation.navigate('About Kulture');
   }
 
+=======
+>>>>>>> f0c2f6fc04f1d9ae659ae10fce51e46504009a09
   return (
     <Modal
       visible={visible}
@@ -69,7 +72,11 @@ export default function ProfileSettings(props) {
           </View>
           <View style={styles.control}>
             <MaterialCommunityIcons name="office-building" color="#000" size={31} />
+<<<<<<< HEAD
             <TouchableOpacity onPress={handleAbout} style={styles.button}>
+=======
+            <TouchableOpacity onPress={() => {}} style={styles.button}>
+>>>>>>> f0c2f6fc04f1d9ae659ae10fce51e46504009a09
               <Text style={styles.logoutText}>
                   About Kulture
               </Text>
