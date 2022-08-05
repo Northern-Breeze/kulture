@@ -17,6 +17,7 @@ const server = {
     getProfileAccount: ({ userId }: { userId: number }) => Axios.get(`/profile/user?userId=${userId}`),
     // search
     searchUsers: ({ name }: { name: string }) => Axios.get(`/profile/users?name=${name}`),
+    searchHomeUsers: ({ name }: { name: string }) => Axios.get(`/users/search?name=${name}`),
     // Follow
     followUser: ({ userId }: { userId: number }) => Axios.post(`/profile/users/follow?userId=${userId}`),
     // users

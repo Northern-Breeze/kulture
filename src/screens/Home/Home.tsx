@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, StatusBar} from 'react-native';
 import {useNetInfo} from '@react-native-community/netinfo';
-
+import { showMessage } from 'react-native-flash-message';
 import server from '../../service/server';
 
 // Components
@@ -32,6 +32,10 @@ export default function Home(props: Props) {
   const [requestStatus, setRequestStatus] = React.useState('LOADING');
   const [loading, setLoadingMore] = React.useState(false);
 
+  // Search state
+  const [search, setSearch] = React.useState('');
+
+
   // hooks
   const netinfo = useNetInfo();
 
@@ -46,34 +50,36 @@ export default function Home(props: Props) {
       // UnAuthorize
       if (response.status === 401) {
         setRequestStatus('FAILED');
+        showMessage({
+          message: 'Something went wrong please try again later',
+          type: 'danger'
+        })
       }
 
       if (response.data.success) {
         const {data} = response.data;
-        if (mounted.current) {
           setUsers(data);
           setRequestStatus('SUCCESS');
-        }
       } else {
-        if (mounted.current) {
-          setRequestStatus('FAILED');
-        }
         setRequestStatus('FAILED');
       }
     } catch (error) {
       console.log(error);
       setRequestStatus('FAILED');
+      showMessage({
+        message: 'Something went wrong please try again later',
+        type: 'danger'
+      })
     }
   };
 
   React.useEffect(() => {
+    if (mounted.current) {
+      fetchUsers();
+    }
     return () => {
       mounted.current = false;
     };
-  }, []);
-
-  React.useEffect(() => {
-    fetchUsers();
   }, []);
 
   if (!netinfo.isConnected) {
@@ -103,6 +109,8 @@ export default function Home(props: Props) {
       {requestStatus === 'SUCCESS' && (
           <UserList
             users={users}
+            search={search}
+            setSearch={setSearch}
             navigation={navigation}
           />
       )}

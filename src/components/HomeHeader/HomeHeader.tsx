@@ -5,15 +5,15 @@ import { ICON_SIZE } from './HomeHeader.style';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-export default function HomeHeader() {
-  const [search, setSearch] = React.useState('');
+type Props = {
+  search: string;
+  setSearch(param: string): void;
+  handleSearch(param: string): Promise<void>;
+}
 
-  const handleSearch = (val: string) => {
-    setSearch(val);
-  }
-    const handleFind = () => {
-        
-    }
+export default function HomeHeader(props: Props) {
+  const {search, setSearch, handleSearch : fnHandleSearch} = props;
+  
   return (
     <View style={styles.container}>
       <View style={styles.controls}>
@@ -21,9 +21,13 @@ export default function HomeHeader() {
           style={styles.search}
           placeholder="Search for users"
           value={search}
-          onChangeText={handleSearch}
+          onChangeText={(val) => {
+            setSearch(val)
+          }}
         />
-        <Pressable onPress={handleFind} style={styles.searchButton}>
+        <Pressable onPress={() => {
+          fnHandleSearch(search)      
+        }} style={styles.searchButton}>
             <Ionicons name="search" color="#fff" size={ICON_SIZE} />
         </Pressable>
       </View>

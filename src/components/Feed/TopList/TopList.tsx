@@ -12,6 +12,8 @@ type Props = {
     name: string;
     id: number;
   }[];
+  search: string;
+  setSearch(param: string): void;
   navigation: {
     navigate: () => void;
   };
@@ -26,7 +28,7 @@ export default function TopList(props: Props) {
       keyExtractor={(_, index) => index.toString() + Math.random().toString()}
       numColumns={2}
       ListEmptyComponent={<ListEmptyPost />}
-      ListHeaderComponent={<HomeHeader />}
+      // ListHeaderComponent={<HomeHeader search={search} setSearch={setSearch} handleSearch={handleSearch} />}
       showsVerticalScrollIndicator={false}
       renderItem={({item}) => {
         return (
