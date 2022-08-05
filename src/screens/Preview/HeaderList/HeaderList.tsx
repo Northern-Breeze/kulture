@@ -13,24 +13,14 @@ type Props = {
 export default function HeaderList(props: Props) {
   const {loading, data, navigation} = props;
 
-  const actionSheetRef = React.createRef<any>();
-
-  const updateProfile = () => {
-    actionSheetRef.current?.setModalVisible();
-  };
-
-  const handleNavigate = () => {
-    navigation.navigate('Add');
+  const handleFollow = () => {
+    
   };
 
   return (
     <>
       <View style={styles.avatarContainer}>
-        <TouchableOpacity
-          activeOpacity={0.7}
-          onPress={() => {
-            updateProfile();
-          }}>
+        <TouchableOpacity activeOpacity={0.7}>
           {data !== null && (
             <Image source={{uri: data.avatar}} style={styles.avatar} />
           )}
@@ -61,7 +51,7 @@ export default function HeaderList(props: Props) {
           activeOpacity={0.9}
           style={styles.button}
           disabled={loading}
-          onPress={handleNavigate}>
+          onPress={handleFollow}>
           <Text style={styles.buttonTextAdd}>Follow - {data.username}</Text>
         </TouchableOpacity>
       </View>

@@ -1,17 +1,16 @@
 import * as React from 'react'
 import { View, Text } from 'react-native'
-import styles from './ListEmpty.styles';
+import styles from './ListEmptyPost.style';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-export default function ListEmpty(props: { username: string }) {
-  const {username} = props;
+export default function ListEmpty() {
   return (
     <View style={styles.container}>
         <View>
             <Ionicons name="md-list-circle-outline" size={45} color="#000" />
         </View>
         <View>
-            <Text style={styles.listText}>{username} has not posted anything</Text>
+            <Text style={styles.listText}>NO USERS YET!</Text>
         </View>
     </View>
   )

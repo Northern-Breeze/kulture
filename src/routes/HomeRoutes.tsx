@@ -29,27 +29,7 @@ export default function HomeRoute() {
         options={{
           tabBarLabel: 'Home',
           tabBarIcon: ({color}) => (
-            <AntDesign name="home" color="#fff" size={23} />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name="Search"
-        component={Search}
-        options={{
-          tabBarLabel: 'Search',
-          tabBarIcon: ({color}) => (
-            <AntDesign name="search1" color="#fff" size={23} />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name="Add"
-        component={AddPost}
-        options={{
-          tabBarLabel: 'Add',
-          tabBarIcon: ({color}) => (
-            <Ionicons name="add-circle" color="#fff" size={23} />
+            <AntDesign name="home" color={color} size={23} />
           ),
         }}
       />
@@ -59,7 +39,27 @@ export default function HomeRoute() {
         options={{
           tabBarLabel: 'Messages',
           tabBarIcon: ({color}) => (
-            <AntDesign name="message1" color="#fff" size={23} />
+            <AntDesign name="message1" color={color} size={23} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Add"
+        component={AddPost}
+        options={{
+          tabBarLabel: 'Add',
+          tabBarIcon: ({color}) => (
+            <Ionicons name="add-circle" color={color} size={23} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Notifications"
+        component={Search}
+        options={{
+          tabBarLabel: 'Notification',
+          tabBarIcon: ({color}) => (
+            <Ionicons name="notifications-outline" color={color} size={23} />
           ),
         }}
       />
@@ -69,7 +69,7 @@ export default function HomeRoute() {
         options={{
           tabBarLabel: 'Profile',
           tabBarIcon: ({color}) => (
-            <AntDesign name="user" color="#fff" size={23} />
+            <AntDesign name="user" color={color} size={23} />
           ),
         }}
       />
