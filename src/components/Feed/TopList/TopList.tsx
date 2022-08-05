@@ -3,6 +3,8 @@ import MasonryList from '@react-native-seoul/masonry-list';
 
 import Item from './Item';
 import ListEmpty from '../../ListEmpty';
+import HomeHeader from '../../HomeHeader';
+import ListEmptyPost from '../../ListEmptyPost';
 
 type Props = {
   users: {
@@ -10,6 +12,8 @@ type Props = {
     name: string;
     id: number;
   }[];
+  search: string;
+  setSearch(param: string): void;
   navigation: {
     navigate: () => void;
   };
@@ -23,7 +27,8 @@ export default function TopList(props: Props) {
       data={users}
       keyExtractor={(_, index) => index.toString() + Math.random().toString()}
       numColumns={2}
-      ListEmptyComponent={<ListEmpty />}
+      ListEmptyComponent={<ListEmptyPost />}
+      // ListHeaderComponent={<HomeHeader search={search} setSearch={setSearch} handleSearch={handleSearch} />}
       showsVerticalScrollIndicator={false}
       renderItem={({item}) => {
         return (

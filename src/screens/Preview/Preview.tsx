@@ -83,10 +83,6 @@ export default function Preview(props: Props) {
     fetchPost();
   }, []);
 
-  const onOpen = () => {
-    setVisible(true);
-  };
-
   const Item: React.FC<any> = ({image}: {image: string}): JSX.Element => {
     return (
       <React.Fragment>
@@ -109,18 +105,14 @@ export default function Preview(props: Props) {
     <View style={styles.container}>
       {requestStatus === 'FAILED' && (
         <View
-          style={{
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}>
-          <View style={{marginVertical: 10}}>
-            <Text style={{color: '#000'}}>
+          style={styles.errorContainer}>
+          <View style={styles.errorContainerInfo}>
+            <Text style={styles.errorContainerText}>
               Something went wrong please try agin later
             </Text>
           </View>
           <Button
-            buttonHandler={() => {}}
+            buttonHandler={fetchPost}
             buttonText="Reload"
             isLoading={loading}
           />
@@ -137,7 +129,7 @@ export default function Preview(props: Props) {
                 navigation={navigation}
               />
             }
-            ListEmptyComponent={<ListEmpty />}
+            ListEmptyComponent={<ListEmpty username={username} />}
             numColumns={2}
             columnWrapperStyle={styles.container}
             data={posts}
