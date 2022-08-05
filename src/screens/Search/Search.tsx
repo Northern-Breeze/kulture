@@ -20,7 +20,14 @@ import styles from './Search.style';
 import NotConnected from '../../components/NotConnected';
 import ActionsSheet from '../../components/ActionSheets/UserAction';
 import EmptyList from './EmptyList'
-export default function Search(props) {
+
+type Props = {
+  navigation: {
+    navigate(param: string): void;
+  }
+}
+
+export default function Search(props: Props) {
   // props
   const {navigation} = props;
   
@@ -37,7 +44,7 @@ export default function Search(props) {
 
   const netinfo = useNetInfo();
 
-  const fetchUsers = async (name) => {
+  const fetchUsers = async (name: string) => {
     try {
       const response = await server.searchUsers({name: name});
       if (response.status === 401) {
@@ -57,18 +64,18 @@ export default function Search(props) {
     }
   };
 
-  const profilePress = (username, userId) => {
+  const profilePress = (username: string, userId: number) => {
     actionSheetRef.current?.setModalVisible();
     setUsername(username);
     setUserId(userId);
   }
 
-  const handleSearch = async (data) => {
+  const handleSearch = async (data: string) => {
     setSearch(data);
     await fetchUsers(data);
   }
 
-  const Item = ({image, username, userId}) => {
+  const Item = ({image, username, userId}: { image: string, username: string, userId: number }) => {
     return (
       <Pressable 
         style={styles.rowResults}
@@ -91,7 +98,7 @@ export default function Search(props) {
     );
   };
 
-  const renderFeed = ({item}) => <Item image={item.profile} username={item.username} userId={item.userId}/>;
+  const renderFeed = ({item}: { item: { profile: string, username: string, userId: number } }) => <Item image={item.profile} username={item.username} userId={item.userId}/>;
 
   React.useEffect(() => {
     return () => {

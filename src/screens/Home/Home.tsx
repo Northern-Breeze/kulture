@@ -1,5 +1,5 @@
 import React from 'react';
-import {View} from 'react-native';
+import {View, StatusBar} from 'react-native';
 import {useNetInfo} from '@react-native-community/netinfo';
 
 import server from '../../service/server';
@@ -14,14 +14,14 @@ import Button from '../../components/common/Button';
 type Props = {
   navigation: {
     navigate: () => void;
-  }
-}
+  };
+};
 
 type User = {
   id: number;
   avatar: string;
   name: string;
-}
+};
 
 export default function Home(props: Props) {
   // props
@@ -34,7 +34,6 @@ export default function Home(props: Props) {
 
   // hooks
   const netinfo = useNetInfo();
-
 
   // Refs
   const mounted = React.useRef(true);
@@ -73,11 +72,9 @@ export default function Home(props: Props) {
     };
   }, []);
 
-
   React.useEffect(() => {
     fetchUsers();
   }, []);
-
 
   if (!netinfo.isConnected) {
     return <NotConnected />;
@@ -85,14 +82,23 @@ export default function Home(props: Props) {
 
   return (
     <>
+      <StatusBar
+        animated={true}
+        backgroundColor="#fff"
+        barStyle="dark-content"
+        showHideTransition="fade"
+        hidden={false}
+      />
       {requestStatus === 'FAILED' && (
         <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-          <Button buttonHandler={fetchUsers} buttonText='Error, Reload!' isLoading={loading} />
+          <Button
+            buttonHandler={fetchUsers}
+            buttonText="Error, Reload!"
+            isLoading={loading}
+          />
         </View>
       )}
-      {requestStatus === 'EMPTY' && (
-        <EmptyList refreshHandler={fetchUsers} />
-      )}
+      {requestStatus === 'EMPTY' && <EmptyList refreshHandler={fetchUsers} />}
       {requestStatus === 'LOADING' && <Loading />}
       {requestStatus === 'SUCCESS' && (
           <UserList

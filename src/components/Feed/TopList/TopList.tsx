@@ -3,6 +3,8 @@ import MasonryList from '@react-native-seoul/masonry-list';
 
 import Item from './Item';
 import ListEmpty from '../../ListEmpty';
+import HomeHeader from '../../HomeHeader';
+import ListEmptyPost from '../../ListEmptyPost';
 
 type Props = {
   users: {
@@ -23,7 +25,8 @@ export default function TopList(props: Props) {
       data={users}
       keyExtractor={(_, index) => index.toString() + Math.random().toString()}
       numColumns={2}
-      ListEmptyComponent={<ListEmpty />}
+      ListEmptyComponent={<ListEmptyPost />}
+      ListHeaderComponent={<HomeHeader />}
       showsVerticalScrollIndicator={false}
       renderItem={({item}) => {
         return (

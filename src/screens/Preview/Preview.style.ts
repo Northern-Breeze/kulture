@@ -6,7 +6,8 @@ import {
 
 const styles = StyleSheet.create({
   container: {
-    resizeMode: 'contain',
+    flex: 1,
+    backgroundColor: '#fff',
   },
   image: {
     width: wp(45),
@@ -14,6 +15,16 @@ const styles = StyleSheet.create({
     marginVertical: wp(2),
     marginHorizontal: hp(1),
     borderRadius: wp(1),
+  },
+  errorContainer: {
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: hp(90)
+  },
+  errorContainerInfo: {marginVertical: 10},
+  errorContainerText: {
+    color: '#000',
   },
 });
 
