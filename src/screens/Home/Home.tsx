@@ -31,9 +31,6 @@ export default function Home(props: Props) {
   const [users, setUsers] = React.useState<User[]>([]);
   const [requestStatus, setRequestStatus] = React.useState('LOADING');
   const [loading, setLoadingMore] = React.useState(false);
-  const [page, setPage] = React.useState(1);
-  const [pageEnd, setPageEnd] = React.useState(false);
-  const [size] = React.useState(20);
 
   // hooks
   const netinfo = useNetInfo();
@@ -55,11 +52,7 @@ export default function Home(props: Props) {
       if (response.data.success) {
         const {data} = response.data;
         if (mounted.current) {
-          if (data.length === 0) {
-            setPageEnd(true);
-          } else {
-            setUsers([...users, ...data]);
-          }
+          setUsers(data);
           setRequestStatus('SUCCESS');
         }
       } else {
