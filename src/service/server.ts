@@ -12,6 +12,7 @@ const server = {
     updateProfileImage: (data: any) => Axios.post('/profile/update-image', data),
     getProfile: () => Axios.get('/profile'),
     getNotifications: () => Axios.get('/profile/notifications'),
+    readNotification: ({ id }: { id: number }) => Axios.post('/profile/notification/read', { id }),
     // likes
     likeAPost: (data: any) => Axios.post('/likes/add', data),
     getMostLiked: () => Axios.get('/likes/likes'),

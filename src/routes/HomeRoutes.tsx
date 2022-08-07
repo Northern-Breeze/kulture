@@ -3,8 +3,8 @@ import {View, Text} from 'react-native';
 import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { useStoreState, State } from 'easy-peasy';
 import IconBadge from 'react-native-icon-badge';
-
 import iconStyles from './IconStyles/icons.style'
 
 // Screens
@@ -16,9 +16,13 @@ import ProfileStack from './Profile';
 import Messages from './Messages';
 import Notifications from './Notifications';
 
+import {Model} from '../store/model';
+
 const Tab = createMaterialBottomTabNavigator();
 
 export default function HomeRoute() {
+  const getNewNotificationCount = useStoreState((state: State<Model>) => state.getNewNotificationCount);
+
   return (
     <Tab.Navigator
       initialRouteName="Home"
@@ -60,7 +64,7 @@ export default function HomeRoute() {
         component={Notifications}
         options={{
           tabBarLabel: 'Notification',
-          tabBarIcon: ({color}) => (
+          tabBarIcon: ({color, focused}) => (
             <IconBadge
               MainElement={
                 <Ionicons
@@ -69,9 +73,9 @@ export default function HomeRoute() {
                   size={23}
                 />
               }
-              BadgeElement={<Text style={iconStyles.iconCountText}>4</Text>}
+              BadgeElement={<Text style={iconStyles.iconCountText}>{getNewNotificationCount}</Text>}
               IconBadgeStyle={iconStyles.iconBadgeStyle}
-              Hidden={false}
+              Hidden={focused}
             />
           ),
         }}

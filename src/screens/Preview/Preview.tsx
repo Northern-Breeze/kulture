@@ -35,8 +35,6 @@ export default function Preview(props: Props) {
   const {navigation, route} = props;
   const {avatar, username, image, userId} = route.params;
   const [loading, setLoading] = React.useState(false);
-  const [data, setData] = React.useState(null);
-  const [visible, setVisible] = React.useState(false);
   const [requestStatus, setRequestStatus] = React.useState('LOADING');
   const [posts, setPost] = React.useState<{asset: string}[]>([
     {asset: '1'},
@@ -63,7 +61,6 @@ export default function Preview(props: Props) {
         } else {
           setPost(postData);
         }
-        console.log(posts);
         setLoading(false);
         setRequestStatus('SUCCESS');
       } else {
