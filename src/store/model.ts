@@ -1,7 +1,6 @@
 import {action, thunk, Action, Thunk, computed, Computed} from 'easy-peasy';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-
 export interface Notification {
   title: string;
   body: {
@@ -23,11 +22,12 @@ export interface Model {
   notifications: Notification[];
   unSeenNotifications: Notification[];
   hasNewNotifications: boolean;
-  getNewNotificationCount: Computed<this, any>;
+  getNewNotificationCount: Computed<this, number>;
   resetUnSeenNotifications: Action<this>;
   addNotification: Action<this, Notification>;
   addNotifications: Action<this, Notification[]>;
-  markReadNotification: Action<this, number>
+  markReadNotification: Action<this, number>;
+  addUnSeenNotification: Action<this, Notification>;
 }
 
 const model: Model = {
@@ -51,17 +51,24 @@ const model: Model = {
   notifications: [],
   unSeenNotifications: [],
   hasNewNotifications: false,
-  getNewNotificationCount: computed(state => state.unSeenNotifications.length),
+  getNewNotificationCount: computed(
+    (state) => state.unSeenNotifications.length,
+  ),
   // Actions --> notifications
   resetUnSeenNotifications: action((state) => {
     const oldState = state;
     oldState.unSeenNotifications = [];
   }),
+  addUnSeenNotification: action((state, payload) => {
+    const oldState = state;
+    oldState.notifications.push(payload);
+    oldState.unSeenNotifications.push(payload);
+  }),
   addNotification: action((state, payload) => {
     const oldState = state;
     oldState.notifications.push(payload);
   }),
-    addNotifications: action((state, payload) => {
+  addNotifications: action((state, payload) => {
     const oldState = state;
     oldState.notifications = payload;
   }),
@@ -70,9 +77,9 @@ const model: Model = {
     const index = oldState.notifications.findIndex((i) => i.id === payload);
     oldState.notifications[index] = {
       ...oldState.notifications[index],
-      is_read: true
-    }
-  })
+      is_read: true,
+    };
+  }),
 };
 
 export default model;

@@ -8,11 +8,12 @@ import font from '../../config/constant';
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
     backgroundColor: '#fff',
     flexDirection: 'row',
-    marginHorizontal: wp(2),
+    marginHorizontal: wp(1),
+    marginVertical: hp(1),
     padding: wp(2),
+    borderRadius: wp(2),
   },
   profile: {
     width: wp(15),
@@ -26,15 +27,15 @@ const styles = StyleSheet.create({
   titleContainer: {},
   titleText: {
     fontFamily: font().regularComfortaa,
-    fontSize: wp(3),
+    fontSize: wp(4),
   },
   dateCreated: {
     fontFamily: font().regularComfortaa,
-    fontSize: wp(2.5),
+    fontSize: wp(3),
   },
   notificationType: {
     fontFamily: font().regularComfortaa,
-    fontSize: wp(2.5),
+    fontSize: wp(3),
   },
   subInfoContainer: {
     flexDirection: 'row',

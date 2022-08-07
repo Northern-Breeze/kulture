@@ -2,7 +2,6 @@ import * as React from 'react';
 import {View, Text} from 'react-native';
 import {useNetInfo} from '@react-native-community/netinfo';
 import {showMessage} from 'react-native-flash-message';
-import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import { useStoreState, State, useStoreActions, Actions } from 'easy-peasy';
 
 // functions
@@ -17,6 +16,7 @@ import NotConnected from '../../components/NotConnected';
 import {FlatList} from 'react-native-gesture-handler';
 import NotificationItem from '../../components/NotificationItem';
 import EmptyNotifications from '../../components/EmptyNotifications';
+import Loading from '../../components/Loading';
 
 type Props = {
   navigation: {
@@ -41,6 +41,7 @@ export default function Search(props: Props) {
   const netinfo = useNetInfo();
   const notifications = useStoreState((state: State<Model>) => state.notifications);
   const setNotifications = useStoreActions((action: Actions<Model>) => action.addNotifications);
+  const resetUnSeenNotifications = useStoreActions((action: Actions<Model>) => action.resetUnSeenNotifications);
 
   const fetchNotifications = async () => {
     try {
@@ -78,6 +79,10 @@ export default function Search(props: Props) {
     };
   }, []);
 
+  React.useEffect(() => {
+    resetUnSeenNotifications();
+  },[])
+
   if (!netinfo.isConnected) {
     return <NotConnected />;
   }
@@ -86,15 +91,7 @@ export default function Search(props: Props) {
     <View style={styles.container}>
       {SERVER_STATUS === 'LOADING' && (
         <View style={styles.placeholder}>
-          <FlatList
-            data={['1', '2', '3', '4', '5', '6', '7', '8', '9']}
-            renderItem={() => (
-              <SkeletonPlaceholder>
-                <View style={styles.loadingContainer}></View>
-              </SkeletonPlaceholder>
-            )}
-            keyExtractor={(item, index) => 'key-' + index}
-          />
+          <Loading />
         </View>
       )}
       {SERVER_STATUS === 'FAILED' && (
