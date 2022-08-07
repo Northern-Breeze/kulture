@@ -28,7 +28,6 @@ export default function TopList(props: Props) {
       keyExtractor={(_, index) => index.toString() + Math.random().toString()}
       numColumns={2}
       ListEmptyComponent={<ListEmptyPost />}
-      // ListHeaderComponent={<HomeHeader search={search} setSearch={setSearch} handleSearch={handleSearch} />}
       showsVerticalScrollIndicator={false}
       renderItem={({item}) => {
         return (

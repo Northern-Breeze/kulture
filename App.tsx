@@ -1,72 +1,71 @@
 import * as React from 'react';
-import {View, Text} from 'react-native';
-import {
-  NavigationContainer,
-} from '@react-navigation/native';
+import {NavigationContainer} from '@react-navigation/native';
 import SplashScreen from 'react-native-splash-screen';
 import {
+  Actions,
   createStore,
   StoreProvider as Provider,
-  persist,
-  useStoreRehydrated,
+  useStoreActions,
 } from 'easy-peasy';
 import analytics from '@react-native-firebase/analytics';
+import messaging from '@react-native-firebase/messaging';
 
-import FlashMessage from "react-native-flash-message";
-import * as Sentry from "@sentry/react-native";
+import {Model} from './src/store/model';
+
+import FlashMessage from 'react-native-flash-message';
+import * as Sentry from '@sentry/react-native';
 
 // Store
 import Store from './src/store/model';
-import storage from './src/store/storage/storage';
 //components
 import Routes from './src/routes/Routes';
 
-const store = createStore(
-  persist(Store, {
-    storage: storage,
-  }),
-);
-
+const store = createStore(Store);
 
 Sentry.init({
-  dsn: "https://6cb908ee0a3c4f06897a13b16bdb84c3@o1229278.ingest.sentry.io/6595975",
+  dsn: 'https://6cb908ee0a3c4f06897a13b16bdb84c3@o1229278.ingest.sentry.io/6595975',
 });
 
 export const RootWrapper: React.FC = () => {
-  const isHydrated = useStoreRehydrated();
-
   const routeNameRef = React.useRef<any>();
   const navigationRef = React.useRef<any>();
 
-  if (isHydrated) {
-    return (
-      <NavigationContainer
-        ref={navigationRef}
-        onReady={() => {
-          routeNameRef.current = navigationRef?.current.getCurrentRoute().name
-        }}
-        onStateChange={async () => {
-          const previousRouteName = routeNameRef.current;
-          const currentRouteName = navigationRef?.current.getCurrentRoute().name
+  const addUnSeenNotification = useStoreActions(
+    (action: Actions<Model>) => action.addUnSeenNotification,
+  );
 
-          if (previousRouteName !== currentRouteName) {
-            await analytics().logScreenView({
-              screen_name: currentRouteName,
-              screen_class: currentRouteName,
-            });
-          }
+  React.useEffect(() => {
+    const unsubscribe = messaging().onMessage(async (remoteMessage) => {
+      const notification = JSON.parse(remoteMessage.data?.payload || '');
+      if (notification) {
+        addUnSeenNotification(notification);
+      }
+    });
 
-          routeNameRef.current = currentRouteName;
-        
-        }}>
-        <Routes />
-      </NavigationContainer>
-    );
-  }
+    return unsubscribe;
+  }, []);
+
   return (
-    <View>
-      <Text>Loading ...</Text>
-    </View>
+    <NavigationContainer
+      ref={navigationRef}
+      onReady={() => {
+        routeNameRef.current = navigationRef?.current.getCurrentRoute().name;
+      }}
+      onStateChange={async () => {
+        const previousRouteName = routeNameRef.current;
+        const currentRouteName = navigationRef?.current.getCurrentRoute().name;
+
+        if (previousRouteName !== currentRouteName) {
+          await analytics().logScreenView({
+            screen_name: currentRouteName,
+            screen_class: currentRouteName,
+          });
+        }
+
+        routeNameRef.current = currentRouteName;
+      }}>
+      <Routes />
+    </NavigationContainer>
   );
 };
 
