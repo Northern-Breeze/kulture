@@ -2,51 +2,50 @@ import React from 'react';
 import {View, Modal, Alert, TouchableOpacity, Text} from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
-import { useStoreActions } from 'easy-peasy';
-import Snackbar from 'react-native-snackbar';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import {useStoreActions} from 'easy-peasy';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 import styles from './ProfileSettings.style';
-export default function ProfileSettings(props) {
+import { showMessage } from 'react-native-flash-message';
+
+type Props = {
+  visible: boolean;
+  onClose(): void;
+  navigation: {
+    navigate(param: string): void;
+  }
+}
+
+export default function ProfileSettings(props: Props) {
   const {visible, onClose, navigation} = props;
 
-  const setIsLoggin = useStoreActions((actions) => actions.setIsLoggin);
-  
+  const setIsLoggin = useStoreActions<any>((actions) => actions.setIsLoggin);
+
   const handleLogOut = async () => {
     try {
       setIsLoggin(false);
       onClose();
     } catch (error) {
-      Snackbar.open({
-        text: 'Something went wrong',
-        duration: 3000,
-      })
+      showMessage({
+        message: 'Something went wrong',
+        type: 'danger'
+      });
     }
-  }
+  };
 
   const handleSupport = () => {
-    onClose()
+    onClose();
     navigation.navigate('profile_support');
-  }
+  };
 
-<<<<<<< HEAD
   const handleAbout = () => {
-    onClose()
+    onClose();
     navigation.navigate('About Kulture');
-  }
+  };
 
-=======
->>>>>>> f0c2f6fc04f1d9ae659ae10fce51e46504009a09
   return (
-    <Modal
-      visible={visible}
-      animationType="slide"
-      transparent={true}
-      onRequestClose={() => {
-        Alert.alert('Modal has been closed.');
-        setModalVisible(!modalVisible);
-      }}>
+    <Modal visible={visible} animationType="slide" transparent={true}>
       <View style={styles.container}>
         <View style={styles.iconContainer}>
           <TouchableOpacity onPress={onClose}>
@@ -57,29 +56,23 @@ export default function ProfileSettings(props) {
           <View style={styles.control}>
             <FontAwesome5 name="door-open" color="#000" size={30} />
             <TouchableOpacity onPress={handleLogOut} style={styles.button}>
-              <Text style={styles.logoutText}>
-                  Logout
-              </Text>
+              <Text style={styles.logoutText}>Logout</Text>
             </TouchableOpacity>
           </View>
           <View style={styles.control}>
             <Ionicons name="heart-circle" color="#000" size={31} />
             <TouchableOpacity onPress={handleSupport} style={styles.button}>
-              <Text style={styles.logoutText}>
-                  Support Me
-              </Text>
+              <Text style={styles.logoutText}>Support Me</Text>
             </TouchableOpacity>
           </View>
           <View style={styles.control}>
-            <MaterialCommunityIcons name="office-building" color="#000" size={31} />
-<<<<<<< HEAD
+            <MaterialCommunityIcons
+              name="office-building"
+              color="#000"
+              size={31}
+            />
             <TouchableOpacity onPress={handleAbout} style={styles.button}>
-=======
-            <TouchableOpacity onPress={() => {}} style={styles.button}>
->>>>>>> f0c2f6fc04f1d9ae659ae10fce51e46504009a09
-              <Text style={styles.logoutText}>
-                  About Kulture
-              </Text>
+              <Text style={styles.logoutText}>About Kulture</Text>
             </TouchableOpacity>
           </View>
         </View>

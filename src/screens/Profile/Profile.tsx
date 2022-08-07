@@ -20,36 +20,41 @@ import styles from './Profile.style';
 
 import { isOdd } from '../../helper/isOdd';
 
+type REQUEST_STATUS = 'LOADING' | 'FAILED' | 'SUCCESS';
+
 // Components
 import HeaderList from './Header';
 import ProfileSettings from '../../components/Modals/ProfileSettings';
 import Loading from '../../components/Loading/Loading';
 
-export default function Profile(props) {
+type Props = {
+  navigation: {
+    navigate(param: string) : void
+  }
+}
+
+export default function Profile(props: Props) {
   const {navigation} = props;
   const [loading, setLoading] = React.useState(false);
-  const [data, setData] = React.useState(null);
+  const [data, setData] = React.useState<{username: string, email : string, profile: string}>();
   const [visible, setVisible] = React.useState(false);
-  const [requestStatus, setRequestStatus] = React.useState('LOADING');
+  const [requestStatus, setRequestStatus] = React.useState<REQUEST_STATUS>('LOADING');
   const [posts, setPost] = React.useState([
-    {postId: 1},
-    {postId: 1},
-    {postId: 3},
-    {postId: 4},
+    {assets: '1'},
+    {assets: '2'},
+    {assets: '3'},
+    {assets: '4'},
+    {assets: '5'},
   ]);
-  const [isRefreshing, setRefreshing] = React.useState(false);
-  const setIsLoggin = useStoreActions((actions) => actions.setIsLoggin);
+  const setIsLoggin = useStoreActions<any>((actions) => actions.setIsLoggin);
 
   const handleRefresh = () => {
-    setRefreshing(true);
     fetchProfile();
-    setRefreshing(false);
   };
 
   const fetchProfile = async () => {
     try {
       setLoading(true);
-      setRefreshing('LOADING');
       const response = await server.getProfile();
 
       // Unauthorized error
@@ -116,7 +121,7 @@ export default function Profile(props) {
     setVisible(true);
   };
 
-  const Item = ({image}) => {
+  const Item = ({image}: { image: string}) => {
     return (
       <TouchableOpacity>
         <Image source={{uri: image}} style={styles.image} />
@@ -124,7 +129,7 @@ export default function Profile(props) {
     );
   };
 
-  const renderFeed = ({item}) => {
+  const renderFeed = ({item}: any) => {
     return <Item image={item.image} />;
   };
 
@@ -167,7 +172,7 @@ export default function Profile(props) {
             columnWrapperStyle={styles.container}
             data={posts}
             renderItem={loading ? loadingItems : renderFeed}
-            keyExtractor={(item) => item.postId}
+            keyExtractor={(item, index) => 'key-' + index}
           />
         </View>
       )}

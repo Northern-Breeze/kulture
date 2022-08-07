@@ -30,7 +30,6 @@ export default function Home(props: Props) {
   // states
   const [users, setUsers] = React.useState<User[]>([]);
   const [requestStatus, setRequestStatus] = React.useState('LOADING');
-  const [loading, setLoadingMore] = React.useState(false);
 
   // Search state
   const [search, setSearch] = React.useState('');
@@ -100,7 +99,6 @@ export default function Home(props: Props) {
           <Button
             buttonHandler={fetchUsers}
             buttonText="Error, Reload!"
-            isLoading={loading}
           />
         </View>
       )}

@@ -1,20 +1,41 @@
 import React from 'react';
 import {View, Text, Image, TouchableOpacity} from 'react-native';
+import { showMessage } from 'react-native-flash-message';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
+import server from '../../../service/server';
 import styles from './Header.style';
 
 //Components
 
 type Props = {
   loading: boolean;
-  data: any;
+  data: {avatar: string; image: string; userId: number; username: string};
   navigation: any;
 };
 export default function HeaderList(props: Props) {
   const {loading, data, navigation} = props;
 
-  const handleFollow = () => {
-    
+  const handleFollow = async () => {
+    try {
+      const response = await server.followUser({ userId: data.userId });
+      if (response.data.success) {
+        showMessage({
+          message: response.data.message,
+          type: 'success'
+        })  
+      } else {
+        showMessage({
+          message: response.data.message,
+          type: 'danger'
+        })        
+      }
+    } catch (error) {
+      console.log(error);
+      showMessage({
+        message: 'Failed to follow user, please try again later',
+        type: 'danger'
+      })
+    }
   };
 
   return (

@@ -1,7 +1,6 @@
 import React from 'react';
 import {View, Text, TextInput, Image, TouchableOpacity} from 'react-native';
 import {useStoreActions} from 'easy-peasy';
-import Snackbar from 'react-native-snackbar';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 // components
@@ -12,8 +11,15 @@ import styles from './SignIn.style';
 
 //helper
 import server from '../../../service/server';
+import { showMessage } from 'react-native-flash-message';
 
-export default function SignIn(props) {
+type Props = {
+  navigation: {
+    navigate(param: string): void;
+  }
+}
+
+export default function SignIn(props: Props) {
   // props
   const {navigation} = props;
 
@@ -24,7 +30,7 @@ export default function SignIn(props) {
   const [isViewAble, setIsViewAble] = React.useState(false);
 
   // globs and actions
-  const loginCallback = useStoreActions((action) => action.loginCallback);
+  const loginCallback = useStoreActions<any>((action) => action.loginCallback);
   const handleToggle = () => {
     setIsViewAble(t => !t);
   }
@@ -34,8 +40,8 @@ export default function SignIn(props) {
       setNetworkLoading(true);
       
       const response = await server.login({
-        email: email,
-        password: password,
+        email,
+        password,
       });
       const status = response.status;
       if (status === 200) {
@@ -43,36 +49,36 @@ export default function SignIn(props) {
           setNetworkLoading(false);
           loginCallback(response.data.token)
             .then(() => {
-              Snackbar.show({
-                text: response.data.message,
-                duration: Snackbar.LENGTH_SHORT,
+              showMessage({
+                message: response.data.message,
+                type: 'success'
               });
             })
-            .catch((error) => console.log(error));
+            .catch((error: string) => console.log(error));
         } else {
-          Snackbar.show({
-            text: response.data.message,
-            duration: Snackbar.LENGTH_SHORT,
+          showMessage({
+            message: response.data.message,
+            type: 'danger',
           });
           setNetworkLoading(false);
         }
       } else {
         setNetworkLoading(false);
-        Snackbar.show({
-          text: response.data.message,
-          duration: Snackbar.LENGTH_SHORT,
+        showMessage({
+          message: response.data.message,
+          type: 'danger'
         });
       }
     } catch (error) {
       console.log(error);
       setNetworkLoading(false);
-      Snackbar.show({
-        text: 'Something went wrong please try again later',
-        duration: Snackbar.LENGTH_SHORT,
-      });
+      showMessage({
+        message: 'Something went wrong, please try again later',
+        type: 'danger'
+      })
     }
   };
-  const goTo = (place) => {
+  const goTo = (place: string) => {
     navigation.navigate(place);
   };
   return (

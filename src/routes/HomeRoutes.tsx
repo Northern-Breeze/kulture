@@ -1,18 +1,20 @@
 import * as React from 'react';
+import {View, Text} from 'react-native';
 import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import IconBadge from 'react-native-icon-badge';
 
-// functions
+import iconStyles from './IconStyles/icons.style'
 
 // Screens
 import AddPost from '../screens/AddPost';
-import Search from '../screens/Search';
 
 // Stacks
 import Home from './Home';
 import ProfileStack from './Profile';
 import Messages from './Messages';
+import Notifications from './Notifications';
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -55,11 +57,22 @@ export default function HomeRoute() {
       />
       <Tab.Screen
         name="Notifications"
-        component={Search}
+        component={Notifications}
         options={{
           tabBarLabel: 'Notification',
           tabBarIcon: ({color}) => (
-            <Ionicons name="notifications-outline" color={color} size={23} />
+            <IconBadge
+              MainElement={
+                <Ionicons
+                  name="notifications-outline"
+                  color={color}
+                  size={23}
+                />
+              }
+              BadgeElement={<Text style={iconStyles.iconCountText}>4</Text>}
+              IconBadgeStyle={iconStyles.iconBadgeStyle}
+              Hidden={false}
+            />
           ),
         }}
       />

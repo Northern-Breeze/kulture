@@ -20,7 +20,7 @@ export default function Message(props) {
     avatar: 'https://via.placeholder.com/300/09f.png/fff',
   });
 
-  const token = useStoreState((state) => state.token);
+  const token = useStoreState<any>((state) => state.token);
 
   const socketRef = React.useRef(null);
 

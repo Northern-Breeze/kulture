@@ -1,5 +1,4 @@
 import * as React from 'react';
-import {View, Text} from 'react-native';
 import {
   NavigationContainer,
 } from '@react-navigation/native';
@@ -7,25 +6,19 @@ import SplashScreen from 'react-native-splash-screen';
 import {
   createStore,
   StoreProvider as Provider,
-  persist,
-  useStoreRehydrated,
 } from 'easy-peasy';
 import analytics from '@react-native-firebase/analytics';
+import messaging from '@react-native-firebase/messaging';
 
 import FlashMessage from "react-native-flash-message";
 import * as Sentry from "@sentry/react-native";
 
 // Store
 import Store from './src/store/model';
-import storage from './src/store/storage/storage';
 //components
 import Routes from './src/routes/Routes';
 
-const store = createStore(
-  persist(Store, {
-    storage: storage,
-  }),
-);
+const store = createStore(Store)
 
 
 Sentry.init({
@@ -33,12 +26,10 @@ Sentry.init({
 });
 
 export const RootWrapper: React.FC = () => {
-  const isHydrated = useStoreRehydrated();
 
   const routeNameRef = React.useRef<any>();
   const navigationRef = React.useRef<any>();
 
-  if (isHydrated) {
     return (
       <NavigationContainer
         ref={navigationRef}
@@ -62,17 +53,20 @@ export const RootWrapper: React.FC = () => {
         <Routes />
       </NavigationContainer>
     );
-  }
-  return (
-    <View>
-      <Text>Loading ...</Text>
-    </View>
-  );
 };
 
 const App = () => {
+
   React.useEffect(() => {
     SplashScreen.hide();
+  }, []);
+
+  React.useEffect(() => {
+    const unsubscribe = messaging().onMessage(async remoteMessage => {
+      console.log(remoteMessage);
+    });
+
+    return unsubscribe;
   }, []);
 
   return (

@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { configs } from '../config/config'
 import AsyncStorage from '@react-native-async-storage/async-storage';
-const baseURL = '';
+import getFCMToken from '../helper/getFCMToken';
 
 const instance = axios.create({
   validateStatus: (status) => {
@@ -32,6 +32,7 @@ instance.interceptors.request.use(async config => {
     }
     config.headers.authorization = `Bearer ${token}`;
     config.headers['mobile-token'] = 'nrC^L9pjG)/4MZ>2';
+    config.headers['fcm_token'] = await getFCMToken();
 
     return config;
    }, error => Promise.reject(error));
