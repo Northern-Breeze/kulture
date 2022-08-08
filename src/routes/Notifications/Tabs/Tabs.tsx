@@ -11,7 +11,6 @@ export default function MyTabs() {
   return (
     <Tab.Navigator>
       <Tab.Screen name="All" component={Notifications} />
-      <Tab.Screen name="Following" component={Friends} />
       <Tab.Screen name="Settings" component={Friends} />
     </Tab.Navigator>
   );
