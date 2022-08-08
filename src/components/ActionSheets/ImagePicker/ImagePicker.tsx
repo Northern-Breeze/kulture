@@ -28,7 +28,8 @@ type FileSelect = {
 
 type Props = {
   actionSheetRef: any;
-  setImage(file: FileSelect): void;
+  setImage(file: any): void;
+  pickerType: string;
 };
 
 const ImagePicker = (props: Props) => {
