@@ -122,8 +122,9 @@ export default function Header(props: Props) {
       <View>
         <View style={styles.usernameContainer}>
           {loading && (
-            <SkeletonPlaceholder
-              style={styles.loadingName}></SkeletonPlaceholder>
+            <SkeletonPlaceholder>
+              <View style={styles.loadingName}></View>
+            </SkeletonPlaceholder>
           )}
           {!loading && data !== null && (
             <Text style={styles.username}>{data.username}</Text>
@@ -153,7 +154,7 @@ export default function Header(props: Props) {
           </Text>
         </TouchableOpacity>
       </View>
-      <ImagePicker actionSheetRef={actionSheetRef} setImage={setFile} />
+      <ImagePicker actionSheetRef={actionSheetRef} pickerType="Profile" navigation={navigation} />
     </>
   );
 }

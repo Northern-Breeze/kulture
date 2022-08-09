@@ -20,6 +20,8 @@ const server = {
     // search
     searchUsers: ({ name }: { name: string }) => Axios.get(`/profile/users?name=${name}`),
     searchHomeUsers: ({ name }: { name: string }) => Axios.get(`/users/search?name=${name}`),
+    // Posts
+    addPost: ({ title, file, name }: {title: string, file: string, name: string }) => Axios.post('/post/add', { title, file, name  }),
     // users
     getAllUsers: () => Axios.get(`/users/get-all-users`),
     getUseProfile: ({ userId }: { userId: number }) => Axios.get(`/users?userId=${userId}`),

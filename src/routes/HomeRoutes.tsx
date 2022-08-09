@@ -17,6 +17,7 @@ import Messages from './Messages';
 import Notifications from './Notifications';
 
 import {Model} from '../store/model';
+import AddImageStack from './AddImage/AddImage';
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -51,7 +52,7 @@ export default function HomeRoute() {
       />
       <Tab.Screen
         name="Add"
-        component={AddPost}
+        component={AddImageStack}
         options={{
           tabBarLabel: 'Add',
           tabBarIcon: ({color}) => (
@@ -75,7 +76,7 @@ export default function HomeRoute() {
               }
               BadgeElement={<Text style={iconStyles.iconCountText}>{getNewNotificationCount}</Text>}
               IconBadgeStyle={iconStyles.iconBadgeStyle}
-              Hidden={focused}
+              Hidden={focused || getNewNotificationCount === 0}
             />
           ),
         }}

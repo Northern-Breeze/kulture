@@ -1,9 +1,13 @@
 import { StyleSheet } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import font from '../../config/constant';
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#fff',
     },
     headerContainer: {
         marginHorizontal: 10,
@@ -61,13 +65,15 @@ const styles = StyleSheet.create({
     placeholder: {
         justifyContent: 'center',
         alignItems: 'center',
-        height: 400,
-        width: '80%',
         backgroundColor: '#eee',
-        borderWidth: 2,
+        borderWidth: wp(0.1),
         borderColor: '#000',
-        resizeMode: 'contain',
-        borderRadius: 10,
+        borderRadius: wp(1),
+        width: wp(90),
+        height: hp(50)
+    },
+    infoText: {
+        fontFamily: font().regularComfortaa
     }
 });
 
