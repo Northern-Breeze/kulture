@@ -23,6 +23,7 @@ type FileSelect = {
 type Props = {
   navigation: {
     navigate(param: string): void;
+    goBack(): void;
   };
   route: {
     params: {
@@ -49,23 +50,45 @@ export default function SubmitImage(props: Props) {
         return;
       }
       setRequestStatus('LOADING');
-      
-      const response = await server.addPost({ title: 'POST', file: base64 || '', name: fileName || '' });
 
-      if (response.data.success) {
-        showMessage({
-          message: response.data.message,
-          type: 'success',
-        });
-        setRequestStatus('IDLE');
-        navigation.navigate('Profile');
+      if (pickerType === 'Profile') {
+        const response = await server.updateProfileImage({ file: base64 || '', name: fileName || '' });
+            
+        if (response.data.success) {
+          showMessage({
+            message: response.data.message,
+            type: 'success',
+          });
+          setRequestStatus('IDLE');
+          navigation.navigate('Profile');
+        } else {
+          showMessage({
+            message: response.data.message,
+            type: 'danger',
+          });
+          setRequestStatus('IDLE');
+        }
+
       } else {
-        showMessage({
-          message: response.data.message,
-          type: 'danger',
-        });
-        setRequestStatus('IDLE');
+
+        const response = await server.addPost({ title: 'POST', file: base64 || '', name: fileName || '' });
+       
+        if (response.data.success) {
+          showMessage({
+            message: response.data.message,
+            type: 'success',
+          });
+          setRequestStatus('IDLE');
+          navigation.goBack();
+        } else {
+          showMessage({
+            message: response.data.message,
+            type: 'danger',
+          });
+          setRequestStatus('IDLE');
+        }
       }
+
     } catch (error) {
       console.log(error);
       showMessage({

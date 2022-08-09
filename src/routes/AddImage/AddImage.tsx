@@ -12,7 +12,7 @@ export default function AddImageStack() {
         name="AddImage"
         component={AddPost}
         options={({route}) => ({
-          title: 'Add Post',
+          title: '',
           headerShadowVisible: false,
           headerBackTitleVisible: false,
           headerStyle: {
