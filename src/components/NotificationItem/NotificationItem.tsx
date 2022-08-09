@@ -17,13 +17,14 @@ type Props = {
 
 export default function NotificationItem(props: Props) {
   const {item} = props;
-  const {title, id, body, is_read, created_at, type} = item;
+  const {id, body, is_read, created_at, type} = item;
   
   const date = new Date(created_at);
   
   const markReadNotification = useStoreActions((action: Actions<Model>) => action.markReadNotification)
 
   const imageUrl = body.imageUrl;
+  const title = body.title;
 
   const handlePressNotification = async () => {
     try {
@@ -61,7 +62,7 @@ export default function NotificationItem(props: Props) {
             <Text>|</Text>
           </View>
           <View>
-            <Text style={styles.notificationType}>{type === 'USER_NOTIFICATION' ? 'GENERAL': 'ANNOUNCEMENT'}</Text>
+            <Text style={styles.notificationType}>{'GENERAL'}</Text>
           </View>
         </View>
       </View>
