@@ -1539,6 +1539,11 @@
     xcode "3.0.1"
     yargs "^16.2.0"
 
+"@seznam/compose-react-refs@^1.0.6":
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/@seznam/compose-react-refs/-/compose-react-refs-1.0.6.tgz#6ec4e70bdd6e32f8e70b4100f27267cf306bd8df"
+  integrity sha512-izzOXQfeQLonzrIQb8u6LQ8dk+ymz3WXTIXjvOlTXHq6sbzROg3NWU+9TTAOpEoK9Bth24/6F/XrfHJ5yR5n6Q==
+
 "@sinonjs/commons@^1.7.0":
   version "1.8.3"
   resolved "https://registry.yarnpkg.com/@sinonjs/commons/-/commons-1.8.3.tgz#3802ddd21a50a949b6721ddd72da36e67e7f1b2d"
@@ -7453,6 +7458,13 @@ slice-ansi@^4.0.0:
     ansi-styles "^4.0.0"
     astral-regex "^2.0.0"
     is-fullwidth-code-point "^3.0.0"
+
+smartlook-react-native-wrapper@^1.2.8:
+  version "1.2.8"
+  resolved "https://registry.yarnpkg.com/smartlook-react-native-wrapper/-/smartlook-react-native-wrapper-1.2.8.tgz#193026349d65e44bda6325ef727393d273805667"
+  integrity sha512-VjQdhDyN0XlgBk2kxdNLKYw5AdqvtTFPc3g/mKw3yJrk01G8Un2uhRdH36BFkz1/kONlVSlibDK9bWHvVpKUyA==
+  dependencies:
+    "@seznam/compose-react-refs" "^1.0.6"
 
 snapdragon-node@^2.0.1:
   version "2.1.1"

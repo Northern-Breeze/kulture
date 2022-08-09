@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   Image,
   KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -18,19 +19,28 @@ import ImagePicker from '../../components/ActionSheets/ImagePicker';
 // helpers
 import {configs} from '../../config/config';
 import Loading from '../../components/Loading';
+import {showMessage} from 'react-native-flash-message';
 
-export default function AddPost(props) {
+type Props = {
+  navigation: {
+    navigate(param: string): void;
+  };
+};
+
+
+export default function AddPost(props: Props) {
   // props
-  const { navigation } = props;
+  const {navigation} = props;
 
   // state
-  const [image, setImage] = React.useState('');
-  const [pickerType, setPickerType] = React.useState('');
+  const [image, setImage] = React.useState<any>('');
+  const [pickerType] = React.useState('');
   const [requestStatus, setRequestStatus] = React.useState('IDLE');
 
   // refs
-  const actionSheetRef = React.useRef(true);
-  const pickerRef = React.useRef();
+  const actionSheetRef = React.useRef<any>(true);
+
+  const pickerRef = React.useRef<any>();
 
   const createPost = () => {
     if (pickerType === '') {
@@ -39,14 +49,14 @@ export default function AddPost(props) {
     actionSheetRef.current?.setModalVisible();
   };
 
-  const createFormData = (file, body) => {
+  const createFormData = (file: any, body:{[key:string]: string}) => {
     const data = new FormData();
 
     data.append('picture', {
       name: file.fileName,
       type: file.type,
       uri:
-        Platform.OS === 'android' ? file.uri : file.uri.replace('file://', ''),
+        Platform.OS === 'android' ? file.uri : file?.uri?.replace('file://', ''),
     });
 
     Object.keys(body).forEach((key) => {
@@ -59,9 +69,9 @@ export default function AddPost(props) {
   const uploadToServer = async () => {
     try {
       if (typeof image === 'undefined' || image === '') {
-        Snackbar.show({
-          text: 'Please Upload A File',
-          duration: Snackbar.LENGTH_SHORT,
+        showMessage({
+          message: 'Please upload an image',
+          type: 'danger',
         });
         return;
       }
@@ -101,7 +111,8 @@ export default function AddPost(props) {
       setRequestStatus('FAILED');
     }
   };
-  const evalString = (value) => {
+
+  const evalString = (value: string) => {
     if (typeof value !== 'string' && typeof value !== 'undefined') {
       return true;
     }
@@ -147,8 +158,7 @@ export default function AddPost(props) {
               </View>
             </View>
           </KeyboardAvoidingView>
-          <View>
-          </View>
+          <View></View>
           <ImagePicker
             actionSheetRef={actionSheetRef}
             setImage={setImage}
